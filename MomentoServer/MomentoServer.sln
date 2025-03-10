@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35506.116 d17.12
+VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MomentoServer", "MomentoServer\MomentoServer.csproj", "{0AB61701-9522-4828-B20E-C0BF1B3B6BC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MomentoServer.Api", "MomentoServer\MomentoServer.Api.csproj", "{0AB61701-9522-4828-B20E-C0BF1B3B6BC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MomentoServer.Core", "MomentoServer.Core\MomentoServer.Core.csproj", "{BD74341A-0D29-4EDD-884E-9464886BBE9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MementoServer.Data", "MementoServer.Data\MementoServer.Data.csproj", "{51C7A38A-9BFB-4FF3-8E35-12BA6A059360}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MementoServer.Service", "MementoServer.Service\MementoServer.Service.csproj", "{515110FA-62CF-4A59-8962-EDA2A17DDD6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{0AB61701-9522-4828-B20E-C0BF1B3B6BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AB61701-9522-4828-B20E-C0BF1B3B6BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AB61701-9522-4828-B20E-C0BF1B3B6BC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD74341A-0D29-4EDD-884E-9464886BBE9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD74341A-0D29-4EDD-884E-9464886BBE9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD74341A-0D29-4EDD-884E-9464886BBE9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD74341A-0D29-4EDD-884E-9464886BBE9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51C7A38A-9BFB-4FF3-8E35-12BA6A059360}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51C7A38A-9BFB-4FF3-8E35-12BA6A059360}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51C7A38A-9BFB-4FF3-8E35-12BA6A059360}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51C7A38A-9BFB-4FF3-8E35-12BA6A059360}.Release|Any CPU.Build.0 = Release|Any CPU
+		{515110FA-62CF-4A59-8962-EDA2A17DDD6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{515110FA-62CF-4A59-8962-EDA2A17DDD6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{515110FA-62CF-4A59-8962-EDA2A17DDD6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{515110FA-62CF-4A59-8962-EDA2A17DDD6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
