@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using MomentoServer.Core.DTOs;
+using MomentoServer.Core.DTOs.UsersDTOs;
 using MomentoServer.Core.Entities;
 using MomentoServer.Core.IServices;
 
@@ -21,9 +21,11 @@ public class TokenService : ITokenService
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
+        Console.WriteLine($"User Role: {user.Role}");
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
+
             Subject = new ClaimsIdentity(new Claim[]
             {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),

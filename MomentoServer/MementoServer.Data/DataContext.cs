@@ -14,6 +14,11 @@ namespace MementoServer.Data
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Template> Templates { get; set; }
+
+        public DbSet<Image> Images { get; set; }
+        public DbSet<Calendar> Calendars { get; set; }
+
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
