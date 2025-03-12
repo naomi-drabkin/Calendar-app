@@ -119,11 +119,13 @@ builder.Services.Configure<FormOptions>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
+
+app.MapGet("/", () => "server is running");
 
 
 app.UseHttpsRedirection();
