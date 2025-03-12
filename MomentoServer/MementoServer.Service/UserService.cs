@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using MementoServer.Data.Repositories;
-using MomentoServer.Core.DTOs;
+using MomentoServer.Core.DTOs.UsersDTOs;
 using MomentoServer.Core.Entities;
 using MomentoServer.Core.IRepositories;
 using MomentoServer.Core.IServices;
@@ -28,67 +28,67 @@ namespace MementoServer.Service
 
         }
 
-        public IEnumerable<DTOuser> GetAll()
+        public async Task<IEnumerable<DTOuser>> GetAllAsync()
         {
-            var users = _userRepository.GetAll();
+            var users =await _userRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<DTOuser>>(users);
         }
 
-        public DTOuser GetById(int id)
+        public async Task<DTOuser> GetByIdAsync(int id)
         {
-            var user = _userRepository.GetById(id);
+            var user =await _userRepository.GetByIdAsync(id);
             return _mapper.Map<DTOuser>(user);
         }
 
-        public bool Register(DTOregister userDto)
+        public async Task<AuthResponse> Register(DTOregister userDto)
         {
-            var existingUser = _userRepository.GetByEmail(userDto.Email);
+            var existingUser = await _userRepository.GetByEmailAsync(userDto.Email);
             if (existingUser == null)
             {
                 var userEntity = _mapper.Map<User>(userDto);
-                userEntity.Role = "User";
-                _userRepository.Add(userEntity);
-                return true;
+                userEntity.Role = userDto.Role;
+                await _userRepository.AddAsync(userEntity);
+                return await Login(userEntity.Email, userEntity.Password); // קריאה אסינכרונית ל-Login
             }
-            return false;
+            return null;
         }
 
-        public AuthResponse Login(string email, string password)
+        public async Task<AuthResponse> Login(string email, string password)
         {
-            var user = _userRepository.GetByEmail(email);
-            var DTOuser = _mapper.Map<DTOuser>(user);
+            var user = await _userRepository.GetByEmailAsync(email);
             if (user == null || user.Password != password)
             {
                 return null;
             }
 
-
+            var DTOuser = _mapper.Map<DTOuser>(user);
             var token = _tokenService.GenerateToken(DTOuser);
+
             return new AuthResponse
             {
                 Token = token,
-                User = _mapper.Map<DTOuser>(user)
+                User = DTOuser
             };
         }
 
-        public bool DeleteUser(int id)
+        public async Task<bool> DeleteUserAsync(int id)
         {
-            var user = _userRepository.GetById(id);
+            var user = await _userRepository.GetByIdAsync(id);
             if (user != null)
             {
-                _userRepository.DeleteUser(id);
+               await _userRepository.DeleteUserAsync(id);
                 return true;
             }
             return false;
         }
 
-        public bool UpdateUser(int id, DTOuser userDto)
+        public async Task<bool> UpdateUserAsync(int id, DTOuser userDto)
         {
-            var existingUser = _userRepository.GetById(id);
+            var existingUser =await _userRepository.GetByIdAsync(id);
             if (existingUser != null)
             {
                 _mapper.Map(userDto, existingUser);
-                _userRepository.UpdateUser(existingUser);
+                await _userRepository.UpdateUserAsync(existingUser);
                 return true;
             }
             return false;

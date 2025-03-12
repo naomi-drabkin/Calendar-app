@@ -18,41 +18,41 @@ namespace MementoServer.Data.Repositories
             _context = context;
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return _context.Users.ToList();
+            return await _context.Users.ToListAsync();
         }
 
-        public User GetById(int id)
+        public async Task<User> GetByIdAsync(int id)
         {
-            return _context.Set<User>().Find(id);
+            return await _context.Set<User>().FindAsync(id);
         }
 
-        public User GetByEmail(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
-            return GetAll().FirstOrDefault(u => u.Email == email);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public void Add(User user)
+        public async Task AddAsync(User user)
         {
-            _context.Set<User>().Add(user);
-            _context.SaveChanges();
+            await _context.Set<User>().AddAsync(user);
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteUser(int id)
+        public async Task DeleteUserAsync(int id)
         {
-            var user = GetById(id);
+            var user = await _context.Set<User>().FindAsync(id);
             if (user != null)
             {
-                _context.Set<User>().Remove(user);
-                _context.SaveChanges();
+               _context.Set<User>().Remove(user);
+               await _context.SaveChangesAsync();
             }
         }
 
-        public void UpdateUser(User user)
+        public async Task UpdateUserAsync(User user)
         {
             _context.Set<User>().Update(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
     }

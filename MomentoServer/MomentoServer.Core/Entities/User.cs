@@ -16,5 +16,9 @@ namespace MomentoServer.Core.Entities
         public string UserName { get; set; }
         public string UserFamily { get; set; }
         public string Role { get; set; }
+        public ICollection<Template> Templates { get; set; }
+        public ICollection<Image> Images { get; set; }
+        public ICollection<Calendar> Calendar { get; set; }
     }
 }
+

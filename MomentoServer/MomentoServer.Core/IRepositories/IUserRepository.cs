@@ -10,12 +10,12 @@ namespace MomentoServer.Core.IRepositories
 {
     public interface IUserRepository
     {
-        IEnumerable<User> GetAll();
-        User GetById(int id);
-        User GetByEmail(string email);
-        void Add(User user);
-        void DeleteUser(int id);
-        void UpdateUser(User user);
+        Task<IEnumerable<User>> GetAllAsync();
+        Task<User> GetByIdAsync(int id);
+        Task<User> GetByEmailAsync(string email);
+        Task AddAsync(User user);
+        Task DeleteUserAsync(int id);
+        Task UpdateUserAsync(User user);
 
 
     }

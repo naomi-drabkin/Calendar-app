@@ -1,12 +1,8 @@
 ﻿using System.Security.Claims;
-using MementoServer.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MomentoServer.Core.DTOs;
-using MomentoServer.Core.Entities;
+using MomentoServer.Core.DTOs.UsersDTOs;
 using MomentoServer.Core.IServices;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MomentoServer.Api.Controllers
 {
@@ -16,96 +12,69 @@ namespace MomentoServer.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ITokenService _TokenService;
+        private readonly ITokenService _tokenService;
 
-
-        public UserController(IUserService userService, ITokenService TokenService)
+        public UserController(IUserService userService, ITokenService tokenService)
         {
             _userService = userService;
-            _TokenService = TokenService;
+            _tokenService = tokenService;
         }
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            return Ok(_userService.GetAll());
+            var users = await _userService.GetAllAsync();
+            return Ok(users);
         }
-
-        //[HttpGet("{id}")]
-        //public IActionResult GetById(int id)
-        //{
-        //    var user = _userService.GetById(id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(user);
-        //}
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody] DTOregister user)
+        public async Task<IActionResult> Register([FromBody] DTOregister user)
         {
-            var success = _userService.Register(user);
-            if (!success) return BadRequest(new { message = "User already exists" });
+            var success = await _userService.Register(user);
+            if (success == null) return Unauthorized(new { message = "User already exists" });
 
-            return Ok(new { message = "User registered successfully" });
+            return Ok(new { Token = success.Token, User = success.User });
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public IActionResult Login([FromBody] DTOlogin request)
+        public async Task<IActionResult> Login([FromBody] DTOlogin request)
         {
-            var userDto = _userService.Login(request.Email, request.Password);
+            var userDto = await _userService.Login(request.Email, request.Password);
             if (userDto == null)
                 return Unauthorized(new { message = "Invalid credentials" });
 
-            //var token = _userService.Login(userDto);
-            //return Ok(new { message = "User login successfully" });
-
-            return Ok(new
-            {
-                Token = userDto.Token,
-                User = userDto.User
-            });
+            return Ok(new { Token = userDto.Token, User = userDto.User });
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public IActionResult DeleteUser(int id)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            var success = _userService.DeleteUser(id);
+            var success = await _userService.DeleteUserAsync(id);
             if (!success) return NotFound();
             return NoContent();
         }
 
         [Authorize]
         [HttpPut("{id}")]
-        public IActionResult UpdateUser(int id, [FromBody] DTOuser user)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] DTOuser user)
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId != id) return Forbid();
 
-            if (userId != id)
-            {
-                return Forbid();
-            }
-
-            var result = _userService.UpdateUser(id, user);
-            if (result)
-            {
-                return Ok("User updated successfully");
-            }
-            return NotFound("User not found");
+            var result = await _userService.UpdateUserAsync(id, user);
+            return result ? Ok("User updated successfully") : NotFound("User not found");
         }
 
         [Authorize]
         [HttpGet("test")]
-        public IActionResult Test()
+        public async Task<IActionResult> Test()
         {
             var claims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-            return Ok(claims);
+            return await Task.FromResult(Ok(claims));
         }
     }
 }
-
