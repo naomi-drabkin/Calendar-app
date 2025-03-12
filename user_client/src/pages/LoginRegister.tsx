@@ -26,6 +26,8 @@ const LoginRegister = () => {
                     email: emailRef.current?.value,
                     password: passwordRef.current?.value,
                 });
+                console.log("login");
+                
             }
             else{
                 const res = await axios.post("http://localhost:5204/api/User/register", {
@@ -35,7 +37,7 @@ const LoginRegister = () => {
                     UserFamily: passwordRef.current?.value,
                     Role:"User"
                 });
-                console.log(res);
+                console.log("register");
                 
             }
         }catch(error){
