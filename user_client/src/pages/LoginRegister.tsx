@@ -22,7 +22,7 @@ const LoginRegister = () => {
         event.preventDefault();
         try{
             if(!isRegister){
-                const res = await axios.post("http://localhost:5204/api/User/login", {                   
+                await axios.post("http://localhost:5204/api/User/login", {                   
                     email: emailRef.current?.value,
                     password: passwordRef.current?.value,
                 });
@@ -30,7 +30,7 @@ const LoginRegister = () => {
                 
             }
             else{
-                const res = await axios.post("http://localhost:5204/api/User/register", {
+                await axios.post("http://localhost:5204/api/User/register", {
                     email: emailRef.current?.value,
                     password: passwordRef.current?.value,
                     UserName: passwordRef.current?.value,
