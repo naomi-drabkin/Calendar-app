@@ -10,7 +10,7 @@ namespace MomentoServer.Core.IServices
 {
     public interface ITokenService
     {
-        string GenerateToken(DTOuser user);
+        string GenerateToken(User user);
 
     }
 }

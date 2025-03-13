@@ -14,8 +14,8 @@ namespace MomentoServer.Core.IRepositories
         Task<User> GetByIdAsync(int id);
         Task<User> GetByEmailAsync(string email);
         Task AddAsync(User user);
-        Task DeleteUserAsync(int id);
-        Task UpdateUserAsync(User user);
+        Task<bool> DeleteUserAsync(int id);
+        Task<bool> UpdateUserAsync(int id ,User user);
 
 
     }

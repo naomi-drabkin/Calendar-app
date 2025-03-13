@@ -35,24 +35,35 @@ namespace MementoServer.Data.Repositories
 
         public async Task AddAsync(User user)
         {
-            await _context.Set<User>().AddAsync(user);
+            await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteUserAsync(int id)
+        public async Task<bool> DeleteUserAsync(int id)
         {
-            var user = await _context.Set<User>().FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
-               _context.Set<User>().Remove(user);
+               _context.Users.Remove(user);
                await _context.SaveChangesAsync();
+                return true;    
             }
+            return false;
         }
 
-        public async Task UpdateUserAsync(User user)
+        public async Task<bool> UpdateUserAsync(int id ,User user)
         {
-            _context.Set<User>().Update(user);
-            await _context.SaveChangesAsync();
+            var userForUpdate = _context.Users.Find(id);
+            if(userForUpdate != null)
+            {
+                userForUpdate.Email = user.Email;
+                userForUpdate.Password = user.Password;
+                userForUpdate.UserName = user.UserName;
+                userForUpdate.UserFamily = user.UserFamily;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+           return false;    
         }
     }
     }
