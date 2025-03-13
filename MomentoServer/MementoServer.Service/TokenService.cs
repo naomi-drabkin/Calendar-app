@@ -17,7 +17,7 @@ public class TokenService : ITokenService
         _config = config;
     }
 
-    public string GenerateToken(DTOuser user)
+    public string GenerateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
@@ -25,12 +25,13 @@ public class TokenService : ITokenService
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-
+            
             Subject = new ClaimsIdentity(new Claim[]
             {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim(ClaimTypes.Role,user.Role),
+            new Claim("Password", user.Password)
             }),
             Expires = DateTime.UtcNow.AddHours(2),
             Issuer = _config["Jwt:Issuer"],

@@ -30,13 +30,13 @@ namespace MementoServer.Service
 
         public async Task<IEnumerable<DTOuser>> GetAllAsync()
         {
-            var users =await _userRepository.GetAllAsync();
+            var users = await _userRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<DTOuser>>(users);
         }
 
         public async Task<DTOuser> GetByIdAsync(int id)
         {
-            var user =await _userRepository.GetByIdAsync(id);
+            var user = await _userRepository.GetByIdAsync(id);
             return _mapper.Map<DTOuser>(user);
         }
 
@@ -47,8 +47,9 @@ namespace MementoServer.Service
             {
                 var userEntity = _mapper.Map<User>(userDto);
                 userEntity.Role = userDto.Role;
+                userEntity.Password = HashPassword(userDto.Password);
                 await _userRepository.AddAsync(userEntity);
-                return await Login(userEntity.Email, userEntity.Password); // קריאה אסינכרונית ל-Login
+                return await Login(userEntity.Email, userEntity.Password);
             }
             return null;
         }
@@ -56,18 +57,18 @@ namespace MementoServer.Service
         public async Task<AuthResponse> Login(string email, string password)
         {
             var user = await _userRepository.GetByEmailAsync(email);
-            if (user == null || user.Password != password)
+            if (user == null)
             {
                 return null;
             }
 
-            var DTOuser = _mapper.Map<DTOuser>(user);
-            var token = _tokenService.GenerateToken(DTOuser);
+            //var userLogin = _userRepository.GetByEmailAsync(email);
+            var token = _tokenService.GenerateToken(user);
 
             return new AuthResponse
             {
                 Token = token,
-                User = DTOuser
+                User = user
             };
         }
 
@@ -76,23 +77,35 @@ namespace MementoServer.Service
             var user = await _userRepository.GetByIdAsync(id);
             if (user != null)
             {
-               await _userRepository.DeleteUserAsync(id);
-                return true;
+                var res = await _userRepository.DeleteUserAsync(id);
+                return res ? true : false;
             }
             return false;
         }
 
         public async Task<bool> UpdateUserAsync(int id, DTOuser userDto)
         {
-            var existingUser =await _userRepository.GetByIdAsync(id);
+            var existingUser = await _userRepository.GetByIdAsync(id);
             if (existingUser != null)
             {
-                _mapper.Map(userDto, existingUser);
-                await _userRepository.UpdateUserAsync(existingUser);
-                return true;
+
+                var change = _mapper.Map<User>(userDto);
+                change.Password = HashPassword(userDto.Password);
+                var res = await _userRepository.UpdateUserAsync(id, change);
+
+                return res ? true : false;
             }
             return false;
         }
 
+        public static string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        public static bool VerifyPassword(string enteredPassword, string hashedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(enteredPassword, hashedPassword);
+        }
     }
 }
