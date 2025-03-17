@@ -8,7 +8,7 @@ namespace MomentoServer.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // מבטיח שרק משתמשים מחוברים יוכלו לגשת ל-API
+    [Authorize]
     public class ImageController : ControllerBase
     {
         private readonly IImageService _imageService;
@@ -28,12 +28,12 @@ namespace MomentoServer.Api.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadImage([FromForm] ImageCreateDTO imageDto)
+        public async Task<IActionResult> UploadImage([FromBody] ImageCreateDTO imageDto)
         {
             try
             {
                 var userId = GetUserId();
-                var fileName = await _imageService.UploadImageAsync(imageDto, userId);
+                var fileName = await _imageService.PostImageAsync(imageDto, userId);
                 return Ok(new { message = "Image uploaded successfully", fileName });
             }
             catch (UnauthorizedAccessException)
@@ -46,7 +46,7 @@ namespace MomentoServer.Api.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllImages()
         {
             try
@@ -80,7 +80,7 @@ namespace MomentoServer.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateImage(int id, [FromForm] ImageUpdateDTO imageDto)
+        public async Task<IActionResult> UpdateImage(int id, [FromBody] ImageUpdateDTO imageDto)
         {
             try
             {

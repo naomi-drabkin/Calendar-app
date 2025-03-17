@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using MementoServer.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using MomentoServer.Core.DTOs.ImagesDTOs;
 using MomentoServer.Core.Entities;
@@ -23,40 +24,15 @@ namespace MementoServer.Service
             _mapper = mapper;
         }
 
-        public async Task<string> UploadImageAsync(ImageCreateDTO imageDto, int userId)
+        public async Task<bool> PostImageAsync(ImageCreateDTO imageDto, int userId)
         {
-            if (imageDto.File == null || imageDto.File.Length == 0)
-                throw new ArgumentException("Invalid file.");
 
-            if (imageDto.UploadDate == default)
-                throw new ArgumentException("Upload date is required.");
+            var ImageEntity = _mapper.Map<Image>(imageDto);
+            ImageEntity.Url = imageDto.Url;
 
-            var allowedExtensions = new[] { ".jpg", ".jpeg" };
-            var fileExtension = Path.GetExtension(imageDto.File.FileName).ToLower();
+            ImageEntity.UploadDate = DateTime.Now;
+            return await _imageRepository.AddImageAsync(ImageEntity);
 
-            if (!allowedExtensions.Contains(fileExtension))
-                throw new ArgumentException("Only JPG or JPEG files are allowed.");
-
-            var fileName = $"{Guid.NewGuid()}{fileExtension}";
-            Console.WriteLine($"{Guid.NewGuid()}{fileExtension}");
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "ImagesUploads");
-            var filePath = Path.Combine(folderPath, fileName);
-
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageDto.File.CopyToAsync(stream);
-            }
-
-            var imageEntity = _mapper.Map<Image>(imageDto);
-            imageEntity.UserId = userId;
-            imageEntity.FileName = fileName;
-            imageEntity.FilePath = filePath;
-
-            await _imageRepository.SaveImageAsync(imageEntity);
-            return fileName;
         }
 
         public async Task<List<ImageDTO>> GetAllImagesAsync(int userId)
@@ -76,23 +52,7 @@ namespace MementoServer.Service
             var image = await _imageRepository.GetImageByIdAsync(id);
             if (image == null) return false;
 
-            if (imageDto.File != null)
-            {
-                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(imageDto.File.FileName).ToLower()}";
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "ImagesUploads", fileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await imageDto.File.CopyToAsync(stream);
-                }
-
-                if (File.Exists(image.FilePath))
-                    File.Delete(image.FilePath);
-
-                image.FileName = fileName;
-                image.FilePath = filePath;
-            }
-
-            _mapper.Map(imageDto, image);
+            image.UpdateUpload = DateTime.Now;
             await _imageRepository.UpdateImageAsync(image);
             return true;
         }
@@ -101,9 +61,6 @@ namespace MementoServer.Service
         {
             var image = await _imageRepository.GetImageByIdAsync(id);
             if (image == null) return false;
-
-            if (File.Exists(image.FilePath))
-                File.Delete(image.FilePath);
 
             await _imageRepository.DeleteImageAsync(image);
             return true;

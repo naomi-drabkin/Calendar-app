@@ -9,9 +9,11 @@ namespace MomentoServer.Core.DTOs.ImagesDTOs
     public class ImageDTO
     {
         public int Id { get; set; }
-        public string FileName { get; set; }
-        public string FilePath { get; set; }
-        public DateTime UploadDate { get; set; }
+        public string Url { get; set; }
+        //public string FilePath { get; set; }
+        public DateTime EventDate { get; set; }
         public string Event { get; set; }
+        public int UserId { get; set; }
+
     }
 }

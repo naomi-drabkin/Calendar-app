@@ -1,13 +1,17 @@
 
-import './App.css'
-import LoginRegister from './pages/LoginRegister'
+import { router } from './Route';
+import { RouterProvider } from 'react-router';
+
+
 
 function App() {
-  // const [count, setCount] = useState(0)
 
   return (
     <>
-    <LoginRegister/>
+        <RouterProvider router={router}>
+
+        </RouterProvider>
+        
     </>
   )
 }

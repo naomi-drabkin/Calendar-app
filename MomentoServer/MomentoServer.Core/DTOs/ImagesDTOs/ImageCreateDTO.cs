@@ -10,12 +10,14 @@ namespace MomentoServer.Core.DTOs.ImagesDTOs
 {
     public class ImageCreateDTO
     {
-        [Required]
-        public IFormFile File { get; set; }
+        //[Required]
+        public string Url { get; set; }
 
-        [Required]
-        public DateTime UploadDate { get; set; }
-        [Required]
+        //[Required]
+        public DateTime EventDate { get; set; }
+        //[Required]
         public string Event { get; set; }
+        public int UserId { get; set; }
+
     }
 }

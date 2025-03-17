@@ -9,7 +9,7 @@ namespace MomentoServer.Core.IServices
 {
     public interface IImageService
     {
-        Task<string> UploadImageAsync(ImageCreateDTO imageDto, int userId);
+        Task<bool> PostImageAsync(ImageCreateDTO imageDto, int userId);
         Task<List<ImageDTO>> GetAllImagesAsync(int userId);
         Task<ImageDTO?> GetImageByIdAsync(int id);
         Task<bool> UpdateImageAsync(int id, ImageUpdateDTO imageDto);

@@ -25,6 +25,7 @@ namespace MomentoServer.Core
             CreateMap<ImageUpdateDTO, Image>().ReverseMap();
             CreateMap<Image, ImageDTO>().ReverseMap();
             CreateMap<Calendar, CalendarDTO>().ReverseMap();
+            CreateMap<Roles, string>().ReverseMap();
 
 
         }

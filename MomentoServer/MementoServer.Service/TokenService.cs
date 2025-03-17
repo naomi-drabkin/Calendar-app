@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -10,36 +11,44 @@ using MomentoServer.Core.IServices;
 
 public class TokenService : ITokenService
 {
-    private readonly IConfiguration _config;
+    private readonly IConfiguration _configuration;
 
     public TokenService(IConfiguration config)
     {
-        _config = config;
+        _configuration = config;
     }
 
     public string GenerateToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
-        Console.WriteLine($"User Role: {user.Role}");
-
-        var tokenDescriptor = new SecurityTokenDescriptor
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        //Console.WriteLine($"User Role: {user.Role}");
+        var claims = new List<Claim>
         {
-            
-            Subject = new ClaimsIdentity(new Claim[]
-            {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role,user.Role),
-            new Claim("Password", user.Password)
-            }),
-            Expires = DateTime.UtcNow.AddHours(2),
-            Issuer = _config["Jwt:Issuer"],
-            Audience = _config["Jwt:Audience"],
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
+            //new Claim(ClaimTypes.Role,user.Role),
+            new Claim("Password", user.Password),
+            new Claim("ID", user.Id.ToString()),
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+        };
+        if (user.Roles != null)
+        {
+            foreach (var role in user.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role.RoleName));
+            }
+        }
+        var token = new JwtSecurityToken(
+            issuer: _configuration["Jwt:Issuer"],
+            audience: _configuration["Jwt:Audience"],
+            claims: claims,
+            expires: DateTime.Now.AddMinutes(30),
+            signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+        );
+
+
+        //var token = tokenHandler.CreateToken(tokenDescriptor);
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

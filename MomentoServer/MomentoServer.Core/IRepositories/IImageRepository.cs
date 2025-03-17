@@ -9,7 +9,7 @@ namespace MomentoServer.Core.IRepositories
 {
     public interface IImageRepository
     {
-        Task SaveImageAsync(Image image);
+        Task<bool> AddImageAsync(Image image);
         Task<Image?> GetImageByIdAsync(int id);
         Task<List<Image>> GetAllImagesAsync(int userId);
         Task UpdateImageAsync(Image image);

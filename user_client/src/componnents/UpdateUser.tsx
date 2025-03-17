@@ -4,22 +4,26 @@ import { FormEvent, useRef, useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
+export const token = sessionStorage.getItem("AuthToken");
+export  type jwtdecode ={
+  Token:String,
+  ID:Number
+}
 export default function UpdateUser() {
   const [openModal, setOpenModal] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const UserNameRef = useRef<HTMLInputElement>(null);
   const UserFamilyRef = useRef<HTMLInputElement>(null);
-  const token = sessionStorage.getItem("AuthToken");
-
+  
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
       if (token) {
-        const decodedToken = jwtDecode(token).nameid;
-        console.log(decodedToken);
+        const userId = jwtDecode<jwtdecode>(token).ID;
+        console.log(userId);
         console.log(jwtDecode(token));
-        const res = await axios.put(`http://localhost:5204/api/User/${decodedToken}`, {
+        const res = await axios.put(`http://localhost:5204/api/User/${userId}`, {
           email: emailRef.current?.value,
           password: passwordRef.current?.value,
           UserName: UserNameRef.current?.value,

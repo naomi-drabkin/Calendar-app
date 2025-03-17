@@ -17,11 +17,14 @@ namespace MomentoServer.Core.Entities
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public string FileName { get; set; }
-        public string FilePath { get; set; }
+        public string Url { get; set; }
+        //public string FilePath { get; set; }
         public string Event { get; set; }
 
         [Required]
+        public DateTime EventDate { get; set; }
         public DateTime UploadDate { get; set; }
+
+        public DateTime UpdateUpload {  get; set; }
     }
 }

@@ -21,10 +21,10 @@ namespace MementoServer.Data.Repositories
             _mapper = mapper;
         }
 
-        public async Task SaveImageAsync(Image image)
+        public async Task<bool> AddImageAsync(Image image)
         {
             await _context.Images.AddAsync(image);
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<Image?> GetImageByIdAsync(int id)

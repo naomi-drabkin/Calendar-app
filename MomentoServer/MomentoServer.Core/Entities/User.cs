@@ -15,10 +15,15 @@ namespace MomentoServer.Core.Entities
         public string Password { get; set; }
         public string UserName { get; set; }
         public string UserFamily { get; set; }
-        public string Role { get; set; }
-        public ICollection<Template> Templates { get; set; }
+        //public string Role { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+
         public ICollection<Image> Images { get; set; }
-        public ICollection<Calendar> Calendar { get; set; }
+        //public Calendar Calendar { get; set; }
+        public ICollection<Roles> Roles { get; set; }
+
+
     }
 }
 

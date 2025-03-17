@@ -46,10 +46,12 @@ namespace MementoServer.Service
             if (existingUser == null)
             {
                 var userEntity = _mapper.Map<User>(userDto);
-                userEntity.Role = userDto.Role;
+                //var role = _mapper.Map<Roles>(userDto.Role);
+                //userEntity.Roles.Add();
                 userEntity.Password = HashPassword(userDto.Password);
+                userEntity.CreatedAt = DateTime.Now;
                 await _userRepository.AddAsync(userEntity);
-                return await Login(userEntity.Email, userEntity.Password);
+                return await Login(userEntity.Email, userDto.Password);
             }
             return null;
         }
@@ -57,7 +59,7 @@ namespace MementoServer.Service
         public async Task<AuthResponse> Login(string email, string password)
         {
             var user = await _userRepository.GetByEmailAsync(email);
-            if (user == null)
+            if (user == null || !VerifyPassword(password,user.Password))
             {
                 return null;
             }
@@ -91,6 +93,7 @@ namespace MementoServer.Service
 
                 var change = _mapper.Map<User>(userDto);
                 change.Password = HashPassword(userDto.Password);
+                change.UpdatedAt = DateTime.Now;
                 var res = await _userRepository.UpdateUserAsync(id, change);
 
                 return res ? true : false;
