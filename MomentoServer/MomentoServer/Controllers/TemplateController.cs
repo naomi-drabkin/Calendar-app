@@ -8,7 +8,7 @@ namespace MomentoServer.Api.Controllers
 {
     [Route("api/templates")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "Admin")]
     public class TemplateController : ControllerBase
     {
         private readonly ITemplateService _service;

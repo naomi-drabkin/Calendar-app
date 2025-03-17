@@ -2,6 +2,7 @@ import { Box, Button, Modal, TextField } from "@mui/material";
 import axios from "axios";
 import { FormEvent, useRef, useState } from "react";
 import HomePage from "../componnents/HomePage";
+import { useNavigate } from "react-router";
 
 export const styleModal = {
     position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
@@ -14,7 +15,8 @@ const LoginRegister = () => {
     const passwordRef = useRef<HTMLInputElement>(null);
     const UserNameRef = useRef<HTMLInputElement>(null);
     const UserFamilyRef = useRef<HTMLInputElement>(null);
-    // const RoleRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
+
 
     const [isRegister, setIsRegister] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -45,6 +47,7 @@ const LoginRegister = () => {
             sessionStorage.setItem("AuthToken", res.data.token);
             setOpenNextComponnent(true);
             setIsOpenModal(false);
+            navigate('/homePage');
         } catch (error) {
             console.log(error);
 

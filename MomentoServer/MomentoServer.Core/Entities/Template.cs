@@ -17,7 +17,7 @@ namespace MomentoServer.Core.Entities
         [ForeignKey(nameof(UserId))]
         public int UserId { get; set; }
         public User User { get; set; }
-        public string PdfUrl { get; set; }
+        public string Url { get; set; }
 
         //[ForeignKey(nameof(ImageUrl))]
         //public int ImageUrl { get; set; }

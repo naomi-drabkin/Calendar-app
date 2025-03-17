@@ -20,7 +20,7 @@ namespace MomentoServer.Api.Controllers
             _tokenService = tokenService;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
@@ -49,7 +49,7 @@ namespace MomentoServer.Api.Controllers
             return Ok(new { Token = userDto.Token, User = userDto.User });
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

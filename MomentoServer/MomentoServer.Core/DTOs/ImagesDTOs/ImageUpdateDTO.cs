@@ -9,8 +9,10 @@ namespace MomentoServer.Core.DTOs.ImagesDTOs
 {
     public class ImageUpdateDTO
     {
-        public IFormFile? File { get; set; } // אופציונלי
-        public DateTime? UploadDate { get; set; } // אופציונלי
+        public string? Url { get; set; }
+        public DateTime? EventDate { get; set; }
         public string? Event { get; set; }
+        public int UserId { get; set; }
+
     }
 }

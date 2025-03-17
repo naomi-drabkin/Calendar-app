@@ -10,21 +10,37 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Options;
+using Amazon.S3;
+using Amazon.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
-Console.WriteLine("*****************************************");
-// Add services to the container.
+Console.WriteLine(builder.Configuration["AWS:AccessKey"]);
+Console.WriteLine(builder.Configuration["AWS:SecretKey"]);
+Console.WriteLine(builder.Configuration["AWS:Region"]);
+
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var credentials = new BasicAWSCredentials(
+    builder.Configuration["AWS:AccessKey"],
+    builder.Configuration["AWS:SecretKey"]
+);
+
+var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]);
+
+var s3Client = new AmazonS3Client(credentials, region);
+
+builder.Services.AddSingleton<IAmazonS3>(s3Client);
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 builder.Services.AddScoped<ITemplateService, TemplateService>();
@@ -57,22 +73,30 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true
         };
     });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("User", policy => policy.RequireRole("User"));
+}
+);
 
-builder.Services.AddAuthorization();//builder.Services.AddDbContext<DataContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDbContext<DataContext>();
-//builder.Services.AddScoped<DataContext>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-//builder.Services.AddCors();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        policy => policy.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+    options.AddPolicy("AllowAll", policy =>
+//policy.WithOrigins(_=>true)
+//                .WithOrigins()
+//                .AllowAnyMethod()
+//                .AllowAnyHeader()
+        //                .AllowCredentials()
+            policy.SetIsOriginAllowed(_ => true)
+        .AllowAnyMethod().AllowAnyHeader().AllowCredentials()
+    );
+
 });
 
 builder.Services.AddSwaggerGen(c =>
@@ -111,18 +135,18 @@ builder.Services.AddSwaggerGen(c =>
 //    c.OperationFilter<SwaggerFileUploadOperationFilter>();
 //});
 
-builder.Services.Configure<FormOptions>(options =>
-{
-    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // מגבלת העלאה של 10MB
-});
+//builder.Services.Configure<FormOptions>(options =>
+//{
+//    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // מגבלת העלאה של 10MB
+//});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 //}
 
 app.MapGet("/", () => "server is running");
