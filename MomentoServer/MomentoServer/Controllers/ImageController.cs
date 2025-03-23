@@ -28,12 +28,12 @@ namespace MomentoServer.Api.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadImage([FromBody] ImageCreateDTO imageDto)
+        public async Task<IActionResult> UploadImage([FromBody] ImageCreateDTO imageDto,int numOfCalendar)
         {
             try
             {
                 var userId = GetUserId();
-                var fileName = await _imageService.PostImageAsync(imageDto, userId);
+                var fileName = await _imageService.PostImageAsync(imageDto, userId,numOfCalendar);
                 return Ok(new { message = "Image uploaded successfully", fileName });
             }
             catch (UnauthorizedAccessException)
@@ -45,14 +45,14 @@ namespace MomentoServer.Api.Controllers
                 return StatusCode(500, new { error = ex.Message });
             }
         }
-
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllImages()
+        
+        [HttpGet("all/{numOfCalendar}")]
+        public async Task<IActionResult> GetAllImages(int numOfCalendar)
         {
             try
             {
                 var userId = GetUserId();
-                var images = await _imageService.GetAllImagesAsync(userId);
+                var images = await _imageService.GetAllImagesAsync(userId,numOfCalendar);
                 return Ok(images);
             }
             catch (UnauthorizedAccessException)
@@ -80,11 +80,11 @@ namespace MomentoServer.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateImage(int id, [FromBody] ImageUpdateDTO imageDto)
+        public async Task<IActionResult> UpdateImage(int id, int numOfCalendar,[FromBody] ImageUpdateDTO imageDto)
         {
             try
             {
-                var success = await _imageService.UpdateImageAsync(id, imageDto);
+                var success = await _imageService.UpdateImageAsync(id, numOfCalendar,imageDto);
                 return success ? Ok(new { message = "Image updated successfully" }) : NotFound();
             }
             catch (Exception ex)
@@ -93,7 +93,7 @@ namespace MomentoServer.Api.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete ("{id}")]
         public async Task<IActionResult> DeleteImage(int id)
         {
             try
@@ -107,12 +107,12 @@ namespace MomentoServer.Api.Controllers
             }
         }
 
-        [HttpDelete("{all}")]
-        public async Task<IActionResult> DeleteAllImages(int id)
+        [HttpDelete("all/{userId}")]
+        public async Task<IActionResult> DeleteAllImages(int usrId)
         {
             try
             {
-                var success = await _imageService.DeleteAllImagesByIdAsync(id);
+                var success = await _imageService.DeleteAllImagesByIdAsync(usrId);
                 return success ? Ok(new { message = "All your images deleted successfully" }) : NotFound();
             }
             catch (Exception ex)

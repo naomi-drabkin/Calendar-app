@@ -14,5 +14,6 @@ namespace MomentoServer.Core.DTOs.ImagesDTOs
         public string? Event { get; set; }
         public int UserId { get; set; }
 
+        public string FileName { get; set; }
     }
 }

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Options;
 using Amazon.S3;
 using Amazon.Runtime;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 Console.WriteLine(builder.Configuration["AWS:AccessKey"]);
@@ -26,16 +27,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Env.Load();
+
+//var AccessKey = Environment.GetEnvironmentVariable("ACCESS");
+//var SecretAccess = Environment.GetEnvironmentVariable("SECRET");
+var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
+
 var credentials = new BasicAWSCredentials(
-    builder.Configuration["AWS:AccessKey"],
-    builder.Configuration["AWS:SecretKey"]
+builder.Configuration["AWS:AccessKey"],
+builder.Configuration["AWS:SecretKey"]
+//AccessKey,
+//SecretAccess
 );
 
 var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]);
+//var region = Amazon.RegionEndpoint.GetBySystemName(awsRegion);
 
 var s3Client = new AmazonS3Client(credentials, region);
 
 builder.Services.AddSingleton<IAmazonS3>(s3Client);
+Console.WriteLine(s3Client);
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -88,12 +99,11 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
-//policy.WithOrigins(_=>true)
-//                .WithOrigins()
-//                .AllowAnyMethod()
-//                .AllowAnyHeader()
-        //                .AllowCredentials()
-            policy.SetIsOriginAllowed(_ => true)
+ //policy.WithOrigins("http://localhost:5173") // כתובת ה-React שלך
+ //             .AllowAnyMethod()
+ //             .AllowAnyHeader()
+ //             .AllowCredentials()
+policy.SetIsOriginAllowed(_ => true)
         .AllowAnyMethod().AllowAnyHeader().AllowCredentials()
     );
 

@@ -3,12 +3,10 @@ import { styleModal } from '../pages/LoginRegister';
 import { FormEvent, useRef, useState } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import { Jwt } from '../Models/Jwt';
 
 export const token = sessionStorage.getItem("AuthToken");
-export  type jwtdecode ={
-  Token:String,
-  ID:Number
-}
+
 export default function UpdateUser() {
   const [openModal, setOpenModal] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -20,7 +18,7 @@ export default function UpdateUser() {
     event.preventDefault();
     try {
       if (token) {
-        const userId = jwtDecode<jwtdecode>(token).ID;
+        const userId = jwtDecode<Jwt>(token).ID;
         console.log(userId);
         console.log(jwtDecode(token));
         const res = await axios.put(`http://localhost:5204/api/User/${userId}`, {

@@ -15,6 +15,8 @@ namespace MomentoServer.Core.Entities
         public string Password { get; set; }
         public string UserName { get; set; }
         public string UserFamily { get; set; }
+
+        public int CountCalendar { get; set; } = 0;
         //public string Role { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

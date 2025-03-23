@@ -8,18 +8,19 @@ namespace MomentoServer.Api.Controllers
 {
     [Route("api/templates")]
     [ApiController]
-    [Authorize(Policy = "Admin")]
     public class TemplateController : ControllerBase
     {
         private readonly ITemplateService _service;
         public TemplateController(ITemplateService service) { _service = service; }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TemplateDto>>> GetTemplates()
         {
             return Ok(await _service.GetAllTemplatesAsync());
         }
 
+        [Authorize(Policy = "Admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<TemplateDto>> GetTemplate(int id)
         {
@@ -28,6 +29,7 @@ namespace MomentoServer.Api.Controllers
             return Ok(template);
         }
 
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateTemplate(TemplateDto templateDto)
         {
@@ -35,6 +37,7 @@ namespace MomentoServer.Api.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTemplate(int id, TemplateDto templateDto)
         {
@@ -42,6 +45,7 @@ namespace MomentoServer.Api.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTemplate(int id)
         {
@@ -49,6 +53,7 @@ namespace MomentoServer.Api.Controllers
             return NoContent();
         }
 
+        [Authorize(Policy = "Admin")]
         [HttpPost("upload-image")]
         [Consumes("multipart/form-data")]
         //[ProducesResponseType(typeof(object), StatusCodes.Status200OK)]

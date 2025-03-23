@@ -1,22 +1,29 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { token } from "./UpdateUser";
+import { Template } from "../Models/Template";
+import ShowImg from "./ShowImg";
+import { useLocation } from "react-router";
+import { Box, Modal } from "@mui/material";
+import { styleModal } from "../pages/LoginRegister";
 
-type Template = {
-    url: string,
-    // FileName: string
-}
 
-export default function ShowTemplates() {
+export default function ShowTemplates({ chooseTemplate }: { chooseTemplate: Function }) {
     const [listTemplates, setListTemplate] = useState<Template[]>([]);
+    const [openModal,setopanModal] = useState(true);
+    const location = useLocation();
+    const setColor = location.state?.color;
+
     useEffect(() => {
         const fetchAllTemplates = async () => {
             try {
-                const res = await axios.get('http://localhost:5204/api/Image/all', {
+                const res = await axios.get('http://localhost:5204/api/templates', {
                     headers: { Authorization: `Bearer ${token}` }
                 })
                 setListTemplate(res.data);
                 console.log(res.data);
+                console.log(res.data);
+
 
             } catch (error) {
                 console.log(error);
@@ -29,20 +36,25 @@ export default function ShowTemplates() {
     }, []);
 
     useEffect(() => {
-    }, [listTemplates]); 
+    }, [listTemplates]);
 
     return (
         <>
-            <div>
-                {listTemplates.length > 0 ? (
-                    listTemplates.map((img, index) => (
-                        <img key={index} src={img.url} alt="תמונה" width="300px"/>
-                    ))
-                ) : (
-                    <p>אין תמונות להצגה</p>
-                )}
-
-            </div>
+            <Modal open={openModal} onClose={()=>{setopanModal(false),chooseTemplate(null)}} 
+            >
+                <Box sx={styleModal} >
+                    {listTemplates.length > 0 ? (
+                        listTemplates.map((img, index) => (
+                            <ShowImg key={index} fileName={img.name} setColor={setColor} chooseTemplate={chooseTemplate} />
+                        ))
+                    ) : (
+                        <p>אין צבעים להצגה</p>
+                    )}
+                     <span className="close-btn" onClick={()=>{setopanModal(false),chooseTemplate(null)}}>
+                        ✖
+                    </span>
+                </Box>
+            </Modal>
         </>
     )
 }

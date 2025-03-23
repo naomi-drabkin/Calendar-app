@@ -1,7 +1,8 @@
 import { createBrowserRouter, Navigate } from "react-router";
 import LoginRegister from "./pages/LoginRegister";
-import HomePage from "./componnents/HomePage";
-import ShowTemplates from "./componnents/ShowTemplates";
+import HomePage from "./pages/HomePage";
+// import ShowTemplates from "./componnents/ShowTemplates";
+import CreateCalendarScreen from "./pages/CreateCalendarScreen";
 
 
 
@@ -23,9 +24,16 @@ export const router = createBrowserRouter([
             
         ]
     },
-    {
-        path: "/templates",
-        element: <ShowTemplates />,
+    
+      {
+        path: "/createCalendar",
+        element: <CreateCalendarScreen />,
+        // children:[
+        //   {
+        //     path: "templates",
+        //     element: <ShowTemplates/>,
+        //   },
+        // ]
       },
     
 ])
