@@ -1,11 +1,60 @@
 #root {
-  max-width: 1280px;
+  width: 100%; /*במקום max-width: 1280px*/
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   text-align: center;
+  /* top:30px; */
+  height: 80vh;
 }
 
+.upload-button {
+  position: sticky;
+  top: -40px;
+  left: 15px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: #69737d;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  z-index: 1000;
+  
+}
 
+.theme-button {
+  position: sticky;
+  top: -40px;
+  left: 5px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color:#ffffff;
+  color: #69737d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.upload-button:hover{
+  background-color: #69737d;
+  color: white;
+}
+
+.theme-button:hover{
+  background-color: #69737d;
+  color: white;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -40,4 +89,121 @@
 
 .read-the-docs {
   color: #888;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: auto;
+  padding: 20px;
+  gap: 20px;
+  align-items: center;
+}
+
+.images-section {
+  width: 30%;
+  max-height: 500px; /* גובה קבוע */
+  overflow-y: auto;/* גלילה פנימית */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.upload-section {
+  width: 50%;
+  text-align: center;
+}
+
+.upload-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.upload-btn:hover {
+  background-color: #0056b3;
+}
+
+/* פופ-אפ */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 50%;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+html, body {
+  height: 100%;
+  margin: 10px;
+  /* overflow: hidden; */
+  /* background-image: url('C:\Users\USER\Pictures\פרויקטים שנה ב\פרקטיקום לוח שנה\user_client\src\assets\1Q3A9348ג.jpg'); */
+
+}
+
+.calendar-container::before {
+  background-image: url('C:\Users\USER\Pictures\פרויקטים שנה ב\פרקטיקום לוח שנה\user_client\src\assets\1Q3A9348ג.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.4; /* שקיפות של 40% */
+  filter: blur(5px); /* טשטוש של 5 פיקסלים */
+  z-index: -1;
+}
+
+.calendar-container{
+  top: 30px;
+  height: 100%;
+}
+
+.calendar-wrapper {
+  width: 100vw; /* כל הרוחב */
+  height: 100vh; /* כל הגובה */
+  overflow: auto; /* גלילה רק אם צריך */
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+}
+
+.fc {
+  width: 100%;
+  height: 50%;
+  /* top:60px; */
+
+}
+
+.fc-daygrid-day {
+  min-width: 300px !important; /* גודל כל יום ברוחב */
+  min-height: 300px !important; /* גובה כל יום */
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+}
+
+.fc-scrollgrid {
+  overflow: auto !important; /* גלילה פנימית ללוח */
 }

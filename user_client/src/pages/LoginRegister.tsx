@@ -1,7 +1,7 @@
 import { Box, Button, Modal, TextField } from "@mui/material";
 import axios from "axios";
 import { FormEvent, useRef, useState } from "react";
-import HomePage from "../componnents/HomePage";
+import HomePage from "./HomePage";
 import { useNavigate } from "react-router";
 
 export const styleModal = {
@@ -45,6 +45,7 @@ const LoginRegister = () => {
                 console.log("register");
             }
             sessionStorage.setItem("AuthToken", res.data.token);
+            sessionStorage.setItem("countCalendar",res.data.countCalendar);
             setOpenNextComponnent(true);
             setIsOpenModal(false);
             navigate('/homePage');

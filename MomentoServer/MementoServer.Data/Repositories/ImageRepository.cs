@@ -36,17 +36,37 @@ namespace MementoServer.Data.Repositories
         {
             return await _context.Images.Where(img => img.UserId == userId).ToListAsync();
         }
-
-        public async Task UpdateImageAsync(Image image)
+        public async Task<List<Image>> GetAllImagesCalendarAsync(List<Image>IdImages, int numOfCalendar)
         {
-            _context.Images.Update(image);
-            await _context.SaveChangesAsync();
+            return  IdImages.Where(img => img.NumOfCalendar == numOfCalendar).ToList();
         }
 
-        public async Task DeleteImageAsync(Image image)
+        public async Task<bool> UpdateImageAsync(int id,int numOfCalendar,Image image)
         {
-            _context.Images.Remove(image);
-            await _context.SaveChangesAsync();
+
+            var userForUpdate =await _context.Images.FindAsync(id,numOfCalendar);
+            if (userForUpdate != null)
+            {
+                userForUpdate.Event = image.Event;
+                userForUpdate.Url = image.Url;
+                userForUpdate.EventDate = image.EventDate;
+                userForUpdate.UserId = image.UserId;
+                return await _context.SaveChangesAsync() >0;
+            }
+            return false;
+           
+        }
+
+        public async Task<bool> DeleteImageAsync(Image image)
+        {
+
+            var user = await _context.Images.FindAsync(image.Id);
+            if (user != null)
+            {
+                _context.Images.Remove(image);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            return false;
         }
 
         

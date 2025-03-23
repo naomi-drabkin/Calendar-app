@@ -79,8 +79,7 @@ namespace MementoServer.Service
             var user = await _userRepository.GetByIdAsync(id);
             if (user != null)
             {
-                var res = await _userRepository.DeleteUserAsync(id);
-                return res ? true : false;
+               return await _userRepository.DeleteUserAsync(id);
             }
             return false;
         }

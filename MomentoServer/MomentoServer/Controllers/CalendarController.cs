@@ -51,7 +51,7 @@ namespace MomentoServer.Api.Controllers
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var updated = await _calendarService.UpdateCalendarAsync(userId, id, calendarDto);
             if (!updated) return Forbid();
-
+ 
             return NoContent();
         }
 
