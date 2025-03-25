@@ -28,12 +28,12 @@ namespace MomentoServer.Api.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadImage([FromBody] ImageCreateDTO imageDto,int numOfCalendar)
+        public async Task<IActionResult> UploadImage([FromBody] ImageCreateDTO imageDto)
         {
             try
             {
                 var userId = GetUserId();
-                var fileName = await _imageService.PostImageAsync(imageDto, userId,numOfCalendar);
+                var fileName = await _imageService.PostImageAsync(imageDto, userId);
                 return Ok(new { message = "Image uploaded successfully", fileName });
             }
             catch (UnauthorizedAccessException)
@@ -80,11 +80,11 @@ namespace MomentoServer.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateImage(int id, int numOfCalendar,[FromBody] ImageUpdateDTO imageDto)
+        public async Task<IActionResult> UpdateImage(int id,[FromBody] ImageUpdateDTO imageDto)
         {
             try
             {
-                var success = await _imageService.UpdateImageAsync(id, numOfCalendar,imageDto);
+                var success = await _imageService.UpdateImageAsync(id,imageDto);
                 return success ? Ok(new { message = "Image updated successfully" }) : NotFound();
             }
             catch (Exception ex)

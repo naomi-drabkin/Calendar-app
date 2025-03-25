@@ -1,6 +1,5 @@
 import axios from 'axios'
 import  { useEffect, useRef } from 'react'
-import { token } from './UpdateUser'
 
 export default function DeleteImg({id,onUpload,closeDelete}:{id:number,onUpload:Function,closeDelete:Function}) {
     const hasRun = useRef(false);
@@ -15,7 +14,7 @@ export default function DeleteImg({id,onUpload,closeDelete}:{id:number,onUpload:
             try {
                 await axios.delete(`http://localhost:5204/api/Image/${id}`,
                     {
-                        headers: { Authorization: `Bearer ${token}`,                        
+                        headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}`,                        
                             "Content-Type": "application/json"},                       
                     }
                 )
@@ -25,7 +24,7 @@ export default function DeleteImg({id,onUpload,closeDelete}:{id:number,onUpload:
                 alert("---תקלה במחיקת הקובץ")
             }
         };
-        console.log("🔄 DeleteImg useEffect ran with id:", id);
+        // console.log("🔄 DeleteImg useEffect ran with id:", id);
 
         deleteImg();
 

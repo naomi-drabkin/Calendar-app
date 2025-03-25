@@ -28,12 +28,13 @@ namespace MementoServer.Data.Repositories
             return await _context.Calendars.Where(c => c.UserId == userId).ToListAsync();
         }
 
-        public async Task<Calendar> AddAsync(Calendar calendar)
+        public async Task<bool> AddAsync(Calendar calendar)
         {
             _context.Calendars.Add(calendar);
-            await _context.SaveChangesAsync();
-            return calendar;
+            return await _context.SaveChangesAsync() > 0;
         }
+
+        
 
         public async Task<bool> UpdateAsync(Calendar calendar)
         {

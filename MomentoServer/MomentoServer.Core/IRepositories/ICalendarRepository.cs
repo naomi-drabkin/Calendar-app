@@ -11,7 +11,7 @@ namespace MomentoServer.Core.IRepositories
     {
         Task<IEnumerable<Calendar>> GetAllAsync();
         Task<IEnumerable<Calendar>> GetByUserIdAsync(int userId);
-        Task<Calendar> AddAsync(Calendar calendar);
+        Task<bool> AddAsync(Calendar calendar);
         Task<bool> UpdateAsync(Calendar calendar);
         Task<bool> DeleteAsync(int userId, int id);
     }

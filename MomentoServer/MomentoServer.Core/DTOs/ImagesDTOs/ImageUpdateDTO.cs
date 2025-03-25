@@ -15,5 +15,7 @@ namespace MomentoServer.Core.DTOs.ImagesDTOs
         public int UserId { get; set; }
 
         public string FileName { get; set; }
+
+        public int NumOfCalendar { get; set; }
     }
 }

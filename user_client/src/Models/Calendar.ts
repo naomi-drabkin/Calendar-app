@@ -1,8 +1,9 @@
 export class Calendar{
     
     constructor(
-       public Title:string,
-       public Description:string,
-       public PdfUrl:string
+       public id:number,
+       public title:string,
+       public description:string,
+       public pdfUrl:string
     ){}
 }
