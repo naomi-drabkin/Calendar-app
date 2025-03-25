@@ -31,8 +31,9 @@ export default function ShowDisignCalendar() {
 
     return (
         <>
-
+            {listCalendars.length > 0 && 
             <p style={{fontSize:"15px",fontWeight:"normal",position:"absolute",top:"63%",justifyContent:"center"}}>עיצובים אחרונים</p>
+            }
             <div className="calendarDesign-container">
                 {listCalendars.length > 0 ? (
                     listCalendars.map((img, index) => (
