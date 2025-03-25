@@ -94,57 +94,190 @@ export default function CreateCalendarScreen() {
         await Promise.all(promises);
     };
 
-    const downloadPDF = async () => {
-        const pdf = new jsPDF("p", "mm", "a4");
+    // const downloadPDF = async () => {
+    //     const pdf = new jsPDF("p", "mm", "a4");
 
-        if (calendarRef.current) {
-            const calendarApi = calendarRef.current.getApi();
+    //     if (calendarRef.current) {
+    //         const calendarApi = calendarRef.current.getApi();
 
-            if (!calendarApi) {
-                console.error("calendarApi לא נטען!");
-                return;
-            }
+    //         if (!calendarApi) {
+    //             console.error("calendarApi לא נטען!");
+    //             return;
+    //         }
 
-            setLoading(true);
+    //         setLoading(true);
 
-            for (let month = 0; month < 12; month++) {
-                let Month = month < 9 ? `0${month + 1}` : `${month + 1}`;
-                const dateString = `2024-${Month}-01`;
-                const parsedDate = new Date(dateString);
+    //         for (let month = 0; month < 12; month++) {
+    //             let Month = month < 9 ? `0${month + 1}` : `${month + 1}`;
+    //             const dateString = `2024-${Month}-01`;
+    //             const parsedDate = new Date(dateString);
 
-                if (isNaN(parsedDate.getTime())) {
-                    console.error(`❌ תאריך לא חוקי: ${dateString}`);
-                    continue;
-                }
+    //             if (isNaN(parsedDate.getTime())) {
+    //                 console.error(`❌ תאריך לא חוקי: ${dateString}`);
+    //                 continue;
+    //             }
 
-                calendarApi.gotoDate(dateString);
-                await new Promise((resolve) => setTimeout(resolve, 800));
+    //             calendarApi.gotoDate(dateString);
+    //             await new Promise((resolve) => setTimeout(resolve, 800));
 
-                const calendarElement = document.getElementById("calendar-container");
+    //             const calendarElement = document.getElementById("calendar-container");
 
-                if (calendarElement) {
-                    await loadImages();
-                    await new Promise((resolve) => setTimeout(resolve, 500));
-                    const canvas = await html2canvas(calendarElement, {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: true
-                    });
+    //             if (calendarElement) {
+    //                 await loadImages();
+    //                 await new Promise((resolve) => setTimeout(resolve, 500));
+    //                 const canvas = await html2canvas(calendarElement, {
+    //                     scale: 2,
+    //                     useCORS: true,
+    //                     allowTaint: true
+    //                 });
 
-                    const imgData = canvas.toDataURL("image/png");
+    //                 const imgData = canvas.toDataURL("image/png");
 
-                    const imgWidth = 210;
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    //                 const imgWidth = 210;
+    //                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-                    if (month > 0) pdf.addPage();
-                    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-                }
-            }
+    //                 if (month > 0) pdf.addPage();
+    //                 pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+    //             }
+    //         }
 
-            setLoading(false);
-            pdf.save("calendar.pdf");
+    //         setLoading(false);
+    //         pdf.save("calendar.pdf");
+    //     }
+    // };
+
+    const downloadCalendarAsPDF = () => {
+        const calendarElement = document.getElementById("calendar-container");
+    
+        if (!calendarElement) {
+            console.error("Calendar element not found");
+            return;
         }
+    
+        // לוודא שכל התמונות נטענות לפני לכידת המסך
+        const images = calendarElement.getElementsByTagName("img");
+        let loadedImages = 0;
+        const totalImages = images.length;
+    
+        if (totalImages === 0) {
+            captureCalendar();
+        } else {
+            for (let img of images) {
+                img.onload = () => {
+                    loadedImages++;
+                    if (loadedImages === totalImages) {
+                        captureCalendar();
+                    }
+                };
+                img.onerror = () => {
+                    loadedImages++;
+                    if (loadedImages === totalImages) {
+                        captureCalendar();
+                    }
+                };
+            }
+        }
+    
+        
     };
+    
+    const captureCalendar = ()=> {
+        const calendarElement = document.getElementById("calendar-container");
+        if (!calendarElement) {
+            console.error("Calendar element not found");
+            return;
+        }
+        html2canvas(calendarElement, {
+            scale: 2,
+            useCORS: true, // חשוב כדי להבטיח שהתמונות יילקחו
+        }).then(canvas => {
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("landscape", "mm", "a4");
+            const imgWidth = 290;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
+            pdf.save("calendar.pdf");
+        });
+    }
+
+    const downloadPDF = async () => {
+        const calendarElement = document.getElementById("calendar-container");
+        if (!calendarElement) return;
+        
+        
+        // await ensureImagesLoaded(calendarElement); // ✅ מחכים לטעינת התמונות
+        const pdf = new jsPDF("p", "mm", "a4");
+        
+        console.log("לפני הטעינה");
+        
+        
+        if (!calendarRef.current) return;
+        const calendarApi = calendarRef.current.getApi();
+    
+        if (!calendarApi) {
+            console.error("❌ calendarApi לא נטען!");
+            return;
+        }
+        setLoading(true); // הפעלת טעינה
+        
+        // 🎯 שלב הכנה: ודא שהתמונות נטענות לפני שמתחילים
+    
+        for (let month = 0; month < 12; month++) {
+            let Month = month < 9 ? `0${month + 1}` : `${month + 1}`;
+            const dateString = `2024-${Month}-01`;
+            const parsedDate = new Date(dateString);
+    
+            if (isNaN(parsedDate.getTime())) {
+                console.error(`❌ תאריך לא חוקי: ${dateString}`);
+                continue;
+            }
+    
+            calendarApi.gotoDate(dateString);
+            await new Promise((resolve) => setTimeout(resolve, 1000)); // מחכים שהכל יתעדכן
+    
+            // 🔥 נוודא שהתמונות עדיין נטענות לפני הצילום
+            await ensureImagesLoaded(calendarElement);
+            await new Promise((resolve) => setTimeout(resolve, 500));
+    
+            const canvas = await html2canvas(calendarElement, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true
+            });
+    
+            const imgData = canvas.toDataURL("image/png");
+    
+            const imgWidth = 210;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    
+            if (month > 0) pdf.addPage();
+            pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+        }
+    
+        setLoading(false); // סיום טעינה
+        pdf.save("calendar.pdf");
+    };
+    
+
+    
+    const ensureImagesLoaded = async (element:HTMLElement) => {
+        const images = element.getElementsByTagName("img");
+        const promises = [];
+    
+        for (let img of images) {
+            if (!img.complete) {
+                img.crossOrigin = "anonymous"; // לוודא טעינה תקינה
+                promises.push(new Promise((resolve) => {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                }));
+            }
+        }
+    
+        await Promise.all(promises);
+    };
+    
 
     useEffect(() => {
 
@@ -287,7 +420,7 @@ export default function CreateCalendarScreen() {
                         {deleteImage && <DeleteImg id={deleteImage.id} onUpload={handleNewImage} closeDelete={setDeleteImageNull} />}
                     </div>
 
-                    <Button onClick={downloadPDF} style={{
+                    <Button onClick={downloadCalendarAsPDF} style={{
                         marginTop: "20px", padding: "10px", fontSize: "16px",
                         position: "absolute",
                         top: '1px',
