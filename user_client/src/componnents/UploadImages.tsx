@@ -39,8 +39,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
             );
             presignedUrl = response.data.url;
 
-            console.log("Presigned URL:", presignedUrl);
-            console.log("File Name:", file.name);
+            // console.log("Presigned URL:", presignedUrl);
+            // console.log("File Name:", file.name);
 
             const uploadResponse = await axios.put(presignedUrl, file, {
                 headers: {
@@ -67,20 +67,20 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
                     ? new Date(eventDateValue)
                     : new Date();
 
-                console.log("Event Date:", eventDate.current?.value);
-                console.log("Token:", token);
+                // console.log("Event Date:", eventDate.current?.value);
+                // console.log("Token:", token);
 
                 if (isNaN(parsedDate.getTime())) {
                     alert(`Invalid Date: ${eventDateValue}`);
                 } else {
-                    console.log("Uploaded URL (clean):", presignedUrl.split("?")[0]);
-                    console.log({
-                        Url: presignedUrl.split("?")[0], // מסיר פרמטרים מיותרים
-                        EventDate: parsedDate.toISOString(),
-                        Event: event.current?.value || "",
-                        UserId: jwtDecode<Jwt>(token).ID,
-                        FileName: file?.name,
-                    });
+                    // console.log("Uploaded URL (clean):", presignedUrl.split("?")[0]);
+                    // console.log({
+                    //     Url: presignedUrl.split("?")[0], // מסיר פרמטרים מיותרים
+                    //     EventDate: parsedDate.toISOString(),
+                    //     Event: event.current?.value || "",
+                    //     UserId: jwtDecode<Jwt>(token).ID,
+                    //     FileName: file?.name,
+                    // });
 
                     await axios.post(
                         "http://localhost:5204/api/Image/upload",
@@ -90,10 +90,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
                             Event: event.current?.value || "",
                             UserId: jwtDecode<Jwt>(token).ID,
                             FileName: file?.name,
+                            NumOfCalendar:sessionStorage.getItem("numOfCalendar")
                         },
                         {
                             headers: {
-                                Authorization: `Bearer ${token}`,
+                                Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}`,
                                 "Content-Type": "application/json",
                             },
                         }

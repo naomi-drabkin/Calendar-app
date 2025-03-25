@@ -1,6 +1,6 @@
 import { Box, Button, Modal, TextField } from "@mui/material";
 import axios from "axios";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import HomePage from "./HomePage";
 import { useNavigate } from "react-router";
 
@@ -10,7 +10,7 @@ export const styleModal = {
 };
 
 
-const LoginRegister = () => {
+const LoginRegister = ({status,setDesign}:{status:boolean,setDesign:Function}) => {
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
     const UserNameRef = useRef<HTMLInputElement>(null);
@@ -18,8 +18,8 @@ const LoginRegister = () => {
     const navigate = useNavigate();
 
 
-    const [isRegister, setIsRegister] = useState(false);
-    const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isRegister, setIsRegister] = useState(status);
+    const [isOpenModal, setIsOpenModal] = useState(true);
     const [openNextComponnent, setOpenNextComponnent] = useState(false);
 
 
@@ -44,23 +44,29 @@ const LoginRegister = () => {
                 });
                 console.log("register");
             }
-            sessionStorage.setItem("AuthToken", res.data.token);
+            await sessionStorage.setItem("AuthToken", res.data.token);
             sessionStorage.setItem("countCalendar",res.data.countCalendar);
-            setOpenNextComponnent(true);
+            await setOpenNextComponnent(true);
             setIsOpenModal(false);
-            navigate('/homePage');
+            setDesign();
+            status == true? navigate('/homePage') : setOpenNextComponnent(false);
+
         } catch (error) {
-            console.log(error);
+            alert("משתמש לא קיים - נסה שנית")
 
         }
 
     }
 
+    useEffect(()=>{
+
+    },[sessionStorage.getItem("AuthToken")])
+
     return (<>
         {!openNextComponnent ?
             <>
-                <Button type="button" onClick={() => setIsOpenModal(true)}>Login</Button>
-                <Button type="button" onClick={() => { setIsRegister(true), setIsOpenModal(true) }}>Register</Button>
+                {/* <Button type="button" onClick={() => setIsOpenModal(true)}>Login</Button>
+                <Button type="button" onClick={() => { setIsRegister(true), setIsOpenModal(true) }}>Register</Button> */}
 
                 <Modal onClose={() => { setIsOpenModal(false), setIsRegister(false) }} open={isOpenModal}>
                     <Box sx={styleModal}>
@@ -74,6 +80,7 @@ const LoginRegister = () => {
                                 variant="outlined" inputRef={passwordRef}
                                 required fullWidth
                                 sx={{ bgcolor: "rgb(249, 249, 249)" }}></TextField>
+                            {!isRegister && <Button type="button" onClick={()=> setIsRegister(true)}>?עוד לא משתמש רשום</Button>}        
                             {isRegister && <>
                                 <TextField id="UserName" type="text" label="UserName"
                                     variant="outlined" inputRef={UserNameRef}
@@ -85,6 +92,7 @@ const LoginRegister = () => {
                                     sx={{ bgcolor: "rgb(249, 249, 249)" }}></TextField>
                                 
                             </>}
+                            {isRegister && <Button type="button" onClick={()=> setIsRegister(false)}>?משתמש מחובר</Button>} 
                             {isRegister && <Button type="submit">הרשם</Button>}
                             {!isRegister && <Button type="submit">התחבר</Button>}
 

@@ -8,7 +8,6 @@ import { useEffect, useState, useRef } from "react";
 import ImageUpload from "../componnents/UploadImages";
 import '../App.css';
 import { Button } from "@mui/material";
-import { token } from "../componnents/UpdateUser";
 import { Img } from "../Models/Img";
 import UpdateImage from "../componnents/UpdateImage";
 import { Trash } from "lucide-react";
@@ -38,12 +37,12 @@ export default function CreateCalendarScreen() {
 
     const fetchImages = async () => {
         try {
-            const numOfCalendar = sessionStorage.getItem('numOfCalendar');            
+            const numOfCalendar = sessionStorage.getItem('numOfCalendar');
             const response = await axios.get(`http://localhost:5204/api/Image/all/${numOfCalendar}`, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` },
             });
 
-            const formattedEvents = response.data.map((item: Img) => ({
+            const formattedEvents = response.data?.map((item: Img) => ({
                 title: item.event || "📸 אירוע",
                 date: item.eventDate,
                 id: item.id,
@@ -77,19 +76,29 @@ export default function CreateCalendarScreen() {
         else {
             setColor(color);
         }
-        console.log(sessionStorage.getItem("Color"));
-        console.log(colorB);
+        // console.log(sessionStorage.getItem("Color"));
+        // console.log(colorB);
     }
 
-    const downloadPDF = async () => {
-        const pdf = new jsPDF("p", "mm", "a4"); // יצירת קובץ PDF בפורמט A4
-        console.log(calendarRef.current);
-        console.log(calendarRef);
+    const loadImages = async () => {
+        const images = document.querySelectorAll<HTMLImageElement>("#calendar-container img"); const promises = Array.from(images).map((img) => {
+            return new Promise((resolve) => {
+                if (img.complete) {
+                    resolve(true);
+                } else {
+                    img.onload = () => resolve(true);
+                    img.onerror = () => resolve(false);
+                }
+            });
+        });
+        await Promise.all(promises);
+    };
 
+    const downloadPDF = async () => {
+        const pdf = new jsPDF("p", "mm", "a4");
 
         if (calendarRef.current) {
             const calendarApi = calendarRef.current.getApi();
-            console.log(calendarRef.current.getApi());
 
             if (!calendarApi) {
                 console.error("calendarApi לא נטען!");
@@ -97,31 +106,32 @@ export default function CreateCalendarScreen() {
             }
 
             setLoading(true);
-            console.log("oooooooooooooooo");
-
 
             for (let month = 0; month < 12; month++) {
-                let Month = month< 9 ? `0${month +1}`: `${month +1}`;
+                let Month = month < 9 ? `0${month + 1}` : `${month + 1}`;
                 const dateString = `2024-${Month}-01`;
                 const parsedDate = new Date(dateString);
-                console.log(isNaN(parsedDate.getTime()));
-                
-                // בדיקה אם התאריך תקף
+
                 if (isNaN(parsedDate.getTime())) {
                     console.error(`❌ תאריך לא חוקי: ${dateString}`);
                     continue;
                 }
 
-
                 calendarApi.gotoDate(dateString);
                 await new Promise((resolve) => setTimeout(resolve, 800));
-                console.log("lllllllllllllllllll");
 
                 const calendarElement = document.getElementById("calendar-container");
+
                 if (calendarElement) {
-                    const canvas = await html2canvas(calendarElement, { scale: 2, useCORS: true });
+                    await loadImages();
+                    await new Promise((resolve) => setTimeout(resolve, 500));
+                    const canvas = await html2canvas(calendarElement, {
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true
+                    });
+
                     const imgData = canvas.toDataURL("image/png");
-                    console.log("rrrrrrrrrrrrrrrrr");
 
                     const imgWidth = 210;
                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -136,24 +146,26 @@ export default function CreateCalendarScreen() {
         }
     };
 
-
     useEffect(() => {
 
     }, [color])
 
 
     useEffect(() => {
-        if (calendarRef.current) {
-            console.log("✅ calendarRef מחובר בהצלחה!", calendarRef.current);
-        } else {
-            console.error("❌ calendarRef עדיין null!");
-        }
+        // if (calendarRef.current) {
+        //     console.log("✅ calendarRef מחובר בהצלחה!", calendarRef.current);
+        // } else {
+        //     console.error("❌ calendarRef עדיין null!");
+        // }
     }, [calendarRef]);
 
     return (
         <>
             <div>
-                <Button type="button" onClick={() => navigate(-1)}>חזרה לעמוד הראשי</Button>
+                <button className="fancy-button" onClick={() => navigate(-1)}>
+                    <span>חזרה לעמוד הבית</span>
+                </button>
+
 
                 <Button type="button" onClick={() => setChooseTemplate(true)} style={{
                     position: "absolute",
@@ -199,6 +211,7 @@ export default function CreateCalendarScreen() {
                             backgroundPosition: "center",
                             borderRadius: '10px',
                             backgroundColor: `${sessionStorage.getItem("Color")}`,
+                            margin:"20px"
                         }}
                     >
                         <FullCalendar
@@ -228,7 +241,7 @@ export default function CreateCalendarScreen() {
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     e.stopPropagation();
-                                                    setSelectedImage(eventInfo.event.extendedProps as { id: number; eventDate: Date });
+                                                    setSelectedImage(eventInfo.event.extendedProps as { id: number; eventDate: Date});
                                                 }}
                                                 style={{
                                                     position: "absolute",

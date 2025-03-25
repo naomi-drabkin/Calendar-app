@@ -17,6 +17,8 @@ namespace MomentoServer.Core.Entities
         public int UserId { get; set; }
         public User User { get; set; }
 
+        public int numOfCalendarToUser { get; set; }
+
         public string Title { get; set; }
         public string Description { get; set; }
         public string PdfUrl { get; set; }

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { token } from "./UpdateUser";
 import { Template } from "../Models/Template";
 import ShowImg from "./ShowImg";
 import { useLocation } from "react-router";
@@ -18,15 +17,15 @@ export default function ShowTemplates({ chooseTemplate }: { chooseTemplate: Func
         const fetchAllTemplates = async () => {
             try {
                 const res = await axios.get('http://localhost:5204/api/templates', {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` }
                 })
                 setListTemplate(res.data);
-                console.log(res.data);
-                console.log(res.data);
+                // console.log(res.data);
+                // console.log(res.data);
 
 
             } catch (error) {
-                console.log(error);
+                alert("ארע תקלה בהצגת התבניות")
 
             }
         }
@@ -48,7 +47,7 @@ export default function ShowTemplates({ chooseTemplate }: { chooseTemplate: Func
                             <ShowImg key={index} fileName={img.name} setColor={setColor} chooseTemplate={chooseTemplate} />
                         ))
                     ) : (
-                        <p>אין צבעים להצגה</p>
+                        <p></p>
                     )}
                      <span className="close-btn" onClick={()=>{setopanModal(false),chooseTemplate(null)}}>
                         ✖

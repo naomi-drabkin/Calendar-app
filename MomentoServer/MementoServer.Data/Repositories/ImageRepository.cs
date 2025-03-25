@@ -41,17 +41,18 @@ namespace MementoServer.Data.Repositories
             return  IdImages.Where(img => img.NumOfCalendar == numOfCalendar).ToList();
         }
 
-        public async Task<bool> UpdateImageAsync(int id,int numOfCalendar,Image image)
+        public async Task<bool> UpdateImageAsync(int id,Image image)
         {
 
-            var userForUpdate =await _context.Images.FindAsync(id,numOfCalendar);
-            if (userForUpdate != null)
+            var imgForUpdate = _context.Images.Where(img => img.Id == id).ToList();
+            var img = imgForUpdate.Find(img => img.NumOfCalendar == image.NumOfCalendar);
+            if (img != null)
             {
-                userForUpdate.Event = image.Event;
-                userForUpdate.Url = image.Url;
-                userForUpdate.EventDate = image.EventDate;
-                userForUpdate.UserId = image.UserId;
-                return await _context.SaveChangesAsync() >0;
+                img.Event = image.Event;
+                img.Url = image.Url;
+                img.EventDate = image.EventDate;
+                img.UserId = image.UserId;
+                return await _context.SaveChangesAsync() > 0;
             }
             return false;
            

@@ -35,8 +35,8 @@ export default function UpdateImage({ id,eventDate,closeModal,onUpload}:{id : nu
             );
             presignedUrl = response.data.url;
 
-            console.log("Presigned URL:", presignedUrl);
-            console.log("File Name:", file.name);
+            // console.log("Presigned URL:", presignedUrl);
+            // console.log("File Name:", file.name);
 
             const uploadResponse = await axios.put(presignedUrl, file, {
                 headers: {
@@ -58,15 +58,15 @@ export default function UpdateImage({ id,eventDate,closeModal,onUpload}:{id : nu
     const UpdateImage = async () => {
         try {
             if (token) {
-                console.log("Uploaded URL (clean):", presignedUrl.split("?")[0]);
-                console.log({
-                    url: presignedUrl.split("?")[0],
-                    EventDate: eventDate,
-                    Event: event.current?.value,
-                    UserId: jwtDecode<Jwt>(token).ID,
-                    FileName: file?.name,
-                });
-
+                // console.log("Uploaded URL (clean):", presignedUrl.split("?")[0]);
+                // console.log({
+                //     url: presignedUrl.split("?")[0],
+                //     EventDate: eventDate,
+                //     Event: event.current?.value,
+                //     UserId: jwtDecode<Jwt>(token).ID,
+                //     FileName: file?.name,
+                // });
+                var numOfCalendar = sessionStorage.getItem("numOfCalendar");
                 await axios.put(
                     `http://localhost:5204/api/Image/${id}`,
                     {
@@ -75,6 +75,7 @@ export default function UpdateImage({ id,eventDate,closeModal,onUpload}:{id : nu
                         Event: event.current?.value ,
                         UserId: jwtDecode<Jwt>(token).ID,
                         FileName: file?.name,
+                        NumOfCalendar:numOfCalendar
                     },
                     {
                         headers: {

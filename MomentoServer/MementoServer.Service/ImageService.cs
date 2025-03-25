@@ -24,12 +24,12 @@ namespace MementoServer.Service
             _mapper = mapper;
         }
 
-        public async Task<bool> PostImageAsync(ImageCreateDTO imageDto, int userId,int numOfCalendar)
+        public async Task<bool> PostImageAsync(ImageCreateDTO imageDto, int userId)
         {
 
             var ImageEntity = _mapper.Map<Image>(imageDto);
             ImageEntity.Url = imageDto.Url;
-            ImageEntity.NumOfCalendar = numOfCalendar;
+            ImageEntity.NumOfCalendar = imageDto.numOfCalendar;
             ImageEntity.UploadDate = DateTime.Now;
             return await _imageRepository.AddImageAsync(ImageEntity);
 
@@ -48,15 +48,15 @@ namespace MementoServer.Service
             return _mapper.Map<ImageDTO>(image);
         }
 
-        public async Task<bool> UpdateImageAsync(int id,int numOfCalendar, ImageUpdateDTO imageDto)
+        public async Task<bool> UpdateImageAsync(int id, ImageUpdateDTO imageDto)
         {
             var image = await _imageRepository.GetImageByIdAsync(id);
             if (image == null) return false;
 
             var change = _mapper.Map<Image>(imageDto);
             change.UpdateUpload = DateTime.Now;
-            change.NumOfCalendar = numOfCalendar;
-            return await _imageRepository.UpdateImageAsync(id,numOfCalendar,change);
+            //change.NumOfCalendar = numOfCalendar;
+            return await _imageRepository.UpdateImageAsync(id,change);
              
         }
 

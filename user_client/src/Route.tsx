@@ -3,6 +3,8 @@ import LoginRegister from "./pages/LoginRegister";
 import HomePage from "./pages/HomePage";
 // import ShowTemplates from "./componnents/ShowTemplates";
 import CreateCalendarScreen from "./pages/CreateCalendarScreen";
+import { Provider } from "react-redux";
+import Store from "./Redux/Store";
 
 
 
@@ -11,18 +13,18 @@ import CreateCalendarScreen from "./pages/CreateCalendarScreen";
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <Navigate to="/login" replace />, // ברירת מחדל: ניתוב לעמוד ההתחברות
+        element: <Navigate to="/homePage" replace />, 
       },
       {
         path: "/login",
-        element: <LoginRegister />,
+        element: <LoginRegister status={true}  setDesign={()=>{}}/>,
       },
       {
         path: "/homePage",
-        element: <HomePage />,
-        children: [
+        element:<Provider store={Store}> <HomePage /></Provider>,
+        // children: [
             
-        ]
+        // ]
     },
     
       {

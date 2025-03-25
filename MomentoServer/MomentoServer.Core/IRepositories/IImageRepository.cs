@@ -13,7 +13,7 @@ namespace MomentoServer.Core.IRepositories
         Task<Image?> GetImageByIdAsync(int id);
         Task<List<Image>> GetAllImagesCalendarAsync(List<Image> IdImages, int numOfCalendar);
         Task<List<Image>> GetAllImagesAsync(int userId);
-        Task<bool> UpdateImageAsync(int id, int numOfCalendar, Image image);
+        Task<bool> UpdateImageAsync(int id, Image image);
         Task<bool> DeleteImageAsync(Image image);
         //Task DeleteImageByIdAsync(Image image);
 
