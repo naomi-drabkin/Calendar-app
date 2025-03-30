@@ -4,6 +4,7 @@ export class Calendar{
        public id:number,
        public title:string,
        public description:string,
-       public pdfUrl:string
+       public pdfUrl:string,
+       public numOfCalendar:number
     ){}
 }

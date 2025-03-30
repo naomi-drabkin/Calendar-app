@@ -40,17 +40,20 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
             presignedUrl = response.data.url;
 
             // console.log("Presigned URL:", presignedUrl);
-            // console.log("File Name:", file.name);
+            console.log("File Name:", file.name);
 
             const uploadResponse = await axios.put(presignedUrl, file, {
                 headers: {
                     "Content-Type": file.type,
                 },
             });
-
-            if (uploadResponse.status === 200) {
+            console.log(uploadResponse.status );
+            
+            if (uploadResponse.status == 200 || uploadResponse.status === 204 || uploadResponse.status === 201) {
+                console.log("Uploading Success!");                
                 postImage();
-            } else {
+            }
+            else {
                 setUploadStatus("Upload failed: " + uploadResponse.statusText);
             }
         } catch (error) {
@@ -61,6 +64,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
 
     const postImage = async () => {
         try {
+            var token =  sessionStorage.getItem("AuthToken");
             if (token) {
                 const eventDateValue = eventDate.current?.value;
                 const parsedDate = eventDateValue
@@ -81,7 +85,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
                     //     UserId: jwtDecode<Jwt>(token).ID,
                     //     FileName: file?.name,
                     // });
-
+                    console.log("התמונה בהלאעה");
+                    
                     await axios.post(
                         "http://localhost:5204/api/Image/upload",
                         {
@@ -98,6 +103,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
                                 "Content-Type": "application/json",
                             },
                         }
+
                     );
 
                     setUploadStatus("Upload Success! ✅");

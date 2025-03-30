@@ -31,7 +31,8 @@ namespace MementoServer.Data.Repositories
         public async Task<bool> AddAsync(Calendar calendar)
         {
             _context.Calendars.Add(calendar);
-            return await _context.SaveChangesAsync() > 0;
+             return await _context.SaveChangesAsync() > 0;
+            
         }
 
         

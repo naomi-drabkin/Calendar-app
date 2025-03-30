@@ -38,6 +38,7 @@ namespace MementoServer.Service
         {
             var countCalendars = await _calendarRepository.GetByUserIdAsync(userId);
             var CalendarEntity = _mapper.Map<Calendar>(calendarDto);
+            CalendarEntity.numOfCalendarToUser = countCalendars.Count() + 1;
             CalendarEntity.UserId = userId;
             return await _calendarRepository.AddAsync(CalendarEntity);
         }

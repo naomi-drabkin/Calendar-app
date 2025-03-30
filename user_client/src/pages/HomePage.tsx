@@ -24,11 +24,14 @@ const HomePage = () => {
 
     const res = useSelector((state: RootState) => state.DesignCalendar.listDesignCalendar);
     const handleSubmit = () => {
+            console.log(res.length + 1);
+            
         var DisignCalendar: Calendar = {
             id: res.length + 1,
             title: TitleRef.current?.value || `calendar ${res.length + 1}`,
             description: " ",
-            pdfUrl: " "
+            pdfUrl: " ",
+            numOfCalendar:res.length + 1
 
         }
         // if (url) {
