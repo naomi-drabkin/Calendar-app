@@ -12,6 +12,7 @@ namespace MomentoServer.Core.IServices
     {
 
         Task<IEnumerable<DTOuser>> GetAllAsync();
+        Task<IEnumerable<string>> GetAllEmailsAsync();
         Task<DTOuser> GetByIdAsync(int id);
         Task<AuthResponse> Register(DTOregister user);
         Task<AuthResponse> Login(string email, string password);

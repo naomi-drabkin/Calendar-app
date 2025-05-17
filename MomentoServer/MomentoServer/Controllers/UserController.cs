@@ -6,7 +6,7 @@ using MomentoServer.Core.IServices;
 
 namespace MomentoServer.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -22,10 +22,19 @@ namespace MomentoServer.Api.Controllers
 
         [Authorize(Policy = "Admin")]
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<ActionResult<IEnumerable<DTOuser>>> GetUsers()
         {
             var users = await _userService.GetAllAsync();
             return Ok(users);
+        }
+
+
+        [Authorize(Policy = "Admin")]
+        [HttpGet("emails")]
+        public async Task<ActionResult<IEnumerable<string>>> GetEmails()
+        {
+            var emails = await _userService.GetAllEmailsAsync();
+            return Ok(emails);
         }
 
         [AllowAnonymous]
@@ -58,15 +67,15 @@ namespace MomentoServer.Api.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] DTOuser user)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if (userId != id) return Forbid();
+            //var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            //if (userId != id) return Forbid();
 
             var result = await _userService.UpdateUserAsync(id, user);
-            return result ? Ok("User updated successfully") : NotFound("User not found");
+            return result ? Ok(new { message = "User updated successfully" }) : NotFound("User not found");
         }
 
         [Authorize]

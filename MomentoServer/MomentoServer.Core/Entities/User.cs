@@ -23,7 +23,7 @@ namespace MomentoServer.Core.Entities
 
         public ICollection<Image> Images { get; set; }
         //public Calendar Calendar { get; set; }
-        public ICollection<Roles> Roles { get; set; }
+        public ICollection<Roles> Roles { get; set; } = new List<Roles>();
 
 
     }

@@ -41,6 +41,8 @@ export default function CreateCalendarScreen() {
     const fetchImages = async () => {
         try {
             const numOfCalendar = sessionStorage.getItem('numOfCalendar');
+            console.log(numOfCalendar);
+
             const response = await axios.get(`http://localhost:5204/api/Image/all/${numOfCalendar}`, {
                 headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` },
             });
@@ -70,178 +72,76 @@ export default function CreateCalendarScreen() {
     const closeModalPost = () => setUpload(false);
     const closeModalUpdate = () => setSelectedImage(null);
     const setDeleteImageNull = () => setdeleteImage(null);
-    const SetChooseTemplate = (colorB: string) => {
+
+    const SetChooseTemplate = (url: string) => {
         setChooseTemplate(false);
-        if (colorB) {
-            setColor(colorB);
-            sessionStorage.setItem("Color", colorB)
+        if (url) {
+            setColor(url);
+            sessionStorage.setItem("Color", url)
+            console.log("--------------------");
+            console.log(sessionStorage.getItem("Color"));
         }
         else {
             setColor(color);
         }
-        // console.log(sessionStorage.getItem("Color"));
-        // console.log(colorB);
+
     }
 
-    const loadImages = async () => {
-        const images = document.querySelectorAll<HTMLImageElement>("#calendar-container img"); const promises = Array.from(images).map((img) => {
-            return new Promise((resolve) => {
-                if (img.complete) {
-                    resolve(true);
-                } else {
-                    img.onload = () => resolve(true);
-                    img.onerror = () => resolve(false);
-                }
-            });
-        });
-        await Promise.all(promises);
-    };
-
-    //נסיון 1 להורדת הלוח 
-    // const downloadPDF = async () => {
-    //     const pdf = new jsPDF("p", "mm", "a4");
-
-    //     if (calendarRef.current) {
-    //         const calendarApi = calendarRef.current.getApi();
-
-    //         if (!calendarApi) {
-    //             console.error("calendarApi לא נטען!");
-    //             return;
-    //         }
-
-    //         setLoading(true);
-
-    //         for (let month = 0; month < 12; month++) {
-    //             let Month = month < 9 ? `0${month + 1}` : `${month + 1}`;
-    //             const dateString = `2024-${Month}-01`;
-    //             const parsedDate = new Date(dateString);
-
-    //             if (isNaN(parsedDate.getTime())) {
-    //                 console.error(`❌ תאריך לא חוקי: ${dateString}`);
-    //                 continue;
-    //             }
-
-    //             calendarApi.gotoDate(dateString);
-    //             await new Promise((resolve) => setTimeout(resolve, 800));
-
-    //             const calendarElement = document.getElementById("calendar-container");
-
-    //             if (calendarElement) {
-    //                 await loadImages();
-    //                 await new Promise((resolve) => setTimeout(resolve, 500));
-    //                 const canvas = await html2canvas(calendarElement, {
-    //                     scale: 2,
-    //                     useCORS: true,
-    //                     allowTaint: true
-    //                 });
-
-    //                 const imgData = canvas.toDataURL("image/png");
-
-    //                 const imgWidth = 210;
-    //                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    //                 if (month > 0) pdf.addPage();
-    //                 pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-    //             }
-    //         }
-
-    //         setLoading(false);
-    //         pdf.save("calendar.pdf");
-    //     }
-    // };
-
-    //נסיון 2 להורדת הלוח
-    // const convertImageToBase64 = async (url:string) => {
-    //     try {
-    //         const response = await fetch(url);
-    //         console.log(response);
-
-    //         const blob = await response.blob();
-    //         return new Promise((resolve) => {
-    //             const reader = new FileReader();
-    //             reader.onloadend = () => resolve(reader.result as string);
-    //             reader.readAsDataURL(blob);
-    //         });
-    //     } catch (error) {
-    //         console.error("Error converting image to Base64:", error);
-    //         return url; // במקרה של שגיאה, מחזירים את ה-URL המקורי
-    //     }
-    // };
-
-
-    // const updateEventImages = async (events:EventApi[]) => {
-    //     if (!Array.isArray(events)) {
-    //         console.error("Error: events is not an array", events);
-    //         return;
-    //     }
-
-    //     for (let event of events) {
-    //         if (event.url) {
-    //             console.log("kkk " + event.url);
-
-    //             // event.url = await convertImageToBase64(event.url) as string;
-    //             const link = document.createElement("a");
-    //             link.href = event.url;
-    //             link.download = "img.png";
-    //             document.body.appendChild(link);
-    //             link.click();
-    //             document.body.removeChild(link);
-    //         }
-    //     }
-    // };
-
-    // /**
-    //  * שומר את לוח השנה כקובץ PDF כולל התמונות
-    //  * @returns {Promise<void>}
-    //  */
     // const handleSaveCalendarAsPDF = async () => {
     //     try {
-    //         const pdf = new jsPDF("p", "mm", "a3");
+    //         setDontShowInDownLoad(true);
+    //         setLoading(true);
+
+    //         const pdf = new jsPDF("landscape", "mm", "a4");
     //         const calendarElement = calendarContainerRef.current;
+    //         const backgroundImageUrl = sessionStorage.getItem("Color");
+
+    //         if (calendarElement && backgroundImageUrl) {
+    //             calendarElement.style.backgroundImage = `url(${backgroundImageUrl})`;
+    //             calendarElement.style.backgroundSize = "cover"; // או contain / repeat לפי הצורך
+    //             calendarElement.style.backgroundPosition = "center";
+    //         }
+    //         //   await waitForImageLoad(backgroundImageUrl); // ← חשוב!
+
 
     //         if (!calendarElement) {
     //             console.error("Calendar container ref is not set.");
+    //             setLoading(false);
     //             return;
     //         }
 
     //         const calendarApi = calendarRef.current?.getApi?.();
     //         if (!calendarApi) {
     //             console.error("Calendar API is not available.");
+    //             setLoading(false);
     //             return;
     //         }
 
-    //         let events = calendarApi.getEvents();
-    //         await updateEventImages(events);
-
-    //         // עדכון ה-URL של התמונות באירועים
-    //         events.forEach(event => event.setProp("url", event.url));
-
-    //         await new Promise(resolve => setTimeout(resolve, 500)); // מחכה שהתמונות יתעדכנו
-
-    //         const originalHTML = calendarElement.innerHTML;
-
-
     //         for (let month = 0; month < 12; month++) {
+    //             // מעבר לחודש הבא בלוח השנה
     //             calendarApi.gotoDate(new Date(2025, month, 1));
-    //             await new Promise((resolve) => setTimeout(resolve, 500));
+    //             await new Promise(resolve => setTimeout(resolve, 500)); // מחכה שהכל ייטען
 
-    //             console.log("Capturing:", calendarElement.innerHTML); // בדיקה שהתוכן נטען
+    //             console.log("Capturing month:", month + 1);
 
+    //             // צילום הלוח כולל התמונות
     //             const canvas = await html2canvas(calendarElement, { scale: 2, useCORS: true });
     //             const imgData = canvas.toDataURL("image/png");
-
+    //             const imgWidth = 210;
+    //             const imgHeight = (canvas.height * imgWidth) / canvas.width;
     //             if (month !== 0) pdf.addPage();
-    //             pdf.addImage(imgData, "PNG", 10, 10, 190, 277);
+    //             pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
     //         }
 
-    //         calendarElement.innerHTML = originalHTML;
     //         pdf.save("calendar.pdf");
-
     //         console.log("Calendar saved as PDF with images.");
     //     } catch (error) {
     //         console.error("Error generating PDF:", error);
     //         alert("שגיאה בהורדת הקובץ.");
+    //     } finally {
+    //         setLoading(false);
     //     }
+    //     setDontShowInDownLoad(false);
     // };
 
     const handleSaveCalendarAsPDF = async () => {
@@ -251,12 +151,33 @@ export default function CreateCalendarScreen() {
 
             const pdf = new jsPDF("landscape", "mm", "a4");
             const calendarElement = calendarContainerRef.current;
+            const backgroundImageUrl = sessionStorage.getItem("Color");
 
-            if (!calendarElement) {
-                console.error("Calendar container ref is not set.");
+            if (!calendarElement || !backgroundImageUrl) {
+                console.error("Calendar container or background image is missing.");
                 setLoading(false);
                 return;
             }
+
+            // טען את התמונה מראש כדי להבטיח שהיא קיימת ב-DOM ונטענת
+            await new Promise<void>((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.src = backgroundImageUrl;
+                console.log("++++++++++++++++++");
+
+                console.log(img.src);
+
+                img.onload = () => resolve();
+                img.onerror = (err) => {
+                    console.error("Failed to load background image", err);
+                    resolve(); // ממשיכים גם אם התמונה לא נטענה
+                };
+            });
+
+            calendarElement.style.backgroundImage = `url(${backgroundImageUrl})`;
+            calendarElement.style.backgroundSize = "cover";
+            calendarElement.style.backgroundPosition = "center";
 
             const calendarApi = calendarRef.current?.getApi?.();
             if (!calendarApi) {
@@ -266,32 +187,32 @@ export default function CreateCalendarScreen() {
             }
 
             for (let month = 0; month < 12; month++) {
-                // מעבר לחודש הבא בלוח השנה
                 calendarApi.gotoDate(new Date(2025, month, 1));
-                await new Promise(resolve => setTimeout(resolve, 500)); // מחכה שהכל ייטען
+                await new Promise(resolve => setTimeout(resolve, 500)); // מחכה לרנדר
 
-                console.log("Capturing month:", month + 1);
+                const canvas = await html2canvas(calendarElement, {
+                    scale: 2,
+                    useCORS: true
+                });
 
-                // צילום הלוח כולל התמונות
-                const canvas = await html2canvas(calendarElement, { scale: 2, useCORS: true });
                 const imgData = canvas.toDataURL("image/png");
                 const imgWidth = 210;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
                 if (month !== 0) pdf.addPage();
                 pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
             }
 
             pdf.save("calendar.pdf");
-            console.log("Calendar saved as PDF with images.");
+            console.log("Calendar saved as PDF with background image.");
         } catch (error) {
             console.error("Error generating PDF:", error);
             alert("שגיאה בהורדת הקובץ.");
         } finally {
             setLoading(false);
+            setDontShowInDownLoad(false);
         }
-        setDontShowInDownLoad(false);
     };
-
 
 
     useEffect(() => {
@@ -300,18 +221,24 @@ export default function CreateCalendarScreen() {
 
 
     useEffect(() => {
-        // if (calendarRef.current) {
-        //     console.log("✅ calendarRef מחובר בהצלחה!", calendarRef.current);
-        // } else {
-        //     console.error("❌ calendarRef עדיין null!");
-        // }
+
     }, [calendarRef]);
+
+    const waitForImageLoad = (url: string): Promise<void> => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = "anonymous"; // חשוב!
+            img.src = url;
+            img.onload = () => resolve();
+            img.onerror = (err) => reject(err);
+        });
+    };
 
     return (
         <>
-            {loading && 
-            <div className="banner" style={{left:"2%"}}
-            ><h1>......מורידים בשבילך את הלוח! - לא לזוז</h1></div>
+            {loading &&
+                <div className="banner" style={{ left: "2%" }}
+                ><h1>......מורידים בשבילך את הלוח! - לא לזוז</h1></div>
             }
             <div>
                 <button className="fancy-button" onClick={() => navigate(-1)}>
@@ -359,14 +286,34 @@ export default function CreateCalendarScreen() {
                         className="calendar-container"
                         ref={calendarContainerRef}
                         style={{
+                            position: "relative", // הוספה
                             padding: "20px",
                             border: "2px solid Gray",
                             backgroundPosition: "center",
                             borderRadius: '10px',
-                            backgroundColor: `${sessionStorage.getItem("Color")}`,
+                            // backgroundColor: `${sessionStorage.getItem("Color")}`,
+                            // backgroundImage: `url(${sessionStorage.getItem("Color")}`,
+                            objectFit: "contain",
                             margin: "20px"
                         }}
                     >
+
+                        <img
+                            className="calendar-background"
+                            src={color || ""}
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "100%",
+                                zIndex: 0,
+                                objectFit: "cover",
+                                borderRadius: "10px",
+                                pointerEvents: "none"
+                            }}
+                        />
+
                         <FullCalendar
                             ref={calendarRef}
                             plugins={[dayGridPlugin, interactionPlugin]}
@@ -377,7 +324,7 @@ export default function CreateCalendarScreen() {
                             contentHeight="auto"
                             events={events}
                             eventContent={(eventInfo) => (
-                                <div style={{ textAlign: "center" }}>
+                                <div style={{ textAlign: "center", zIndex: 1 }}>
                                     {eventInfo.event.url && (
                                         <>
                                             <img src={eventInfo.event?.url} crossOrigin="anonymous" alt="" style={{

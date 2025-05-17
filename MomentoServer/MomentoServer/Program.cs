@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Amazon.S3;
 using Amazon.Runtime;
 using DotNetEnv;
+using MomentoServer.Api.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 Console.WriteLine(builder.Configuration["AWS:AccessKey"]);
@@ -26,6 +27,23 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+//builder.Services.AddControllers()
+//    .AddJsonOptions(x =>
+//    {
+//        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+//        x.JsonSerializerOptions.WriteIndented = true;
+//    });
+
+builder.Services.AddControllers()
+    .AddJsonOptions(x =>
+    {
+        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        x.JsonSerializerOptions.WriteIndented = true; // זה סתם לפורמט יפה, לא חובה
+    });
+
+
 
 //Env.Load();
 
@@ -47,6 +65,9 @@ var s3Client = new AmazonS3Client(credentials, region);
 
 builder.Services.AddSingleton<IAmazonS3>(s3Client);
 Console.WriteLine(s3Client);
+
+//builder.Services.AddScoped<TemplateController, UploadFiles>();
+builder.Services.AddScoped<UploadFiles>();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -91,6 +112,10 @@ builder.Services.AddAuthorization(options =>
 }
 );
 
+builder.Services.AddHttpClient();
+
+// הוספת שירותי ה-MailService (שירות לשליחת מיילים דרך Mailchimp או שירותים אחרים)
+//builder.Services.AddTransient<IMailService, MailService>();
 
 builder.Services.AddDbContext<DataContext>();
 
@@ -103,7 +128,7 @@ builder.Services.AddCors(options =>
  //             .AllowAnyMethod()
  //             .AllowAnyHeader()
  //             .AllowCredentials()
-policy.SetIsOriginAllowed(_ => true)
+policy.SetIsOriginAllowed(_ =>  true)
         .AllowAnyMethod().AllowAnyHeader().AllowCredentials()
     );
 
@@ -139,6 +164,8 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+
 
 //builder.Services.AddSwaggerGen(c =>
 //{

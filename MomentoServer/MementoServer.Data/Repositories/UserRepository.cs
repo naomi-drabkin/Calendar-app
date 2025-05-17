@@ -30,7 +30,7 @@ namespace MementoServer.Data.Repositories
 
         public async Task<User> GetByEmailAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.Users.Include(u=>u.Roles).FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task AddAsync(User user)

@@ -1,0 +1,222 @@
+/* Modern Editor Container */
+.simple-editor-container {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+  }
+  
+  /* Toolbar Styling */
+  .toolbar {
+    display: flex;
+    padding: 10px 12px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+    direction: rtl;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .toolbar-button {
+    background: none;
+    border: 1px solid transparent;
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    margin-left: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s ease;
+  }
+  
+  .toolbar-button:hover {
+    background-color: #e8eaed;
+    border-color: #d0d0d0;
+  }
+  
+  .toolbar-button:active {
+    background-color: #d0d0d0;
+  }
+  
+  .toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background-color: #e0e0e0;
+    margin: 0 8px;
+  }
+  
+  /* Editor Content Area */
+  .editor-content {
+    min-height: 250px;
+    padding: 16px;
+    direction: rtl;
+    text-align: right;
+    line-height: 1.6;
+    font-size: 16px;
+    color: #333;
+    background-color: #ffffff;
+    outline: none;
+    overflow-y: auto;
+  }
+  
+  .editor-content:focus {
+    box-shadow: inset 0 0 0 2px rgba(66, 133, 244, 0.1);
+  }
+  
+  .editor-content h1 {
+    font-size: 24px;
+    margin-bottom: 16px;
+    color: #202124;
+  }
+  
+  .editor-content h2 {
+    font-size: 20px;
+    margin-bottom: 14px;
+    color: #202124;
+  }
+  
+  .editor-content p {
+    margin-bottom: 12px;
+  }
+  
+  /* Dropdown Menu */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    padding: 0 12px;
+    font-size: 14px;
+  }
+  
+  .dropdown-arrow {
+    font-size: 10px;
+    margin-right: 4px;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 10;
+    min-width: 150px;
+    margin-top: 4px;
+  }
+  
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  
+  .dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    text-align: right;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f1f3f4;
+  }
+  
+  /* Color Picker */
+  .color-picker {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .color-button {
+    display: flex;
+    align-items: center;
+    width: auto;
+    padding: 0 12px;
+  }
+  
+  .color-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    margin-left: 6px;
+  }
+  
+  .color-label {
+    font-size: 14px;
+  }
+  
+  .color-palette {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    /* display: flex
+; */
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    z-index: 20;
+    max-width: 280vw;
+    margin-top: 4px;
+    padding: 12px;
+    overflow: overlay;
+  }
+  
+  .color-palette-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .close-palette {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #666;
+  }
+  
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+  }
+  
+  .color-swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  
+  .color-swatch:hover {
+    transform: scale(1.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+  }

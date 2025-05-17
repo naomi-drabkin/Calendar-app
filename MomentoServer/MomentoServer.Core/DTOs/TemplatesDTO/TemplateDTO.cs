@@ -9,7 +9,7 @@ namespace MomentoServer.Core.DTOs.TemplatesDTO
     public class TemplateDto
     {
         public string Name { get; set; }
-        public int UserId { get; set; }
+        public int ?UserId { get; set; }
         public string ImageUrl { get; set; }
     }
 }

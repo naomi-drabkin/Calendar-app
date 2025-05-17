@@ -1,25 +1,203 @@
 
-import React, { useRef, useState } from "react";
-import axios from "axios";
-import { Box, Modal, TextField } from "@mui/material";
-import { token } from "./UpdateUser";
-import { jwtDecode } from "jwt-decode";
-import { Jwt } from "../Models/Jwt";
-import { styleModal } from "../pages/LoginRegister";
-import { CircularProgress } from "@mui/material";
+// import React, { useRef, useState } from "react";
+// import axios from "axios";
+// import { Box, Modal, TextField } from "@mui/material";
+// import { jwtDecode } from "jwt-decode";
+// import { Jwt } from "../Models/Jwt";
+// import { styleModal } from "../pages/LoginRegister";
+// import { CircularProgress } from "@mui/material";
+
+// interface ImageUploadProps {
+//     onUpload: () => void;
+//     closeModal: () => void;
+// }
+
+// const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
+//     const [file, setFile] = useState<File | null>(null);
+//     const [uploadStatus, setUploadStatus] = useState("");
+//     const [loading, setLoading] = useState(false);
+//     const eventDate = useRef<HTMLInputElement>(null);
+//     const event = useRef<HTMLInputElement>(null);
+//     const [openModal, setOpenMOdal] = useState(true);
+//     let presignedUrl!: string
+
+
+
+//     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+//         setFile(event.target.files?.[0] || null);
+//     };
+
+//     const handleUpload = async () => {
+//         if (!file) {
+//             setUploadStatus("Please select a file to upload.");
+//             return;
+//         }
+
+//         try {
+//             setLoading(true);
+//             const response = await axios.get(
+//                 `http://localhost:5204/api/upload/presigned-url?fileName=${file.name}`
+//             );
+//             presignedUrl = response.data.url;
+
+//             console.log("File Name:", file.name);
+
+//             const uploadResponse = await axios.put(presignedUrl, file, {
+//                 headers: {
+//                     "Content-Type": file.type,
+//                 },
+//             });
+//             console.log(uploadResponse.status );
+
+//             if (uploadResponse.status == 200 || uploadResponse.status === 204 || uploadResponse.status === 201) {
+//                 console.log("Uploading Success!");                
+//                 postImage();
+//             }
+//             else {
+//                 setUploadStatus("Upload failed: " + uploadResponse.statusText);
+//             }
+//         } catch (error) {
+//             setUploadStatus("Error: " + error);
+//         }
+//         setLoading(false);
+//     };
+
+//     const postImage = async () => {
+//         try {
+//             var token =  sessionStorage.getItem("AuthToken");
+//             if (token) {
+//                 const eventDateValue = eventDate.current?.value;
+//                 const parsedDate = eventDateValue
+//                     ? new Date(eventDateValue)
+//                     : new Date();
+
+
+//                 if (isNaN(parsedDate.getTime())) {
+//                     alert(`Invalid Date: ${eventDateValue}`);
+//                 } else {
+//                     console.log("התמונה בהלאעה");
+
+//                     await axios.post(
+//                         "http://localhost:5204/api/Image/upload",
+//                         {
+//                             Url: presignedUrl.split("?")[0],
+//                             EventDate: parsedDate.toISOString(),
+//                             Event: event.current?.value || "",
+//                             UserId: jwtDecode<Jwt>(token).ID,
+//                             FileName: file?.name,
+//                             NumOfCalendar:sessionStorage.getItem("numOfCalendar")
+//                         },
+//                         {
+//                             headers: {
+//                                 Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}`,
+//                                 "Content-Type": "application/json",
+//                             },
+//                         }
+
+//                     );
+
+//                     setUploadStatus("Upload Success! ✅");
+
+//                     onUpload();
+//                     setOpenMOdal(false)
+//                 }
+//             }
+//         } catch (error) {
+//             alert("Error saving image");
+//             setUploadStatus("Upload failed! You are not logged in.");
+//         }
+//     }
+
+//     return (
+//         <>
+//             <Modal open={openModal} onClose={() => setOpenMOdal(false)}>
+//                 <Box sx={styleModal}>
+//                     <h2>Upload Image</h2>
+//                     <input type="file" onChange={handleFileChange} />
+//                     <form>
+//                         <TextField
+//                             id="eventDate"
+//                             type="date"
+//                             variant="outlined"
+//                             inputRef={eventDate}
+//                             required
+//                             fullWidth
+//                             sx={{ bgcolor: "rgb(249, 249, 249)" }}
+//                         />
+
+//                         <TextField
+//                             id="event"
+//                             type="text"
+//                             label="Event"
+//                             variant="outlined"
+//                             inputRef={event}
+//                             required
+//                             fullWidth
+//                             sx={{ bgcolor: "rgb(249, 249, 249)" }}
+//                         />
+//                     </form>
+//                    {loading? <CircularProgress size={15} color="inherit" style={{
+//                         position: "absolute",
+//                         top: "50%",
+//                         right:' 50%',
+//                         background: "rgba(255, 255, 255, 0.22)",
+//                         color: "gray",
+//                         borderRadius: "50%",
+//                         minWidth: "10px",
+//                         width: "50px",
+//                         height: "50px"
+//                    }}/> : <button onClick={handleUpload}>Upload</button>}
+//                     <p>{uploadStatus}</p>
+//                     <span className="close-btn" onClick={closeModal}>
+//                         ✖
+//                     </span>
+//                 </Box>
+//             </Modal>
+//         </>
+//     );
+// };
+
+// export default ImageUpload;
+
+
+"use client"
+
+import type React from "react"
+import { useRef, useState } from "react"
+import axios from "axios"
+import { Box, Modal, TextField, CircularProgress } from "@mui/material"
+import { jwtDecode } from "jwt-decode"
+import type { Jwt } from "../Models/Jwt"
+import { Upload, X } from "lucide-react"
 
 interface ImageUploadProps {
-    onUpload: () => void; // פונקציה שמתעדכנת אחרי העלאה
-    closeModal: () => void;
+    onUpload: () => void
+    closeModal: () => void
+}
+
+// סגנון מעודכן לפופאפ העלאת תמונה
+const uploadModalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "white",
+    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+    p: 4,
+    borderRadius: "12px",
+    outline: "none",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    backdropFilter: "blur(8px)",
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
-    const [file, setFile] = useState<File | null>(null);
-    const [uploadStatus, setUploadStatus] = useState("");
-    const [loading, setLoading] = useState(false);
-    const eventDate = useRef<HTMLInputElement>(null);
-    const event = useRef<HTMLInputElement>(null);
-    const [openModal, setOpenMOdal] = useState(true);
+    const [file, setFile] = useState<File | null>(null)
+    const [uploadStatus, setUploadStatus] = useState("")
+    const [loading, setLoading] = useState(false)
+    const eventDate = useRef<HTMLInputElement>(null)
+    const event = useRef<HTMLInputElement>(null)
+    const [openModal, setOpenMOdal] = useState(true)
     let presignedUrl!: string
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +217,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
             );
             presignedUrl = response.data.url;
 
-            // console.log("Presigned URL:", presignedUrl);
             console.log("File Name:", file.name);
 
             const uploadResponse = await axios.put(presignedUrl, file, {
@@ -47,10 +224,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
                     "Content-Type": file.type,
                 },
             });
-            console.log(uploadResponse.status );
-            
+            console.log(uploadResponse.status);
+
             if (uploadResponse.status == 200 || uploadResponse.status === 204 || uploadResponse.status === 201) {
-                console.log("Uploading Success!");                
+                console.log("Uploading Success!");
                 postImage();
             }
             else {
@@ -64,29 +241,19 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
 
     const postImage = async () => {
         try {
-            var token =  sessionStorage.getItem("AuthToken");
+            var token = sessionStorage.getItem("AuthToken");
             if (token) {
                 const eventDateValue = eventDate.current?.value;
                 const parsedDate = eventDateValue
                     ? new Date(eventDateValue)
                     : new Date();
 
-                // console.log("Event Date:", eventDate.current?.value);
-                // console.log("Token:", token);
 
                 if (isNaN(parsedDate.getTime())) {
                     alert(`Invalid Date: ${eventDateValue}`);
                 } else {
-                    // console.log("Uploaded URL (clean):", presignedUrl.split("?")[0]);
-                    // console.log({
-                    //     Url: presignedUrl.split("?")[0], // מסיר פרמטרים מיותרים
-                    //     EventDate: parsedDate.toISOString(),
-                    //     Event: event.current?.value || "",
-                    //     UserId: jwtDecode<Jwt>(token).ID,
-                    //     FileName: file?.name,
-                    // });
                     console.log("התמונה בהלאעה");
-                    
+
                     await axios.post(
                         "http://localhost:5204/api/Image/upload",
                         {
@@ -95,7 +262,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
                             Event: event.current?.value || "",
                             UserId: jwtDecode<Jwt>(token).ID,
                             FileName: file?.name,
-                            NumOfCalendar:sessionStorage.getItem("numOfCalendar")
+                            NumOfCalendar: sessionStorage.getItem("numOfCalendar")
                         },
                         {
                             headers: {
@@ -110,7 +277,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
 
                     onUpload();
                     setOpenMOdal(false)
-                    // setdate(parsedDate.toISOString());
                 }
             }
         } catch (error) {
@@ -119,53 +285,221 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
         }
     }
 
+    // סגנונות לרכיבים
+    const textFieldStyle = {
+        marginBottom: "16px",
+        "& .MuiOutlinedInput-root": {
+            borderRadius: "8px",
+            "&:hover fieldset": {
+                borderColor: "#8a2be2",
+            },
+            "&.Mui-focused fieldset": {
+                borderColor: "#8a2be2",
+            },
+        },
+        "& .MuiInputLabel-root": {
+            "&.Mui-focused": {
+                color: "#8a2be2",
+            },
+        },
+        bgcolor: "rgb(249, 249, 249)",
+    }
+
     return (
         <>
             <Modal open={openModal} onClose={() => setOpenMOdal(false)}>
-                <Box sx={styleModal}>
-                    <h2>Upload Image</h2>
-                    <input type="file" onChange={handleFileChange} />
-                    <form>
-                        <TextField
-                            id="eventDate"
-                            type="date"
-                            variant="outlined"
-                            inputRef={eventDate}
-                            required
-                            fullWidth
-                            sx={{ bgcolor: "rgb(249, 249, 249)" }}
-                        />
+                <Box sx={uploadModalStyle}>
+                    <div style={{ textAlign: "center", marginBottom: "24px" }}>
+                        <h2
+                            style={{
+                                margin: "0 0 8px 0",
+                                fontSize: "24px",
+                                background: "linear-gradient(90deg, #00c6ff 0%, #8a2be2 100%)",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            העלאת תמונה
+                        </h2>
+                        <p
+                            style={{
+                                margin: "0",
+                                color: "#666",
+                                fontSize: "16px",
+                            }}
+                        >
+                            בחר תמונה והוסף פרטי אירוע
+                        </p>
+                    </div>
 
-                        <TextField
-                            id="event"
-                            type="text"
-                            label="Event"
-                            variant="outlined"
-                            inputRef={event}
-                            required
-                            fullWidth
-                            sx={{ bgcolor: "rgb(249, 249, 249)" }}
-                        />
-                    </form>
-                   {loading? <CircularProgress size={15} color="inherit" style={{
-                        position: "absolute",
-                        top: "50%",
-                        right:' 50%',
-                        background: "rgba(255, 255, 255, 0.22)",
-                        color: "gray",
-                        borderRadius: "50%",
-                        minWidth: "10px",
-                        width: "50px",
-                        height: "50px"
-                   }}/> : <button onClick={handleUpload}>Upload</button>}
-                    <p>{uploadStatus}</p>
-                    <span className="close-btn" onClick={closeModal}>
-                        ✖
-                    </span>
+                    <div dir="rtl">
+                        <div
+                            style={{
+                                marginBottom: "20px",
+                                border: "2px dashed #e0e0e0",
+                                borderRadius: "8px",
+                                padding: "20px",
+                                textAlign: "center",
+                                backgroundColor: "rgb(249, 249, 249)",
+                            }}
+                        >
+                            <label
+                                htmlFor="file-upload"
+                                style={{
+                                    display: "block",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                    }}
+                                >
+                                    <Upload size={24} color="#8a2be2" />
+                                    <span style={{ color: "#666" }}>{file ? file.name : "לחץ כאן לבחירת קובץ או גרור לכאן"}</span>
+                                </div>
+                                <input id="file-upload" type="file" onChange={handleFileChange} style={{ display: "none" }} />
+                            </label>
+                        </div>
+
+                        <form style={{ marginBottom: "20px" }}>
+                            <div style={{ marginBottom: "16px" }}>
+                                <label
+                                    htmlFor="eventDate"
+                                    style={{
+                                        display: "block",
+                                        marginBottom: "8px",
+                                        fontWeight: "500",
+                                        color: "#333",
+                                    }}
+                                >
+                                    תאריך האירוע
+                                </label>
+                                <TextField
+                                    id="eventDate"
+                                    type="date"
+                                    variant="outlined"
+                                    inputRef={eventDate}
+                                    required
+                                    fullWidth
+                                    sx={textFieldStyle}
+                                />
+                            </div>
+
+                            <TextField
+                                id="event"
+                                type="text"
+                                label="שם האירוע"
+                                variant="outlined"
+                                inputRef={event}
+                                required
+                                fullWidth
+                                sx={textFieldStyle}
+                            />
+                        </form>
+
+                        <button
+                            onClick={handleUpload}
+                            disabled={loading}
+                            style={{
+                                width: "100%",
+                                padding: "12px",
+                                borderRadius: "8px",
+                                border: "none",
+                                background: "linear-gradient(90deg, #00c6ff 0%, #8a2be2 100%)",
+                                color: "white",
+                                fontWeight: "bold",
+                                cursor: loading ? "not-allowed" : "pointer",
+                                position: "relative",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                transition: "all 0.3s ease",
+                                boxShadow: "0 4px 12px rgba(138, 43, 226, 0.2)",
+                            }}
+                            onMouseOver={(e) => {
+                                if (!loading) {
+                                    e.currentTarget.style.boxShadow = "0 6px 16px rgba(138, 43, 226, 0.3)"
+                                    e.currentTarget.style.transform = "translateY(-1px)"
+                                }
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.boxShadow = "0 4px 12px rgba(138, 43, 226, 0.2)"
+                                e.currentTarget.style.transform = "translateY(0)"
+                            }}
+                        >
+                            {loading ? "מעלה..." : "העלה תמונה"}
+                            {loading && (
+                                <CircularProgress
+                                    size={20}
+                                    style={{
+                                        color: "white",
+                                        position: "absolute",
+                                        right: "20px",
+                                    }}
+                                />
+                            )}
+                        </button>
+
+                        {uploadStatus && (
+                            <p
+                                style={{
+                                    margin: "16px 0",
+                                    padding: "10px",
+                                    borderRadius: "8px",
+                                    backgroundColor: uploadStatus.includes("Success") ? "rgba(0, 200, 83, 0.1)" : "rgba(255, 0, 0, 0.1)",
+                                    color: uploadStatus.includes("Success") ? "#00c853" : "#f44336",
+                                    textAlign: "center",
+                                }}
+                            >
+                                {uploadStatus}
+                            </p>
+                        )}
+
+                        <button
+                            onClick={() => {
+                                setOpenMOdal(false)
+                                closeModal()
+                            }}
+                            style={{
+                                position: "absolute",
+                                top: "12px",
+                                right: "12px",
+                                // background: "rgba(255, 255, 255, 0.8)",
+                                // border: "1px solid rgba(0, 0, 0, 0.1)",
+                                cursor: "pointer",
+                                color: "rgba(17, 16, 16, 0.8)",
+                                fontSize: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                width: "30px",
+                                height: "30px",
+                                borderRadius: "30%",
+                                // boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                transition: "all 0.2s ease",
+                                zIndex: 10,
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.backgroundColor = "#f5f5f5"
+                                e.currentTarget.style.transform = "scale(1.05)"
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.8)"
+                                e.currentTarget.style.transform = "scale(1)"
+                            }}
+                        >
+                            ✖
+                        </button>
+                    </div>
                 </Box>
             </Modal>
         </>
-    );
-};
+    )
+}
 
-export default ImageUpload;
+export default ImageUpload

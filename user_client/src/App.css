@@ -185,6 +185,7 @@
   right: 15px;
   font-size: 20px;
   cursor: pointer;
+  
 }
 
 html,
@@ -509,4 +510,11 @@ p {
 .logout {
   color: red;
   font-weight: bold;
+}
+.template-item {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* רווח בין תמונה לטקסט */
+  min-height: 60px; /* גובה קבוע למניעת קפיצה */
+  padding: 8px 0;
 }

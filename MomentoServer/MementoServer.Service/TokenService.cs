@@ -26,18 +26,17 @@ public class TokenService : ITokenService
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
+            new Claim("Email", user.Email),
             //new Claim(ClaimTypes.Role,user.Role),
             new Claim("Password", user.Password),
             new Claim("ID", user.Id.ToString()),
 
         };
-        if (user.Roles != null)
+
+        foreach (var role in user.Roles)
         {
-            foreach (var role in user.Roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role.RoleName));
-            }
+            claims.Add(new Claim("roles", role.RoleName));
+            Console.WriteLine(role.RoleName);
         }
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],

@@ -1,0 +1,133 @@
+<!-- <div class="ai-report-container">
+  <button class="generate-btn" (click)="generateMarketingEmail()">צור מייל שיווקי</button>
+
+  <div class="popup-overlay" *ngIf="showPopup">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h2>טיוטת מייל שיווקי</h2>
+        <button class="close-btn" (click)="closePopup()">×</button>
+      </div>
+      
+      <div class="popup-body">
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+        
+        <div *ngIf="!emailDraft && !errorMessage" class="loading">
+          <div class="spinner"></div>
+          <p>מייצר טיוטה...</p>
+        </div>
+        
+        <div *ngIf="emailDraft" class="editor-container">
+          <div class="editor-header">
+            <h3>ערוך את הטקסט לפני השליחה</h3>
+            <p class="editor-tip">ניתן להדגיש, לצבוע, למחוק ולערוך את הטקסט</p>
+          </div>
+          
+
+          <div class="toolbar">
+            <select (change)="execCommand('foreColor', $any($event.target).value)">
+              <option value="">צבע טקסט</option>
+              <option value="black">שחור</option>
+              <option value="red">אדום</option>
+              <option value="blue">כחול</option>
+              <option value="green">ירוק</option>
+            </select>
+          
+            <select (change)="execCommand('hiliteColor', $any($event.target).value)">
+              <option value="">צבע רקע</option>
+              <option value="yellow">צהוב</option>
+              <option value="lightblue">כחול בהיר</option>
+              <option value="lightgreen">ירוק בהיר</option>
+            </select>
+          </div>
+          <app-simple-editor [(content)]="editorContent"></app-simple-editor>
+
+          <div class="action-buttons">
+            <button class="send-btn" [disabled]="isSending" (click)="sendToAll()">
+              <span *ngIf="!isSending">שלח לכל המשתמשים</span>
+              <span *ngIf="isSending" class="sending-text">
+                <span class="spinner-small"></span>
+                שולח... {{ sendingProgress.sent + sendingProgress.failed }}/{{ sendingProgress.total }}
+              </span>
+            </button>
+            <button class="send-btn" (click)="generateMarketingEmail()">צור טיוטה חדשה</button>
+            <button class="cancel-btn" [disabled]="isSending" (click)="closePopup()">ביטול</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<div class="ai-report-container">
+  <button class="generate-btn" (click)="generateMarketingEmail()">
+    <span class="btn-icon">✉️</span>
+    <span class="btn-text">צור מייל שיווקי</span>
+  </button>
+
+  <div class="popup-overlay" *ngIf="showPopup">
+    <div class="popup-content">
+      <div class="popup-header">
+        <h2>
+          <span class="header-icon">✉️</span>
+          <span>טיוטת מייל שיווקי</span>
+        </h2>
+        <button class="close-btn" [disabled]="isSending" (click)="closePopup()">×</button>
+      </div>
+      
+      <div class="popup-body">
+        <div *ngIf="errorMessage" class="error-message">
+          <span class="error-icon">⚠️</span>
+          {{ errorMessage }}
+        </div>
+        
+        <div *ngIf="isGenerating" class="loading">
+          <div class="spinner"></div>
+          <p>מייצר טיוטה...</p>
+        </div>
+        
+        <div *ngIf="emailDraft && !isGenerating" class="editor-container">
+          <div class="editor-header">
+            <h3>ערוך את הטקסט לפני השליחה</h3>
+            <p class="editor-tip">ניתן להדגיש, לצבוע, למחוק ולערוך את הטקסט</p>
+          </div>
+          
+          <app-simple-editor [(content)]="editorContent"></app-simple-editor>
+          
+          <div class="action-buttons">
+            <button class="send-btn primary-btn" [disabled]="isSending" (click)="sendToAll()">
+              <span *ngIf="!isSending">
+                <span class="btn-icon">📨</span>
+                <span class="btn-text">שלח לכל המשתמשים</span>
+              </span>
+              <span *ngIf="isSending" class="sending-text">
+                <span class="spinner-small"></span>
+                <span>שולח... {{ sendingProgress.sent + sendingProgress.failed }}/{{ sendingProgress.total }}</span>
+              </span>
+            </button>
+            <button class="refresh-btn secondary-btn" [disabled]="isSending" (click)="generateMarketingEmail()">
+              <span class="btn-icon">🔄</span>
+              <span class="btn-text">צור טיוטה חדשה</span>
+            </button>
+            <button class="cancel-btn tertiary-btn" [disabled]="isSending" (click)="closePopup()">
+              <span class="btn-text">ביטול</span>
+            </button>
+          </div>
+          
+          <!-- Sending progress bar -->
+          <div *ngIf="isSending" class="sending-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="getSendingPercentage()"></div>
+            </div>
+            <div class="progress-stats">
+              <span class="sent">נשלחו: {{ sendingProgress.sent }}</span>
+              <span class="failed" *ngIf="sendingProgress.failed > 0">נכשלו: {{ sendingProgress.failed }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

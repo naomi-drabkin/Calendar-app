@@ -1,0 +1,60 @@
+<div class="template-manager">
+  <h1>ניהול תבניות</h1>
+
+  <div class="upload-section">
+    <div class="file-input-container">
+      <label class="file-input-label">
+        <mat-icon>cloud_upload</mat-icon>
+        בחר קובץ
+        <input type="file" class="file-input" (change)="onFileSelected($event)" />
+      </label>
+    </div>
+
+    <button class="upload-button" [disabled]="!selectedFile || isUploading" (click)="upload()">
+      <ng-container *ngIf="!isUploading; else uploading">
+        <mat-icon>upload</mat-icon>
+        העלה תבנית
+      </ng-container>
+      <ng-template #uploading>
+        <span class="spinner-small"></span> מעלה...
+      </ng-template>
+    </button>
+  </div>
+
+  <div class="template-grid">
+    @for (template of templates; track template.name) {
+      <div class="template-item">
+        <img class="template-image" [src]="template.imageUrl" [alt]="template.name" />
+        <div class="template-info">
+          <p class="template-name">{{ template.fileName }}</p>
+
+          <button
+            class="delete-button"
+            [disabled]="deletingTemplateId === template.name"
+            (click)="deleteTemplate(template)"
+          >
+            @if (deletingTemplateId === template.name) {
+              <ng-template #uploading>
+                <span class="spinner-small"></span> מוחק...
+              </ng-template>
+            } @else {
+              <mat-icon>delete</mat-icon>
+              
+            }
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (templates.length === 0) {
+    <div class="no-templates">
+      <mat-icon
+        style="font-size: 48px; width: 48px; height: 48px; opacity: 0.5; margin-bottom: 16px;"
+      >
+        image_not_supported
+      </mat-icon>
+      <p>אין תבניות זמינות. העלה תבנית חדשה כדי להתחיל.</p>
+    </div>
+  }
+</div>

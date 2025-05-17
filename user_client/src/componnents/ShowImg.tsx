@@ -14,7 +14,7 @@ const ShowImg = ({ fileName, setColor, chooseTemplate }: { fileName: string, set
                 // console.log("colololololollo");
 
             } catch (error) {
-                console.error('שגיאה בהבאת ה-URL:', error);
+                alert('שגיאה בהבאת ה-URL:'+ error);
             }
         };
         getImageUrl();

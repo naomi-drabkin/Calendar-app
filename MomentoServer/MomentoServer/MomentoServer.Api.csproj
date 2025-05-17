@@ -12,6 +12,8 @@
     <PackageReference Include="AWSSDK.Core" Version="4.0.0-preview.10" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.0-preview.10" />
     <PackageReference Include="AWSSDK.S3" Version="4.0.0-preview.10" />
+    <PackageReference Include="Bnaya.CSharp.AsyncExtensions" Version="1.0.68" />
+    <PackageReference Include="LiteX.Email.Core" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.20" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.19" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.20">

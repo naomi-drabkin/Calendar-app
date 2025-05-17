@@ -23,19 +23,7 @@ namespace MomentoServer.Api.Controllers
         [HttpGet("presigned-url")]
         public async Task<IActionResult> GetPresignedUrlAsync([FromQuery] string fileName)
         {
-            //var request = new GetPreSignedUrlRequest
-            //{
-            //    BucketName = _bucketName,
-            //    Key = fileName,
-            //    Verb = HttpVerb.PUT, // מאפשר העלאה
-            //    Expires = DateTime.UtcNow.AddMinutes(5),
-            //    ContentType = "image/jpeg" // או סוג הקובץ המתאים
-            //};
-
-
-            //string url = _s3Client.GetPreSignedURL(request);
-            //return Ok(new { url });
-
+           
             // רשימת הסיומות המותרות
             var allowedExtensions = new HashSet<string> { ".jpg", ".jpeg", ".png" };
 

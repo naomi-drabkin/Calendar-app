@@ -1,0 +1,217 @@
+.user-manager {
+    padding: 24px;
+    background-color: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .user-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .user-title {
+    color: var(--dark-text);
+    font-size: 28px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 12px;
+    margin: 0;
+  }
+  
+  .user-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+  }
+  
+  .add-user-button {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--gradient-primary);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(71, 118, 230, 0.3);
+  }
+  
+  .add-user-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(71, 118, 230, 0.4);
+  }
+  
+  .add-user-button mat-icon {
+    margin-left: 8px;
+  }
+  
+  .user-list {
+    display: grid;
+    gap: 16px;
+  }
+  
+  .user-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: all 0.3s;
+    border: 1px solid var(--border-color);
+    animation: fadeIn 0.5s ease;
+    /* margin: 20px 0; */
+  }
+  
+  .user-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: rgba(71, 118, 230, 0.3);
+  }
+  
+  .user-content {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gradient-secondary);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 16px;
+    font-weight: 600;
+  }
+  
+  .user-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-email {
+    font-weight: 500;
+    color: var(--dark-text);
+    margin: 0;
+  }
+  
+  .user-actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .edit-button {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: var(--gradient-secondary);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .edit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(110, 142, 251, 0.3);
+  }
+  
+  .delete-button {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--error);
+    border: 1px solid var(--error);
+    border-radius: var(--border-radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .delete-button:hover {
+    background-color: rgba(217, 48, 37, 0.1);
+  }
+  
+  .delete-button mat-icon, .edit-button mat-icon {
+    margin-left: 4px;
+    font-size: 18px;
+  }
+  
+  /* Dialog Styles */
+  .dialog-title {
+    color: var(--dark-text);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px ;
+    margin: 20px;
+  }
+  
+  .dialog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 20px;
+  }
+  
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  
+  .dialog-cancel {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--light-text);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .dialog-cancel:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .dialog-submit {
+    padding: 8px 16px;
+    background: var(--gradient-primary);
+    color: var(--white);
+    border: none;
+    border-radius: var(--border-radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .dialog-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(71, 118, 230, 0.3);
+  }
+  
+  .dialog-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }

@@ -15,7 +15,7 @@ namespace MomentoServer.Core.Entities
         public string Name { get; set; }
 
         [ForeignKey(nameof(UserId))]
-        public int UserId { get; set; }
+        public int ?UserId { get; set; }
         public User User { get; set; }
         public string Url { get; set; }
 

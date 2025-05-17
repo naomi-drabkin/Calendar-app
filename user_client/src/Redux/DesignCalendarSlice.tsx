@@ -7,6 +7,8 @@ import { RootState } from "./Store";
 export const fetchDisignCalendar = createAsyncThunk("DesignCalendar/fetch",
   async (_, thunkApi) => {
     try {
+      console.log("fetchDisignCalendar");
+      
       const res = await axios.get("http://localhost:5204/api/calendars/user",
         {
           headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}`}
@@ -20,7 +22,7 @@ export const fetchDisignCalendar = createAsyncThunk("DesignCalendar/fetch",
 );
 
 // // פעולה אסינכרונית להוספת התבניות
-export const addDesignCalendar = createAsyncThunk('DesignCalendar/add', async (DisignCalendar: Calendar, thunkApi) => {
+export const addDesignCalendar = createAsyncThunk('DesignCalendar/add', async (DisignCalendar: Partial<Calendar>, thunkApi) => {
   try {
     const res = await axios.post("http://localhost:5204/api/calendars",
       DisignCalendar,

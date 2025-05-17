@@ -15,7 +15,6 @@ namespace MementoServer.Service
     public class UserService : IUserService
     {
 
-
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
@@ -34,6 +33,14 @@ namespace MementoServer.Service
             return _mapper.Map<IEnumerable<DTOuser>>(users);
         }
 
+
+        public async Task<IEnumerable<string>> GetAllEmailsAsync()
+        {
+            var emails = await _userRepository.GetAllAsync();
+            return emails.Select(user => user.Email);
+        }
+
+
         public async Task<DTOuser> GetByIdAsync(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
@@ -46,8 +53,10 @@ namespace MementoServer.Service
             if (existingUser == null)
             {
                 var userEntity = _mapper.Map<User>(userDto);
-                //var role = _mapper.Map<Roles>(userDto.Role);
-                //userEntity.Roles.Add();
+                var role = _mapper.Map<Roles>(userDto.Role);
+                role.Description = userDto.Role;
+                role.RoleName = userDto.Role;
+                userEntity.Roles.Add(role);
                 userEntity.Password = HashPassword(userDto.Password);
                 userEntity.CreatedAt = DateTime.Now;
                 await _userRepository.AddAsync(userEntity);
@@ -59,7 +68,7 @@ namespace MementoServer.Service
         public async Task<AuthResponse> Login(string email, string password)
         {
             var user = await _userRepository.GetByEmailAsync(email);
-            if (user == null || !VerifyPassword(password,user.Password))
+            if (user == null || !VerifyPassword(password, user.Password))
             {
                 return null;
             }
@@ -79,7 +88,7 @@ namespace MementoServer.Service
             var user = await _userRepository.GetByIdAsync(id);
             if (user != null)
             {
-               return await _userRepository.DeleteUserAsync(id);
+                return await _userRepository.DeleteUserAsync(id);
             }
             return false;
         }

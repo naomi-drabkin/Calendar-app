@@ -1,0 +1,70 @@
+<div class="user-manager">
+  <div class="user-header">
+    <h2 class="user-title">רשימת משתמשים</h2>
+    <button class="add-user-button" (click)="[add_User = true, openDialog()]">
+      <mat-icon>person_add</mat-icon>
+      הוספת משתמש
+    </button>
+  </div>
+
+  <div class="user-list">
+    @for (user of users; track user.id) {
+      <div class="user-card">
+        <div class="user-content">
+          <div class="user-info">
+            <div class="user-avatar">
+              {{ user.email.charAt(0).toUpperCase() }}
+            </div>
+            <div class="user-details">
+              <p class="user-email">{{ user.email }}</p>
+            </div>
+          </div>
+          <div class="user-actions">
+            <button class="edit-button" (click)="[idUser = user.id, openDialog()]">
+              <mat-icon>edit</mat-icon>
+              עדכן
+            </button>
+            <button class="delete-button" (click)="deleteUser(user.id)">
+              <mat-icon>delete</mat-icon>
+              מחק
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <ng-template #dialogTemplate>
+    <div class="dialog-content">
+      <h2 class="dialog-title">{{ add_User ? 'הוספת משתמש חדש' : 'עדכון פרטי משתמש' }}</h2>
+      <form [formGroup]="data" (ngSubmit)="add_User !== true ? onSubmit(idUser) : [addUser(),add_User = false]" class="dialog-form">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>שם</mat-label>
+          <input matInput formControlName="userName">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>שם משפחה</mat-label>
+          <input matInput formControlName="userFamily">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>אימייל</mat-label>
+          <input matInput type="email" formControlName="email">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>סיסמה</mat-label>
+          <input matInput type="password" formControlName="password">
+        </mat-form-field>
+
+        <div class="dialog-actions">
+          <button mat-button type="button" class="dialog-cancel" (click)="[add_User = false ,this.data.reset(),dialog.closeAll()]">ביטול</button>
+          <button mat-raised-button color="primary" type="submit" class="dialog-submit" [disabled]="data.invalid">
+            {{ add_User ? 'הוסף משתמש' : 'עדכן משתמש' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>

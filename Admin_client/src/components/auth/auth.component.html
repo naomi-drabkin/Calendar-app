@@ -1,0 +1,29 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      התחברות
+    </div>
+    <div class="auth-content">
+      <form class="auth-form">
+        <div class="form-field">
+          <mat-label>אימייל</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput [(ngModel)]="email" name="email" type="email" placeholder="הזן את כתובת האימייל שלך" />
+            <!-- <mat-icon matSuffix>email</mat-icon> -->
+          </mat-form-field>
+        </div>
+        <div class="form-field">
+          <mat-label>סיסמה</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput [(ngModel)]="password" name="password" type="password" placeholder="הזן את הסיסמה שלך" />
+            <!-- <mat-icon matSuffix>lock</mat-icon> -->
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button class="auth-button" (click)="login()">
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

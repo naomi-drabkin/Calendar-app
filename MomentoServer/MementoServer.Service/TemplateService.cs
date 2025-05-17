@@ -16,6 +16,7 @@ namespace MementoServer.Service
     {
         private readonly ITemplateRepository _repository;
         private readonly IMapper _mapper;
+        //private readonly UploadF
 
         public TemplateService(ITemplateRepository repository, IMapper mapper)
         {
@@ -38,6 +39,7 @@ namespace MementoServer.Service
         public async Task AddTemplateAsync(TemplateDto templateDto)
         {
             var template = _mapper.Map<Template>(templateDto);
+            template.Url = templateDto.ImageUrl;
             await _repository.AddTemplateAsync(template);
         }
 
@@ -52,17 +54,33 @@ namespace MementoServer.Service
 
         public async Task<string> UploadTemplateImageAsync(IFormFile file)
         {
-            string uploadPath = Path.Combine(Directory.GetCurrentDirectory(),"TemplatesUploads");
+            string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "TemplatesUploads");
             if (!Directory.Exists(uploadPath))
             {
                 Directory.CreateDirectory(uploadPath);
             }
+
             var filePath = Path.Combine(uploadPath, file.FileName);
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
-            return $"/uploads/{file.FileName}";
+            Console.WriteLine("---------------------------");
+            Console.WriteLine(Path.GetFileName(file.FileName));
+            Console.WriteLine(file.FileName);
+            // עדכון כתובת התמונה באובייקט התבנית
+            var newTemplate = new TemplateDto
+            {
+                Name = Path.GetFileName(file.FileName),
+                UserId = null,
+                ImageUrl = "" 
+            };
+
+            // שמירת התבנית לרשימה (DB)
+            await AddTemplateAsync(newTemplate);
+
+            return newTemplate.ImageUrl;
         }
+
     }
 }
