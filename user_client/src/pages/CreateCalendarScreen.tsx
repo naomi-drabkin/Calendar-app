@@ -22,7 +22,6 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import ShowTemplates from "../componnents/ShowTemplates";
 import { useNavigate } from "react-router";
-// import { EventApi } from "@fullcalendar/core/index.js";
 
 export default function CreateCalendarScreen() {
     const [events, setEvents] = useState([]);
@@ -41,7 +40,7 @@ export default function CreateCalendarScreen() {
     const fetchImages = async () => {
         try {
             const numOfCalendar = sessionStorage.getItem('numOfCalendar');
-            console.log(numOfCalendar);
+            // console.log(numOfCalendar);
 
             const response = await axios.get(`http://localhost:5204/api/Image/all/${numOfCalendar}`, {
                 headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` },
@@ -76,8 +75,11 @@ export default function CreateCalendarScreen() {
     const SetChooseTemplate = (url: string) => {
         setChooseTemplate(false);
         if (url) {
-            setColor(url);
-            sessionStorage.setItem("Color", url)
+            const http_url = url.replace("https://", "http://")
+            console.log("http_url : " + http_url);
+
+            setColor(http_url);
+            sessionStorage.setItem("Color", http_url)
             console.log("--------------------");
             console.log(sessionStorage.getItem("Color"));
         }
@@ -87,63 +89,6 @@ export default function CreateCalendarScreen() {
 
     }
 
-    // const handleSaveCalendarAsPDF = async () => {
-    //     try {
-    //         setDontShowInDownLoad(true);
-    //         setLoading(true);
-
-    //         const pdf = new jsPDF("landscape", "mm", "a4");
-    //         const calendarElement = calendarContainerRef.current;
-    //         const backgroundImageUrl = sessionStorage.getItem("Color");
-
-    //         if (calendarElement && backgroundImageUrl) {
-    //             calendarElement.style.backgroundImage = `url(${backgroundImageUrl})`;
-    //             calendarElement.style.backgroundSize = "cover"; // או contain / repeat לפי הצורך
-    //             calendarElement.style.backgroundPosition = "center";
-    //         }
-    //         //   await waitForImageLoad(backgroundImageUrl); // ← חשוב!
-
-
-    //         if (!calendarElement) {
-    //             console.error("Calendar container ref is not set.");
-    //             setLoading(false);
-    //             return;
-    //         }
-
-    //         const calendarApi = calendarRef.current?.getApi?.();
-    //         if (!calendarApi) {
-    //             console.error("Calendar API is not available.");
-    //             setLoading(false);
-    //             return;
-    //         }
-
-    //         for (let month = 0; month < 12; month++) {
-    //             // מעבר לחודש הבא בלוח השנה
-    //             calendarApi.gotoDate(new Date(2025, month, 1));
-    //             await new Promise(resolve => setTimeout(resolve, 500)); // מחכה שהכל ייטען
-
-    //             console.log("Capturing month:", month + 1);
-
-    //             // צילום הלוח כולל התמונות
-    //             const canvas = await html2canvas(calendarElement, { scale: 2, useCORS: true });
-    //             const imgData = canvas.toDataURL("image/png");
-    //             const imgWidth = 210;
-    //             const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    //             if (month !== 0) pdf.addPage();
-    //             pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-    //         }
-
-    //         pdf.save("calendar.pdf");
-    //         console.log("Calendar saved as PDF with images.");
-    //     } catch (error) {
-    //         console.error("Error generating PDF:", error);
-    //         alert("שגיאה בהורדת הקובץ.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    //     setDontShowInDownLoad(false);
-    // };
-
     const handleSaveCalendarAsPDF = async () => {
         try {
             setDontShowInDownLoad(true);
@@ -151,7 +96,7 @@ export default function CreateCalendarScreen() {
 
             const pdf = new jsPDF("landscape", "mm", "a4");
             const calendarElement = calendarContainerRef.current;
-            const backgroundImageUrl = sessionStorage.getItem("Color");
+            const backgroundImageUrl = sessionStorage.getItem("Color") || " ";
 
             if (!calendarElement || !backgroundImageUrl) {
                 console.error("Calendar container or background image is missing.");
@@ -159,25 +104,17 @@ export default function CreateCalendarScreen() {
                 return;
             }
 
-            // טען את התמונה מראש כדי להבטיח שהיא קיימת ב-DOM ונטענת
-            await new Promise<void>((resolve, reject) => {
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                img.src = backgroundImageUrl;
-                console.log("++++++++++++++++++");
+            console.log(backgroundImageUrl);
 
-                console.log(img.src);
 
-                img.onload = () => resolve();
-                img.onerror = (err) => {
-                    console.error("Failed to load background image", err);
-                    resolve(); // ממשיכים גם אם התמונה לא נטענה
-                };
+            // טען את התמונה עם fetch
+            const bgImageBlob = await fetchImage(backgroundImageUrl);
+            const img = new Image();
+            img.src = URL.createObjectURL(bgImageBlob);
+
+            await new Promise((resolve) => {
+                img.onload = () => resolve(img);
             });
-
-            calendarElement.style.backgroundImage = `url(${backgroundImageUrl})`;
-            calendarElement.style.backgroundSize = "cover";
-            calendarElement.style.backgroundPosition = "center";
 
             const calendarApi = calendarRef.current?.getApi?.();
             if (!calendarApi) {
@@ -188,11 +125,12 @@ export default function CreateCalendarScreen() {
 
             for (let month = 0; month < 12; month++) {
                 calendarApi.gotoDate(new Date(2025, month, 1));
-                await new Promise(resolve => setTimeout(resolve, 500)); // מחכה לרנדר
+                await new Promise(resolve => setTimeout(resolve, 500)); // ממתין לרינדור
 
                 const canvas = await html2canvas(calendarElement, {
                     scale: 2,
-                    useCORS: true
+                    useCORS: true,
+                    backgroundColor: null // כדי לא למחוק את הרקע של ה־CSS
                 });
 
                 const imgData = canvas.toDataURL("image/png");
@@ -200,7 +138,8 @@ export default function CreateCalendarScreen() {
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
                 if (month !== 0) pdf.addPage();
-                pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+                pdf.addImage(img.src, "PNG", 0, 0, imgWidth, imgHeight); // הוספת הרקע
+                pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight); // צילום הלוח
             }
 
             pdf.save("calendar.pdf");
@@ -214,6 +153,22 @@ export default function CreateCalendarScreen() {
         }
     };
 
+    // פונקציה לטעינת התמונה
+    const fetchImage = async (url: string) => {
+        try {
+            console.log("url : " + url);
+
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return await response.blob();
+        } catch (error) {
+            console.error("Error fetching image:", error);
+            throw error;
+        }
+    };
+
 
     useEffect(() => {
 
@@ -224,15 +179,6 @@ export default function CreateCalendarScreen() {
 
     }, [calendarRef]);
 
-    const waitForImageLoad = (url: string): Promise<void> => {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.crossOrigin = "anonymous"; // חשוב!
-            img.src = url;
-            img.onload = () => resolve();
-            img.onerror = (err) => reject(err);
-        });
-    };
 
     return (
         <>
@@ -286,33 +232,17 @@ export default function CreateCalendarScreen() {
                         className="calendar-container"
                         ref={calendarContainerRef}
                         style={{
-                            position: "relative", // הוספה
+                            position: "relative",
                             padding: "20px",
                             border: "2px solid Gray",
                             backgroundPosition: "center",
                             borderRadius: '10px',
-                            // backgroundColor: `${sessionStorage.getItem("Color")}`,
-                            // backgroundImage: `url(${sessionStorage.getItem("Color")}`,
+                            backgroundColor: '',
+                            backgroundImage: `url(${sessionStorage.getItem("Color")}`,
                             objectFit: "contain",
                             margin: "20px"
                         }}
-                    >
-
-                        <img
-                            className="calendar-background"
-                            src={color || ""}
-                            style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                                zIndex: 0,
-                                objectFit: "cover",
-                                borderRadius: "10px",
-                                pointerEvents: "none"
-                            }}
-                        />
+                    >                    
 
                         <FullCalendar
                             ref={calendarRef}

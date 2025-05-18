@@ -100,7 +100,8 @@ export default function ShowTemplates({ chooseTemplate }: { chooseTemplate: Func
         const fetchAllTemplates = async () => {
             try {
                 const res = await axios.get("http://localhost:5204/api/templates/get-all-templates", {
-                    // headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` }
+                    // headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` },
+                    // mode: "cors",
                 })
                 setListTemplate(res.data)
                 console.log(res.data)

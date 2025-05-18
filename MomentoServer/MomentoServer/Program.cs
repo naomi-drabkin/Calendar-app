@@ -16,10 +16,27 @@ using Amazon.Runtime;
 using DotNetEnv;
 using MomentoServer.Api.Controllers;
 
+//var builder = WebApplication.CreateBuilder(args);
+//Console.WriteLine(builder.Configuration["AWS:AccessKey"]);
+//Console.WriteLine(builder.Configuration["AWS:SecretKey"]);
+//Console.WriteLine(builder.Configuration["AWS:Region"]);
+
+
+
+
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
-Console.WriteLine(builder.Configuration["AWS:AccessKey"]);
-Console.WriteLine(builder.Configuration["AWS:SecretKey"]);
-Console.WriteLine(builder.Configuration["AWS:Region"]);
+
+
+
+var credentials = new BasicAWSCredentials(
+    builder.Configuration["AWS:AccessKey"],
+    builder.Configuration["AWS:SecretKey"]
+);
+
+
+
 
 
 builder.Services.AddControllers();
@@ -47,18 +64,20 @@ builder.Services.AddControllers()
 
 //Env.Load();
 
-//var AccessKey = Environment.GetEnvironmentVariable("ACCESS");
-//var SecretAccess = Environment.GetEnvironmentVariable("SECRET");
-var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
+////var AccessKey = Environment.GetEnvironmentVariable("ACCESS");
+////var SecretAccess = Environment.GetEnvironmentVariable("SECRET");
+//var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
 
-var credentials = new BasicAWSCredentials(
-builder.Configuration["AWS:AccessKey"],
-builder.Configuration["AWS:SecretKey"]
-//AccessKey,
-//SecretAccess
-);
+//var credentials = new BasicAWSCredentials(
+//builder.Configuration["AWS:AccessKey"],
+//builder.Configuration["AWS:SecretKey"]
+////AccessKey,
+////SecretAccess
+//);
 
-var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]);
+
+var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]); // בדקי שהאזור נכון
+
 //var region = Amazon.RegionEndpoint.GetBySystemName(awsRegion);
 
 var s3Client = new AmazonS3Client(credentials, region);

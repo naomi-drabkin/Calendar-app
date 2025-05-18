@@ -1,13 +1,12 @@
 import { Box, Modal, TextField } from '@mui/material'
 import React, { useRef, useState } from 'react'
-import { styleModal } from '../pages/LoginRegister';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import { Jwt } from '../Models/Jwt';
 import { CircularProgress } from "@mui/material";
 
 import '../App.css';
-import { Upload, X } from 'lucide-react';
+import { Upload} from 'lucide-react';
 
 export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { id: number, eventDate: Date, closeModal: Function, onUpload: Function }) {
     const [file, setFile] = useState<File | null>(null);
@@ -127,41 +126,6 @@ export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { i
 
     return (
         <>
-            {/* <Modal open={openModal} onClose={() => setOpenMOdal(false)}>
-                <Box sx={styleModal}>
-                    <h2>Update Image</h2>
-                    <input type="file" onChange={handleFileChange} />
-                    <form>
-                        <TextField
-                            id="event"
-                            type="text"
-                            label="Event"
-                            variant="outlined"
-                            inputRef={event}
-                            required
-                            fullWidth
-                            sx={{ bgcolor: "rgb(249, 249, 249)" }}
-                        />
-                    </form>
-                     {loading? <CircularProgress size={15} color="inherit" style={{
-                                            position: "absolute",
-                                            top: "50%",
-                                            right:' 50%',
-                                            background: "rgba(255, 255, 255, 0.22)",
-                                            color: "gray",
-                                            borderRadius: "50%",
-                                            minWidth: "10px",
-                                            width: "50px",
-                                            height: "50px"
-                                       }}/> : <button onClick={handleUpdate}>Update</button>}
-
-                    <span className="close-btn" onClick={() => {setOpenMOdal(false),closeModal()}}>
-                        ✖
-                    </span>
-                    <p>{uploadStatus}</p>
-                </Box>
-            </Modal> */}
-
 
             <Modal open={openModal} onClose={() => setOpenMOdal(false)}>
                 <Box sx={updateModalStyle}>
