@@ -2,7 +2,12 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 
-const ShowImg = ({ fileName, setColor, chooseTemplate }: { fileName: string, setColor: null | string, chooseTemplate: Function }) => {
+const ShowImg = ({ fileName, 
+    // setColor,
+     chooseTemplate }: { fileName: string,
+        //  setColor: null | string
+        //  ,
+          chooseTemplate: Function }) => {
     const [imgUrl, setImgUrl] = useState(null);
 
     useEffect(() => {
@@ -22,7 +27,10 @@ const ShowImg = ({ fileName, setColor, chooseTemplate }: { fileName: string, set
 
     return (<>
         {imgUrl != null ? (
-            <Button className="image-box" onClick={() => { setColor = fileName, chooseTemplate(fileName) }}>
+            <Button className="image-box" onClick={() => { 
+                // setColor = fileName
+            // ,
+             chooseTemplate(fileName) }}>
                 <div style={{
                     backgroundColor: `${fileName}`,
                     width: '50px',
