@@ -7,12 +7,11 @@ const ShowImg = ({ fileName, setColor, chooseTemplate }: { fileName: string, set
 
     useEffect(() => {
         const getImageUrl = async () => {
+            console.log(fileName);
             
             try {
                 const response = await axios.get(`http://localhost:5204/api/upload/download-url/${fileName}`);
                 setImgUrl(response.data);
-                // console.log(response.data);
-                // console.log("colololololollo");
 
             } catch (error) {
                 alert('שגיאה בהבאת ה-URL:'+ error);
