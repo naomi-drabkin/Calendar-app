@@ -218,7 +218,7 @@ app.MapGet("/", () => "server is running");
 
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
+app.UseCors("AllowClients");
 
 //app.UseAuthorization();
 app.UseAuthentication();
