@@ -1,5 +1,6 @@
 import axios from 'axios'
 import  { useEffect, useRef } from 'react'
+import { _http } from '../App';
 
 export default function DeleteImg({id,onUpload,closeDelete}:{id:number,onUpload:Function,closeDelete:Function}) {
     const hasRun = useRef(false);
@@ -12,7 +13,7 @@ export default function DeleteImg({id,onUpload,closeDelete}:{id:number,onUpload:
         hasRun.current = true;
         const deleteImg = async () => {
             try {
-                await axios.delete(`http://localhost:5204/api/Image/${id}`,
+                await axios.delete(`${_http}/api/Image/${id}`,
                     {
                         headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}`,                        
                             "Content-Type": "application/json"},                       

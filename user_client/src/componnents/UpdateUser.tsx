@@ -122,6 +122,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Jwt } from '../Models/Jwt';
 import { FiSettings } from "react-icons/fi";
 import { useNavigate } from 'react-router';
+import { _http } from '../App';
 
 export const token = sessionStorage.getItem("AuthToken");
 
@@ -140,7 +141,7 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
     try {
       if (token) {
         const userId = jwtDecode<Jwt>(token).ID;
-        await axios.put(`http://localhost:5204/api/User/${userId}`, {
+        await axios.put(`${_http}/api/User/${userId}`, {
           email: emailRef.current?.value,
           password: passwordRef.current?.value,
           UserName: UserNameRef.current?.value,

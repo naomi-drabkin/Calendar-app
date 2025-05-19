@@ -7,6 +7,7 @@ import { CircularProgress } from "@mui/material";
 
 import '../App.css';
 import { Upload} from 'lucide-react';
+import { _http } from '../App';
 
 export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { id: number, eventDate: Date, closeModal: Function, onUpload: Function }) {
     const [file, setFile] = useState<File | null>(null);
@@ -27,7 +28,7 @@ export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { i
         try {
             setLoading(true);
             const response = await axios.get(
-                `http://localhost:5204/api/upload/presigned-url?fileName=${file.name}`
+                `${_http}/api/upload/presigned-url?fileName=${file.name}`
             );
             presignedUrl = response.data.url;
 
@@ -58,7 +59,7 @@ export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { i
 
                 var numOfCalendar = sessionStorage.getItem("numOfCalendar");
                 await axios.put(
-                    `http://localhost:5204/api/Image/${id}`,
+                    `${_http}/api/Image/${id}`,
                     {
                         Url: presignedUrl.split("?")[0],
                         EventDate: eventDate,

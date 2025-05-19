@@ -72,6 +72,7 @@ import axios from "axios"
 import { Box, Modal } from "@mui/material"
 import type { Template } from "../Models/Template"
 import "../App.css"
+import { _http } from "../App"
 
 // סגנון מעודכן לפופאפ הצגת תבניות
 const templatesModalStyle = {
@@ -99,7 +100,7 @@ export default function ShowTemplates({ chooseTemplate }: { chooseTemplate: Func
     useEffect(() => {
         const fetchAllTemplates = async () => {
             try {
-                const res = await axios.get("http://localhost:5204/api/templates/get-all-templates", {
+                const res = await axios.get(`${_http}/api/templates/get-all-templates`, {
                     // headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` },
                     // mode: "cors",
                 })

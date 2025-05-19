@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useEffect, useState } from 'react'
+import { _http } from '../App';
 
 const ShowImg = ({ fileName, 
     // setColor,
@@ -15,7 +16,7 @@ const ShowImg = ({ fileName,
             console.log(fileName);
             
             try {
-                const response = await axios.get(`http://localhost:5204/api/upload/download-url/${fileName}`);
+                const response = await axios.get(`${_http}/api/upload/download-url/${fileName}`);
                 setImgUrl(response.data);
 
             } catch (error) {

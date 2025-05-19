@@ -22,6 +22,7 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import ShowTemplates from "../componnents/ShowTemplates";
 import { useNavigate } from "react-router";
+import { _http } from "../App";
 
 export default function CreateCalendarScreen() {
     const [events, setEvents] = useState([]);
@@ -42,7 +43,7 @@ export default function CreateCalendarScreen() {
             const numOfCalendar = sessionStorage.getItem('numOfCalendar');
             // console.log(numOfCalendar);
 
-            const response = await axios.get(`http://localhost:5204/api/Image/all/${numOfCalendar}`, {
+            const response = await axios.get(`${_http}/api/Image/all/${numOfCalendar}`, {
                 headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` },
             });
 

@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
+
 export class AppComponent {
   title = 'Admin_client';
   
@@ -24,3 +25,6 @@ export class AppComponent {
     return localStorage.getItem('isLoggedIn') === 'true';
   }
 }
+
+
+export const _http = "https://calendar-app-server-fn9y.onrender.com";

@@ -6,6 +6,7 @@ import axios from "axios"
 import { Box, Button, Modal, TextField } from "@mui/material"
 import HomePage from "./HomePage"
 import { useNavigate } from "react-router"
+import { _http } from "../App"
 
 export const styleModal = {
   position: "absolute",
@@ -58,13 +59,13 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
     let res = null
     try {
       if (!isRegister) {
-        res = await axios.post("http://localhost:5204/api/User/login", {
+        res = await axios.post(`${_http}/api/User/login`, {
           email: emailRef.current?.value,
           password: passwordRef.current?.value,
         })
         console.log("login")
       } else {
-        res = await axios.post("http://localhost:5204/api/User/register", {
+        res = await axios.post(`${_http}/api/User/register`, {
           email: emailRef.current?.value,
           password: passwordRef.current?.value,
           UserName: UserNameRef.current?.value,

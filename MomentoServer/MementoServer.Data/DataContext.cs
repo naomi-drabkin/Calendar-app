@@ -23,7 +23,10 @@ namespace MementoServer.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=calendar_db");
+
+            var connectionString = Environment.GetEnvironmentVariable("Calendar__DB");
+            var serverVersion = ServerVersion.AutoDetect(connectionString);
+            optionsBuilder.UseMySql(connectionString, serverVersion);
         }
 
 

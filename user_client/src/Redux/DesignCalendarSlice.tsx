@@ -9,7 +9,7 @@ export const fetchDisignCalendar = createAsyncThunk("DesignCalendar/fetch",
     try {
       console.log("fetchDisignCalendar");
       
-      const res = await axios.get("http://localhost:5204/api/calendars/user",
+      const res = await axios.get("https://calendar-app-server-fn9y.onrender.com/api/calendars/user",
         {
           headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}`}
         }
@@ -24,7 +24,7 @@ export const fetchDisignCalendar = createAsyncThunk("DesignCalendar/fetch",
 // // פעולה אסינכרונית להוספת התבניות
 export const addDesignCalendar = createAsyncThunk('DesignCalendar/add', async (DisignCalendar: Partial<Calendar>, thunkApi) => {
   try {
-    const res = await axios.post("http://localhost:5204/api/calendars",
+    const res = await axios.post("https://calendar-app-server-fn9y.onrender.com/api/calendars",
       DisignCalendar,
       {
         headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` }

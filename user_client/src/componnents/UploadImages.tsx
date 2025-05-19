@@ -8,6 +8,7 @@ import { Box, Modal, TextField, CircularProgress } from "@mui/material"
 import { jwtDecode } from "jwt-decode"
 import type { Jwt } from "../Models/Jwt"
 import { Upload} from "lucide-react"
+import { _http } from "../App"
 
 interface ImageUploadProps {
     onUpload: () => void
@@ -52,7 +53,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
         try {
             setLoading(true);
             const response = await axios.get(
-                `http://localhost:5204/api/upload/presigned-url?fileName=${file.name}`
+                `${_http}/api/upload/presigned-url?fileName=${file.name}`
             );
             presignedUrl = response.data.url;
 
@@ -94,7 +95,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
                     console.log("התמונה בהלאעה");
 
                     await axios.post(
-                        "http://localhost:5204/api/Image/upload",
+                        `${_http}/api/Image/uploa`,
                         {
                             Url: presignedUrl.split("?")[0],
                             EventDate: parsedDate.toISOString(),

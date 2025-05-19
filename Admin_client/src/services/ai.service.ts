@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
+import { _http } from '../app/app.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AiService {
-  private apiUrl = 'http://localhost:5204/api/Email/api/send-email'; 
-  private apiUrlGet = 'http://localhost:5204/api/User/emails'; 
+  private apiUrl = `${_http}/api/Email/api/send-email`; 
+  private apiUrlGet = `${_http}/api/User/emails`; 
 
   constructor(private http: HttpClient,
             private userService: UsersService,
@@ -24,7 +25,7 @@ export class AiService {
   }
 
   sendMessage(message: string) {
-    return this.http.post<any>('http://localhost:5204/api/openai/chat', { message });
+    return this.http.post<any>(`${_http}/api/openai/chat`, { message });
   }
  
 }

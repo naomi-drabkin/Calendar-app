@@ -3,14 +3,15 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { UsersService } from './users.service';
 import { TemplateDto } from '../models/TemplateDto';
+import { _http } from '../app/app.component';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class UploadService {
-  private serverUrl = 'http://localhost:5204/api/templates'; // עדכן לפי כתובת ה-API שלך
-  private downloadUrl = 'http://localhost:5204/api/upload'; // עדכן לפי כתובת ה-API שלך
+  private serverUrl = `${_http}/api/templates`; // עדכן לפי כתובת ה-API שלך
+  private downloadUrl = `${_http}/api/upload`; // עדכן לפי כתובת ה-API שלך
 
 
   constructor(private http: HttpClient,
