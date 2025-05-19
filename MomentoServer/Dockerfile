@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 
 # העתק את קובץ ה-.csproj של ה-API
-COPY MomentoServer/MomentoServer.Api/MomentoServer.Api.csproj MomentoServer.Api/
+COPY MomentoServer/MomentoServer.Api/MomentoServer.Api.csproj ./MomentoServer.Api/
 
 # שחזור חבילות NuGet
 RUN dotnet restore MomentoServer.Api/MomentoServer.Api.csproj
