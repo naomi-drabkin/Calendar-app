@@ -8,18 +8,24 @@ import { UsersService } from './users.service';
   providedIn: 'root'
 })
 export class AiService {
-  private apiUrl = 'http://localhost:5204/api/Email/api/send-email';  // כתובת ה-API של השרת שלך
-  private apiUrlGet = 'http://localhost:5204/api/User/emails';  // כתובת ה-API של השרת שלך
+  private apiUrl = 'http://localhost:5204/api/Email/api/send-email'; 
+  private apiUrlGet = 'http://localhost:5204/api/User/emails'; 
 
   constructor(private http: HttpClient,
             private userService: UsersService,
   ) { }
 
   getEmails(){
-    return this.http.get(this.apiUrlGet,this.userService.getAuthHeaders() );  // שליחה לשרת
+    return this.http.get(this.apiUrlGet,this.userService.getAuthHeaders() );
   }
 
   sendEmail(data: any): Observable<any> {
-    return this.http.post(this.apiUrl, data);  // שליחה לשרת
+    return this.http.post(this.apiUrl, data);
   }
+
+  sendMessage(message: string) {
+    return this.http.post<any>('http://localhost:5204/api/openai/chat', { message });
+  }
+ 
 }
+

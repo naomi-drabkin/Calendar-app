@@ -164,7 +164,7 @@
 //       this.caretRange = selection.getRangeAt(0).cloneRange();
 //     }
 //   }
-  
+
 //   restoreCaretPosition() {
 //     if (this.caretRange) {
 //       const selection = window.getSelection();
@@ -174,7 +174,7 @@
 //       }
 //     }
 //   }
-  
+
 //   execCommand(command: string, value?: string) {
 //     document.execCommand(command, false, value);
 //   }
@@ -206,6 +206,8 @@ export class AiReportComponent {
   editorContent: string = '';
   isGenerating: boolean = false;
   isSending: boolean = false;
+  prompt = `צור טיוטה של מייל שיווקי בעברית עבור משתמשים שמכינים לוח שנה אישי עם תמונות לפי תאריך ,באתר MOMENTO. סגנון קליל, מזמין, עם קריאה לפעולה ברורה.`;
+ 
   sendingProgress: { total: number, sent: number, failed: number } = {
     total: 0,
     sent: 0,
@@ -224,18 +226,8 @@ export class AiReportComponent {
     this.errorMessage = '';
     this.isGenerating = true;
 
-    const prompt = `צור טיוטה של מייל שיווקי בעברית עבור משתמשים שמכינים לוח שנה אישי עם תמונות לפי תאריך ,באתר MOMENTO. סגנון קליל, מזמין, עם קריאה לפעולה ברורה.`;
-    const apiKey = '';
-
-    this.http.post<any>('https://api.openai.com/v1/chat/completions', {
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: prompt }]
-    }, {
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      }
-    }).subscribe({
+    this.aiService.sendMessage(this.prompt)
+    .subscribe({
       next: res => {
         this.isGenerating = false;
         this.emailDraft = res.choices[0].message.content;
@@ -249,6 +241,18 @@ export class AiReportComponent {
       }
     });
   }
+
+  // generateMarketingEmail() {
+  //     this.showPopup = true;
+  //   this.emailDraft = '';
+  //   this.editorContent = '';
+  //   this.errorMessage = '';
+  //   this.isGenerating = true;
+  //   this.aiService.sendMessage(this.prompt)
+  //     .subscribe(response => {
+  //       console.log(response.choices[0].message.content);
+  //     });
+  // }
 
   sendToAll() {
     this.sendingProgress = {
@@ -319,7 +323,7 @@ export class AiReportComponent {
   closePopup() {
     // Don't allow closing while sending
     if (this.isSending) return;
-    
+
     this.showPopup = false;
     this.emailDraft = '';
     this.editorContent = '';
