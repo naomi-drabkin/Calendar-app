@@ -140,17 +140,26 @@ builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowAll", policy =>
+
+//    policy.SetIsOriginAllowed(_ => true)
+//        .AllowAnyMethod().AllowAnyHeader().AllowCredentials()
+//        );
+
+//});
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
- //policy.WithOrigins("http://localhost:5173") // כתובת ה-React שלך
- //             .AllowAnyMethod()
- //             .AllowAnyHeader()
- //             .AllowCredentials()
-policy.SetIsOriginAllowed(_ =>  true)
-        .AllowAnyMethod().AllowAnyHeader().AllowCredentials()
-    );
-
+    options.AddPolicy("AllowClients", policy =>
+    {
+        policy.WithOrigins(
+                "https://calendar-react-client.onrender.com",
+                "https://calendar-admin-client.onrender.com")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 builder.Services.AddSwaggerGen(c =>
