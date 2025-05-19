@@ -20,6 +20,9 @@ public class TokenService : ITokenService
 
     public string GenerateToken(User user)
     {
+
+        Console.WriteLine("Jwt:Issuer = " + _configuration["Jwt:Issuer"]);
+        Console.WriteLine("Jwt:Audience = " + _configuration["Jwt:Audience"]);
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
         //Console.WriteLine($"User Role: {user.Role}");

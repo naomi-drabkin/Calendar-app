@@ -5,14 +5,7 @@
             "Microsoft.AspNetCore": "Warning"
         }
     },
-    "AllowedHosts": "*",
-
-    "Jwt": {
-        "Key": "MySuperStrongSecretKeyWithMoreThan32Chars!",
-        "Issuer": "http://localhost:5204",
-        "Audience": "http://localhost:5204"
-    }
-
+    "AllowedHosts": "*"
 
  
 }
