@@ -77,7 +77,8 @@ export default function CreateCalendarScreen() {
     const SetChooseTemplate = (url: string) => {
         setChooseTemplate(false);
         if (url) {
-            const http_url = url.replace("https://", "http://")
+            // const http_url = url.replace("https://", "http://")
+            const http_url = url;
             console.log("http_url : " + http_url);
 
             setColor(http_url);
