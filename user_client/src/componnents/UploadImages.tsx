@@ -95,7 +95,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
                     console.log("התמונה בהלאעה");
 
                     await axios.post(
-                        `${_http}/api/Image/uploa`,
+                        `${_http}/api/Image/upload`,
                         {
                             Url: presignedUrl.split("?")[0],
                             EventDate: parsedDate.toISOString(),

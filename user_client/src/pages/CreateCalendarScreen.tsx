@@ -56,7 +56,8 @@ export default function CreateCalendarScreen() {
             }));
             setEvents(formattedEvents);
         } catch (error) {
-            alert("Error fetching images");
+            console.log("No fetching images");
+            
         }
     };
 
