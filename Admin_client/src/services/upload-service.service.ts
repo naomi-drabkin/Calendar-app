@@ -27,7 +27,7 @@ export class UploadService {
 
   // קבלת כל התבניות
   getAllTemplates(): Observable<TemplateDto[]> {
-    return this.http.get<TemplateDto[]>(`${this.serverUrl}`);
+    return this.http.get<TemplateDto[]>(`${this.serverUrl}/get-all-templates`);
   }
 
   // העלאת קובץ
