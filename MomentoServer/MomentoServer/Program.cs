@@ -158,7 +158,7 @@ builder.Services.AddCors(options =>
                 "https://calendar-react-client.onrender.com",
                 "https://calendar-admin-client.onrender.com")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod().AllowCredentials();
     });
 });
 
