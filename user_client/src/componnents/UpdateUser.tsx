@@ -151,16 +151,15 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
             headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` }
           });
 
-          console.log("פרטיך מתעדכנים...");
-          
+        console.log("פרטיך מתעדכנים...");
+
       }
-      else{
+      else {
         console.log("תקלהההה");
-        
       }
     } catch (error) {
       console.log("ארע תקלה בעת עדכון פרטיך");
-      
+
     }
     setOpenModal(false);
     sessionStorage.setItem("Design", `${true}`);
@@ -254,7 +253,12 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
                   sx={textFieldStyle}
                 />
 
-                <Button type="submit" variant="contained" color="primary">עדכן משתמש</Button>
+                <Button type="button"
+                  onClick={(e) => {
+                    console.log("נלחץ כפתור עדכון");
+                    handleSubmit(e as any); // לעקוף זמנית את סוג האירוע
+                  }} 
+                  variant="contained" color="primary">עדכן משתמש</Button>
               </>
             </form>
           </Box>
