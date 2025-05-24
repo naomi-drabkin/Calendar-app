@@ -154,8 +154,13 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
           console.log("פרטיך מתעדכנים...");
           
       }
+      else{
+        console.log("תקלהההה");
+        
+      }
     } catch (error) {
-      alert("ארע תקלה בעת עדכון פרטיך");
+      console.log("ארע תקלה בעת עדכון פרטיך");
+      
     }
     setOpenModal(false);
     sessionStorage.setItem("Design", `${true}`);
