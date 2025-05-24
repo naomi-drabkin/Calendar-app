@@ -139,8 +139,11 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      if (token) {
-        const userId = jwtDecode<Jwt>(token).ID;
+        const authToken = sessionStorage.getItem("AuthToken");
+        if (!authToken) {
+          throw new Error("AuthToken is missing");
+        }
+        const userId = jwtDecode<Jwt>(authToken).ID;
         await axios.put(`${_http}/api/User/${userId}`, {
           email: emailRef.current?.value,
           password: passwordRef.current?.value,
@@ -151,12 +154,8 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
             headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` }
           });
 
-        console.log("פרטיך מתעדכנים...");
-
-      }
-      else {
-        console.log("תקלהההה");
-      }
+        console.log("פרטיך מתעדכנים...");  
+    
     } catch (error) {
       console.log("ארע תקלה בעת עדכון פרטיך");
 
