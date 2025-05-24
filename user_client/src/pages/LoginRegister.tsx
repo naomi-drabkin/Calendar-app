@@ -74,6 +74,7 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
         })
         console.log("register")
       }
+      
       await sessionStorage.setItem("AuthToken", res.data.token)
       sessionStorage.setItem("countCalendar", res.data.countCalendar)
       await setOpenNextComponnent(true)
@@ -85,10 +86,15 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
     }
   }
 
+
+ 
   useEffect(() => {}, [sessionStorage.getItem("AuthToken")])
 
-  // סגנונות לרכיבים
- 
+  // useEffect(() => 
+  //   { 
+      
+  // }, [isOpenModal])
+  
   const buttonStyle = {
     marginTop: "8px",
     marginBottom: "8px",
@@ -118,6 +124,8 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
 
   return (
     <>
+
+
       {!openNextComponnent ? (
         <>
           <Modal
@@ -140,20 +148,20 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
                   }}
                 >   
                   MomenTo
-                </h2>
+                  </h2>
                 <p
-                  style={{
+                style={{
                     margin: "0",
                     color: "#666",
                     fontSize: "16px",
                   }}
-                >
+                  >
                   {isRegister ? "צור חשבון חדש" : "התחבר לחשבון שלך"}
                 </p>
               </div>
-
+              
               <form onSubmit={handleSubmit} dir="rtl">
-                <TextField
+              <TextField
                   id="email"
                   type="email"
                   label="אימייל"
@@ -173,21 +181,21 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
                   required
                   fullWidth
                   sx={textFieldStyle}
-                />
-
-                {isRegister && (
+                  />
+                  
+                  {isRegister && (
                   <>
-                    <TextField
-                      id="UserName"
-                      type="text"
-                      label="שם פרטי"
-                      variant="outlined"
-                      inputRef={UserNameRef}
-                      required
-                      fullWidth
-                      sx={textFieldStyle}
-                    />
-                    <TextField
+                  <TextField
+                  id="UserName"
+                  type="text"
+                  label="שם פרטי"
+                  variant="outlined"
+                  inputRef={UserNameRef}
+                  required
+                  fullWidth
+                  sx={textFieldStyle}
+                  />
+                  <TextField
                       id="UserFamily"
                       type="text"
                       label="שם משפחה"
@@ -196,27 +204,27 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
                       required
                       fullWidth
                       sx={textFieldStyle}
-                    />
-                  </>
-                )}
-
-                <div
-                  style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px" }}
-                >
-                  {!isRegister ? (
+                      />
+                      </>
+                    )}
+                    
+                    <div
+                    style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px" }}
+                    >
+                    {!isRegister ? (
                     <>
-                      <Button type="button" onClick={() => setIsRegister(true)} sx={secondaryButtonStyle}>
+                    <Button type="button" onClick={() => setIsRegister(true)} sx={secondaryButtonStyle}>
                         עוד לא רשום?
-                      </Button>
-                      <Button type="submit" sx={primaryButtonStyle}>
+                        </Button>
+                        <Button type="submit" sx={primaryButtonStyle}>
                         התחבר
                       </Button>
-                    </>
-                  ) : (
+                      </>
+                    ) : (
                     <>
                       <Button type="button" onClick={() => setIsRegister(false)} sx={secondaryButtonStyle}>
                         כבר רשום?
-                      </Button>
+                        </Button>
                       <Button type="submit" sx={primaryButtonStyle}>
                         הרשם
                       </Button>
@@ -230,6 +238,7 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
       ) : (
         <HomePage />
       )}
+      
     </>
   )
 }

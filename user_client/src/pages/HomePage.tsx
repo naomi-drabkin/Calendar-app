@@ -33,6 +33,7 @@ const HomePage = () => {
   const [newCalendar, setNewCalendar] = useState(false)
   const TitleRef = useRef<HTMLInputElement>(null)
   const [Login, setLogin] = useState(false)
+  const [loginKey, setLoginKey] = useState(0)
   const [_, setDesign] = useState(false)
   // sessionStorage.setItem("Design",`${true}`);
 
@@ -178,13 +179,14 @@ const HomePage = () => {
             className="design-button"
             type="button"
             onClick={() => {
+              setLoginKey(prev => prev + 1) // משנה את המפתח
               setLogin(true)
             }}
           >
             התחבר לאתר
           </button>
         )}
-        {Login && <LoginRegister status={false} setDesign={SetDesign} />}
+        {Login && <LoginRegister key={loginKey} status={false} setDesign={SetDesign} />}
 
         <footer>
           <hr />

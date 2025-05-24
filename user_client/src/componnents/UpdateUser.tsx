@@ -150,6 +150,9 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
           {
             headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` }
           });
+
+          console.log("פרטיך מתעדכנים...");
+          
       }
     } catch (error) {
       alert("ארע תקלה בעת עדכון פרטיך");
@@ -160,7 +163,6 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
 
   const logOut = () => {
     sessionStorage.clear();
-    alert('התנתקת מהאתר');
     setLogin(true);
     setDesign(false);
     sessionStorage.setItem("Design", `${false}`);
