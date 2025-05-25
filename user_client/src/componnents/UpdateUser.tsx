@@ -114,8 +114,7 @@
 
 
 
-import { Alert, Box, Button, Grid, Modal, TextField } from '@mui/material';
-import { Snackbar } from "@mui/material";
+import {  Box, Button, Grid, Modal, TextField } from '@mui/material';
 import { styleModal, textFieldStyle } from '../pages/LoginRegister';
 import { FormEvent, useRef, useState, useEffect } from 'react';
 import axios from 'axios';
@@ -128,7 +127,7 @@ import { _http } from '../App';
 export const token = sessionStorage.getItem("AuthToken");
 
 export default function UpdateUser({ setDesign }: { setDesign: Function }) {
-  const [openModal, setOpenModal] = useState(false);
+  const [openUpdateModal, setUpdateOpenModal] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const UserNameRef = useRef<HTMLInputElement>(null);
@@ -137,13 +136,6 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [_, setLogin] = useState(false);
   const navigate = useNavigate();
-  const [openAlert, setOpenAlert] = useState(false);
-
-  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    event.preventDefault();
-    if (reason === "clickaway") return;
-    setOpenAlert(false);
-  };
 
 
   const handleSubmit = async (event: FormEvent) => {
@@ -170,7 +162,7 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
       console.log("ארע תקלה בעת עדכון פרטיך");
 
     }
-    setOpenModal(false);
+    setUpdateOpenModal(false);
     sessionStorage.setItem("Design", `${true}`);
   }
 
@@ -184,18 +176,13 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
 
   useEffect(() => { }, [token]);
 
-  // useEffect(() => {
-  //   if (!isToken) {
-  //     setOpenAlert(true);
-  //   }
-  // }, [isToken]);
 
   return (
     <>
       <Grid>
         {isToken &&
           <div className="user-menu">
-            <button className="menu-button" onClick={() => [setIsOpenModal(!isOpenModal),setOpenModal(!openModal)]}>
+            <button className="menu-button" onClick={() => [setIsOpenModal(!isOpenModal)]}>
               <i className="fas fa-user-circle"> <FiSettings size={24} /> </i>
             </button>
 
@@ -204,7 +191,7 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
                 <button
                   className="menu-item"
                   onClick={() => {
-                    setOpenModal(true);
+                    setUpdateOpenModal(true);
                     setIsOpenModal(false);
                   }}
                 >
@@ -225,26 +212,10 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
 
         }
 
-        {openAlert && (
-          <Snackbar
-            open={openAlert}
-            autoHideDuration={3000}
-            onClose={handleClose}
-            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          >
-            <Alert
-              onClose={handleClose}
-              severity="warning"
-              variant="filled"
-              sx={{ width: "100%" , color: "#fff", backgroundColor: "#f57c00" }}
-            >
-              יש להתחבר תחילה
-            </Alert>
-          </Snackbar>
-        )}
+        
 
 
-        <Modal onClose={() => [setOpenModal(false), setIsOpenModal(false)]} open={openModal}>
+        <Modal onClose={() => [setUpdateOpenModal(false), setIsOpenModal(false)]} open={openUpdateModal}>
           <Box sx={styleModal}>
             <div style={{ textAlign: "center", marginBottom: "24px" }}>
               <h2
