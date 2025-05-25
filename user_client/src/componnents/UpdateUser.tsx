@@ -114,7 +114,8 @@
 
 
 
-import { Box, Button, Grid, Modal, TextField } from '@mui/material';
+import { Alert, Box, Button, Grid, Modal, TextField } from '@mui/material';
+import { Snackbar } from "@mui/material";
 import { styleModal, textFieldStyle } from '../pages/LoginRegister';
 import { FormEvent, useRef, useState, useEffect } from 'react';
 import axios from 'axios';
@@ -133,30 +134,38 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
   const UserNameRef = useRef<HTMLInputElement>(null);
   const UserFamilyRef = useRef<HTMLInputElement>(null);
   const isToken = sessionStorage.getItem("AuthToken");
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [_, setLogin] = useState(false);
   const navigate = useNavigate();
+  const [openAlert, setOpenAlert] = useState(true);
+
+  const handleClose = (event:React.SyntheticEvent | Event, reason?:string) => {
+    event.preventDefault();
+    if (reason === "clickaway") return;
+    setOpenAlert(false);
+  };
+
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     try {
-        const authToken = sessionStorage.getItem("AuthToken");
-        if (!authToken) {
-          throw new Error("AuthToken is missing");
-        }
-        const userId = jwtDecode<Jwt>(authToken).ID;
-        await axios.put(`${_http}/api/User/${userId}`, {
-          email: emailRef.current?.value,
-          password: passwordRef.current?.value,
-          UserName: UserNameRef.current?.value,
-          UserFamily: UserFamilyRef.current?.value,
-        },
-          {
-            headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` }
-          });
+      const authToken = sessionStorage.getItem("AuthToken");
+      if (!authToken) {
+        throw new Error("AuthToken is missing");
+      }
+      const userId = jwtDecode<Jwt>(authToken).ID;
+      await axios.put(`${_http}/api/User/${userId}`, {
+        email: emailRef.current?.value,
+        password: passwordRef.current?.value,
+        UserName: UserNameRef.current?.value,
+        UserFamily: UserFamilyRef.current?.value,
+      },
+        {
+          headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` }
+        });
 
-        console.log("פרטיך מתעדכנים...");  
-    
+      console.log("פרטיך מתעדכנים...");
+
     } catch (error) {
       console.log("ארע תקלה בעת עדכון פרטיך");
 
@@ -179,19 +188,35 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
     <>
       <Grid>
         <div className="user-menu">
-          <button className="menu-button" onClick={() => setIsOpen(!isOpen)}>
+          <button className="menu-button" onClick={() => setIsOpenModal(!isOpenModal)}>
             <i className="fas fa-user-circle"> <FiSettings size={24} /> </i>
           </button>
 
-          {isToken && isOpen && (
+          {(isToken && isOpenModal) ? (
             <div className="dropdown-menu">
-              <button className="menu-item" onClick={() => { setOpenModal(true); setIsOpen(false); }}>עדכון משתמש</button>
-              <button className="menu-item logout" onClick={() => { logOut(); setIsOpen(false); }}>יציאה</button>
+              <button className="menu-item" onClick={() => { setOpenModal(true); setIsOpenModal(false); }}>עדכון משתמש</button>
+              <button className="menu-item logout" onClick={() => { logOut(); setIsOpenModal(false); }}>יציאה</button>
             </div>
-          )}
+          ) :
+            <Snackbar
+              open={openAlert}
+              autoHideDuration={4000}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+              <Alert
+                onClose={handleClose}
+                severity="warning"
+                variant="filled"
+                sx={{ width: "100%" }}
+              >
+                יש להתחבר תחילה
+              </Alert>
+            </Snackbar>
+          }
         </div>
 
-        <Modal onClose={() => [setOpenModal(false),setIsOpen(false)]} open={openModal}>
+        <Modal onClose={() => [setOpenModal(false), setIsOpenModal(false)]} open={openModal}>
           <Box sx={styleModal}>
             <div style={{ textAlign: "center", marginBottom: "24px" }}>
               <h2
@@ -254,8 +279,8 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
                 <Button type="button"
                   onClick={(e) => {
                     console.log("נלחץ כפתור עדכון");
-                    handleSubmit(e as any); 
-                  }} 
+                    handleSubmit(e as any);
+                  }}
                   variant="contained" color="primary">עדכן משתמש</Button>
               </>
             </form>
