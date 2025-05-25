@@ -199,7 +199,7 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                                 fontSize: "16px",
                             }}
                         >
-                            בחר תמונה חדשה ועדכן את פרטי האירוע
+                            בחר תמונה חדשה או עדכן את פרטי האירוע
                         </p>
                     </div>
 
@@ -230,7 +230,7 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                                     }}
                                 >
                                     <Upload size={24} color="#8a2be2" />
-                                    <span style={{ color: "#666" }}>{file ? file.name : "לחץ כאן לבחירת קובץ או גרור לכאן"}</span>
+                                    <span style={{ color: "#666" }}>{file ? file.name : url}</span>
                                 </div>
                                 <input id="file-upload-update" type="file" onChange={handleFileChange} style={{ display: "none" }} />
                             </label>
@@ -240,10 +240,9 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                             <TextField
                                 id="event"
                                 type="text"
-                                label="שם האירוע"
+                                label={event}
                                 variant="outlined"
                                 inputRef={newEvent}
-                                defaultValue={event} 
                                 required
                                 fullWidth
                                 sx={textFieldStyle}
