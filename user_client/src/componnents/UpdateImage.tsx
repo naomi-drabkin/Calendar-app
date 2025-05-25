@@ -65,6 +65,8 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
         let finalUrl = url;
         let finalEvent = event;
     
+        console.log(finalUrl, finalEvent);
+        
         try {
             if (isImageChanged && file) {
                 const response = await axios.get(
