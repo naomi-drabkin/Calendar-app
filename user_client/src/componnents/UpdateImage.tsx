@@ -50,7 +50,7 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
     // };
 
     const handleUpdate = async () => {
-        const newEventValue = newEvent.current?.value?.trim() || ""; // תמיד יהיה מחרוזת
+        const newEventValue = newEvent.current?.value?.trim() || "";
         const isImageChanged = !!file;
         const isEventChanged = newEventValue !== event;
     
@@ -106,7 +106,7 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
     
 
 
-    const UpdateImage = async (url: string, prevEvent: string) => {
+    const UpdateImage = async (updatedUrl: string, updatedEvent: string) => {
         try {
             const token = sessionStorage.getItem("AuthToken");
             if (!token) {
@@ -119,9 +119,9 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
             await axios.put(
                 `${_http}/api/Image/${id}`,
                 {
-                    Url: url,
+                    Url: updatedUrl,
                     EventDate: eventDate,
-                    Event: prevEvent,
+                    Event: updatedEvent,
                     UserId: jwtDecode<Jwt>(token).ID,
                     FileName: file?.name ?? "", // אם לא השתנה – ריק או תוכל לשלוח קובץ ישן אם יש לך
                     NumOfCalendar: numOfCalendar
