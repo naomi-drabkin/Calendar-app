@@ -182,7 +182,7 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
       <Grid>
         {isToken &&
           <div className="user-menu">
-            <button className="menu-button" onClick={() => [setIsOpenModal(!isOpenModal)]}>
+            <button className="menu-button" onClick={() => setIsOpenModal(true)}>
               <i className="fas fa-user-circle"> <FiSettings size={24} /> </i>
             </button>
 
