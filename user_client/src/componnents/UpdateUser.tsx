@@ -137,9 +137,9 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [_, setLogin] = useState(false);
   const navigate = useNavigate();
-  const [openAlert, setOpenAlert] = useState(true);
+  const [openAlert, setOpenAlert] = useState(false);
 
-  const handleClose = (event:React.SyntheticEvent | Event, reason?:string) => {
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     event.preventDefault();
     if (reason === "clickaway") return;
     setOpenAlert(false);
@@ -184,37 +184,65 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
 
   useEffect(() => { }, [token]);
 
+  useEffect(() => {
+    if (!isToken) {
+      setOpenAlert(true);
+    }
+  }, [isToken]);
+
   return (
     <>
       <Grid>
-        <div className="user-menu">
-          <button className="menu-button" onClick={() => setIsOpenModal(!isOpenModal)}>
-            <i className="fas fa-user-circle"> <FiSettings size={24} /> </i>
-          </button>
+        {isToken &&
+          <div className="user-menu">
+            <button className="menu-button" onClick={() => setIsOpenModal(!isOpenModal)}>
+              <i className="fas fa-user-circle"> <FiSettings size={24} /> </i>
+            </button>
 
-          {(isToken && isOpenModal) ? (
-            <div className="dropdown-menu">
-              <button className="menu-item" onClick={() => { setOpenModal(true); setIsOpenModal(false); }}>עדכון משתמש</button>
-              <button className="menu-item logout" onClick={() => { logOut(); setIsOpenModal(false); }}>יציאה</button>
-            </div>
-          ) :
-            <Snackbar
-              open={openAlert}
-              autoHideDuration={4000}
+            {isOpenModal && (
+              <div className="dropdown-menu">
+                <button
+                  className="menu-item"
+                  onClick={() => {
+                    setOpenModal(true);
+                    setIsOpenModal(false);
+                  }}
+                >
+                  עדכון משתמש
+                </button>
+                <button
+                  className="menu-item logout"
+                  onClick={() => {
+                    logOut();
+                    setIsOpenModal(false);
+                  }}
+                >
+                  יציאה
+                </button>
+              </div>
+            )}
+          </div>
+
+        }
+
+        {openAlert && (
+          <Snackbar
+            open={openAlert}
+            autoHideDuration={3000}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          >
+            <Alert
               onClose={handleClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+              severity="warning"
+              variant="filled"
+              sx={{ width: "100%" , color: "#fff", backgroundColor: "#f57c00" }}
             >
-              <Alert
-                onClose={handleClose}
-                severity="warning"
-                variant="filled"
-                sx={{ width: "100%" }}
-              >
-                יש להתחבר תחילה
-              </Alert>
-            </Snackbar>
-          }
-        </div>
+              יש להתחבר תחילה
+            </Alert>
+          </Snackbar>
+        )}
+
 
         <Modal onClose={() => [setOpenModal(false), setIsOpenModal(false)]} open={openModal}>
           <Box sx={styleModal}>
