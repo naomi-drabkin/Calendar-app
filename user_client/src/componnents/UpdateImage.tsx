@@ -6,10 +6,10 @@ import { Jwt } from '../Models/Jwt';
 import { CircularProgress } from "@mui/material";
 
 import '../App.css';
-import { Upload} from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { _http } from '../App';
 
-export default function UpdateImage({ id, eventDate, url,event, closeModal, onUpload }: { id: number, eventDate: Date,url:string,event:string, closeModal: Function, onUpload: Function }) {
+export default function UpdateImage({ id, eventDate, url, event, closeModal, onUpload }: { id: number, eventDate: Date, url: string, event: string, closeModal: Function, onUpload: Function }) {
     const [file, setFile] = useState<File | null>(null);
     const [openModal, setOpenMOdal] = useState(true);
     const newEvent = useRef<HTMLInputElement>(null);
@@ -20,67 +20,113 @@ export default function UpdateImage({ id, eventDate, url,event, closeModal, onUp
         setFile(event.target.files?.[0] || null);
     };
 
+    // const handleUpdate = async () => {
+    //     if (!file) {
+    //         setUploadStatus("Please select a file to upload.");
+    //         return;
+    //     }
+    //     try {
+    //         setLoading(true);
+    //         const response = await axios.get(
+    //             `${_http}/api/upload/presigned-url?fileName=${file.name}`
+    //         );
+    //         presignedUrl = response.data.url;
+
+    //         const uploadResponse = await axios.put(presignedUrl, file, {
+    //             headers: {
+    //                 "Content-Type": file.type,
+    //             },
+    //         });
+
+    //         if (uploadResponse.status === 200) {
+    //             UpdateImage(url,event);
+    //         } else {
+    //             setUploadStatus("Upload failed: " + uploadResponse.statusText);
+    //         }
+    //     } catch (error) {
+    //         setUploadStatus("Error: " + error);
+    //     }
+    //     setLoading(false);
+    // };
+
     const handleUpdate = async () => {
-        if (!file) {
-            setUploadStatus("Please select a file to upload.");
+        const newEventValue = newEvent.current?.value?.trim();
+
+        const isImageChanged = !!file;
+        const isEventChanged = newEventValue && newEventValue !== event;
+
+        if (!isImageChanged && !isEventChanged) {
+            setUploadStatus("יש לעדכן את התמונה או את האירוע לפחות.");
             return;
         }
+
         try {
             setLoading(true);
-            const response = await axios.get(
-                `${_http}/api/upload/presigned-url?fileName=${file.name}`
-            );
-            presignedUrl = response.data.url;
+            let finalUrl = url;
 
-            const uploadResponse = await axios.put(presignedUrl, file, {
-                headers: {
-                    "Content-Type": file.type,
-                },
-            });
+            // אם התמונה שונתה – העלה אותה וקבל כתובת חדשה
+            if (isImageChanged && file) {
+                const response = await axios.get(
+                    `${_http}/api/upload/presigned-url?fileName=${file.name}`
+                );
+                presignedUrl = response.data.url;
 
-            if (uploadResponse.status === 200) {
-                UpdateImage(url,event);
-            } else {
-                setUploadStatus("Upload failed: " + uploadResponse.statusText);
+                const uploadResponse = await axios.put(presignedUrl, file, {
+                    headers: { "Content-Type": file.type },
+                });
+
+                if (uploadResponse.status !== 200) {
+                    setUploadStatus("העלאת קובץ נכשלה");
+                    setLoading(false);
+                    return;
+                }
+
+                finalUrl = presignedUrl.split("?")[0]; // הכתובת הסופית בלי הפרמטרים
             }
+
+            // const finalEvent = isEventChanged ? newEventValue : event;
+
+            await UpdateImage(url, event);
+
+            setUploadStatus("עודכן בהצלחה ✅");
+            onUpload();
+            setOpenMOdal(false);
+            closeModal();
         } catch (error) {
-            setUploadStatus("Error: " + error);
+            setUploadStatus("שגיאה בעדכון: " + error);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
-    const UpdateImage = async (url:string,prevEvent:string) => {
+
+    const UpdateImage = async (url: string, prevEvent: string) => {
         try {
-            var token = sessionStorage.getItem("AuthToken");
-            if (token) {
-
-                var numOfCalendar = sessionStorage.getItem("numOfCalendar");
-                await axios.put(
-                    `${_http}/api/Image/${id}`,
-                    {
-                        Url: presignedUrl.split("?")[0]!='' || url,
-                        EventDate: eventDate,
-                        Event: newEvent.current?.value || prevEvent,
-                        UserId: jwtDecode<Jwt>(token).ID,
-                        FileName: file?.name,
-                        NumOfCalendar: numOfCalendar
-                    },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-
-                setUploadStatus("Update Success! ✅");
-                onUpload();
-
-                // onUpload();
-                setOpenMOdal(false);
-                closeModal();
+            const token = sessionStorage.getItem("AuthToken");
+            if (!token) {
+                setUploadStatus("עדכון נכשל – אין התחברות");
+                return;
             }
 
+            const numOfCalendar = sessionStorage.getItem("numOfCalendar");
+
+            await axios.put(
+                `${_http}/api/Image/${id}`,
+                {
+                    Url: url,
+                    EventDate: eventDate,
+                    Event: prevEvent,
+                    UserId: jwtDecode<Jwt>(token).ID,
+                    FileName: file?.name ?? "", // אם לא השתנה – ריק או תוכל לשלוח קובץ ישן אם יש לך
+                    NumOfCalendar: numOfCalendar
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
         } catch (error) {
             alert("Error saving image");
             setUploadStatus("Update failed! You are not logged in.");
@@ -125,7 +171,7 @@ export default function UpdateImage({ id, eventDate, url,event, closeModal, onUp
     return (
         <>
 
-            <Modal open={openModal} onClose={() => {setOpenMOdal(false), closeModal()}}>
+            <Modal open={openModal} onClose={() => { setOpenMOdal(false), closeModal() }}>
                 <Box sx={updateModalStyle}>
                     <div style={{ textAlign: "center", marginBottom: "24px" }}>
                         <h2
