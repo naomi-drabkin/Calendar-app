@@ -146,7 +146,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
 
     return (
         <>
-            <Modal open={openModal} onClose={() => [setOpenMOdal(false),closeModal()]}>
+            <Modal open={openModal} onClose={() => {setOpenMOdal(false)}}>
                 <Box sx={uploadModalStyle}>
                     <div style={{ textAlign: "center", marginBottom: "24px" }}>
                         <h2
