@@ -52,7 +52,7 @@ export default function CreateCalendarScreen() {
                 date: item.eventDate,
                 id: item.id,
                 url: item.url.split("?")[0],
-                extendedProps: { id: item.id, eventDate: item.eventDate }
+                extendedProps: { id: item.id, eventDate: item.eventDate ,url: item.url, event: item.event || "📸 אירוע" }
             }));
             setEvents(formattedEvents);
         } catch (error) {
