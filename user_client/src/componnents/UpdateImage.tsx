@@ -50,54 +50,60 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
     // };
 
     const handleUpdate = async () => {
-        const newEventValue = newEvent.current?.value?.trim();
-
+        const newEventValue = newEvent.current?.value?.trim() || ""; // תמיד יהיה מחרוזת
         const isImageChanged = !!file;
-        const isEventChanged = newEventValue && newEventValue !== event;
-
+        const isEventChanged = newEventValue !== event;
+    
         if (!isImageChanged && !isEventChanged) {
             setUploadStatus("יש לעדכן את התמונה או את האירוע לפחות.");
             return;
         }
-
+    
+        setLoading(true);
+    
+        // הגדר מראש את הערכים המועדכנים
+        let finalUrl = url;
+        let finalEvent = event;
+    
         try {
-            setLoading(true);
-            let finalUrl = url;
-
-            // אם התמונה שונתה – העלה אותה וקבל כתובת חדשה
             if (isImageChanged && file) {
                 const response = await axios.get(
                     `${_http}/api/upload/presigned-url?fileName=${file.name}`
                 );
+    
                 presignedUrl = response.data.url;
-
+    
                 const uploadResponse = await axios.put(presignedUrl, file, {
                     headers: { "Content-Type": file.type },
                 });
-
+    
                 if (uploadResponse.status !== 200) {
                     setUploadStatus("העלאת קובץ נכשלה");
-                    setLoading(false);
                     return;
                 }
-
-                finalUrl = presignedUrl.split("?")[0]; // הכתובת הסופית בלי הפרמטרים
+    
+                finalUrl = presignedUrl.split("?")[0];
             }
-
-            const finalEvent = isEventChanged ? newEventValue : event;
-
+    
+            if (isEventChanged) {
+                finalEvent = newEventValue;
+            }
+    
+            // עכשיו שולחים את הערכים החדשים (או הישנים אם לא שונו)
             await UpdateImage(finalUrl, finalEvent);
-
+    
             setUploadStatus("עודכן בהצלחה ✅");
             onUpload();
             setOpenMOdal(false);
             closeModal();
         } catch (error) {
+            console.error("שגיאה בעדכון:", error);
             setUploadStatus("שגיאה בעדכון: " + error);
         } finally {
             setLoading(false);
         }
     };
+    
 
 
     const UpdateImage = async (url: string, prevEvent: string) => {
@@ -237,6 +243,7 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                                 label="שם האירוע"
                                 variant="outlined"
                                 inputRef={newEvent}
+                                defaultValue={event} 
                                 required
                                 fullWidth
                                 sx={textFieldStyle}
