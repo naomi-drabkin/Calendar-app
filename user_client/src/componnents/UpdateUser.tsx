@@ -184,18 +184,18 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
 
   useEffect(() => { }, [token]);
 
-  useEffect(() => {
-    if (!isToken) {
-      setOpenAlert(true);
-    }
-  }, [isToken]);
+  // useEffect(() => {
+  //   if (!isToken) {
+  //     setOpenAlert(true);
+  //   }
+  // }, [isToken]);
 
   return (
     <>
       <Grid>
         {isToken &&
           <div className="user-menu">
-            <button className="menu-button" onClick={() => setIsOpenModal(!isOpenModal)}>
+            <button className="menu-button" onClick={() => [setIsOpenModal(!isOpenModal),setOpenModal(!openModal)]}>
               <i className="fas fa-user-circle"> <FiSettings size={24} /> </i>
             </button>
 
