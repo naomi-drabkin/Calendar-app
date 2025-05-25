@@ -15,7 +15,7 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
     const newEvent = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState("");
-    let presignedUrl: string = '';
+    let presignedUrl: string = url;
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFile(event.target.files?.[0] || null);
     };
@@ -230,7 +230,7 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                                     }}
                                 >
                                     <Upload size={24} color="#8a2be2" />
-                                    <span style={{ color: "#666" }}>{file ? file.name : url}</span>
+                                    <span style={{ color: "#666" }}>{file ? file.name : presignedUrl } :תמונה </span>
                                 </div>
                                 <input id="file-upload-update" type="file" onChange={handleFileChange} style={{ display: "none" }} />
                             </label>
@@ -240,7 +240,8 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                             <TextField
                                 id="event"
                                 type="text"
-                                label={event}
+                                label="שם הארוע"
+                                placeholder={event}
                                 variant="outlined"
                                 inputRef={newEvent}
                                 required
