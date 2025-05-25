@@ -48,11 +48,11 @@ export default function CreateCalendarScreen() {
             });
 
             const formattedEvents = response.data?.map((item: Img) => ({
-                title: item.event ,
+                title: item.event || "📸 אירוע",
                 date: item.eventDate,
                 id: item.id,
                 url: item.url.split("?")[0],
-                extendedProps: { id: item.id, eventDate: item.eventDate ,url: item.url, event: item.event || "📸 אירוע" }
+                extendedProps: { id: item.id, eventDate: item.eventDate ,url: item.url, event: item.event}
             }));
             setEvents(formattedEvents);
         } catch (error) {
