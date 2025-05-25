@@ -9,13 +9,13 @@ import '../App.css';
 import { Upload} from 'lucide-react';
 import { _http } from '../App';
 
-export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { id: number, eventDate: Date, closeModal: Function, onUpload: Function }) {
+export default function UpdateImage({ id, eventDate, url,event, closeModal, onUpload }: { id: number, eventDate: Date,url:string,event:string, closeModal: Function, onUpload: Function }) {
     const [file, setFile] = useState<File | null>(null);
     const [openModal, setOpenMOdal] = useState(true);
-    const event = useRef<HTMLInputElement>(null);
+    const newEvent = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(false);
     const [uploadStatus, setUploadStatus] = useState("");
-    let presignedUrl: string;
+    let presignedUrl: string = '';
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFile(event.target.files?.[0] || null);
     };
@@ -32,9 +32,6 @@ export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { i
             );
             presignedUrl = response.data.url;
 
-            // console.log("Presigned URL:", presignedUrl);
-            // console.log("File Name:", file.name);
-
             const uploadResponse = await axios.put(presignedUrl, file, {
                 headers: {
                     "Content-Type": file.type,
@@ -42,7 +39,7 @@ export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { i
             });
 
             if (uploadResponse.status === 200) {
-                UpdateImage();
+                UpdateImage(url,event);
             } else {
                 setUploadStatus("Upload failed: " + uploadResponse.statusText);
             }
@@ -52,7 +49,7 @@ export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { i
         setLoading(false);
     };
 
-    const UpdateImage = async () => {
+    const UpdateImage = async (url:string,prevEvent:string) => {
         try {
             var token = sessionStorage.getItem("AuthToken");
             if (token) {
@@ -61,9 +58,9 @@ export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { i
                 await axios.put(
                     `${_http}/api/Image/${id}`,
                     {
-                        Url: presignedUrl.split("?")[0],
+                        Url: presignedUrl.split("?")[0]!='' || url,
                         EventDate: eventDate,
-                        Event: event.current?.value,
+                        Event: newEvent.current?.value || prevEvent,
                         UserId: jwtDecode<Jwt>(token).ID,
                         FileName: file?.name,
                         NumOfCalendar: numOfCalendar
@@ -193,7 +190,7 @@ export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { i
                                 type="text"
                                 label="שם האירוע"
                                 variant="outlined"
-                                inputRef={event}
+                                inputRef={newEvent}
                                 required
                                 fullWidth
                                 sx={textFieldStyle}

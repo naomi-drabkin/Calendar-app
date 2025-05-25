@@ -31,6 +31,7 @@ const uploadModalStyle = {
     backdropFilter: "blur(8px)",
 }
 
+
 const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
     const [file, setFile] = useState<File | null>(null)
     const [uploadStatus, setUploadStatus] = useState("")
@@ -66,6 +67,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
             });
             console.log(uploadResponse.status);
 
+            
             if (uploadResponse.status == 200 || uploadResponse.status === 204 || uploadResponse.status === 201) {
                 console.log("Uploading Success!");
                 postImage();
@@ -146,7 +148,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
 
     return (
         <>
-            <Modal open={openModal} onClose={() => {setOpenMOdal(false)}}>
+            <Modal open={openModal} onClose={() => {setOpenMOdal(false), closeModal()}}>
                 <Box sx={uploadModalStyle}>
                     <div style={{ textAlign: "center", marginBottom: "24px" }}>
                         <h2

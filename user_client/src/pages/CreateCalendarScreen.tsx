@@ -28,7 +28,7 @@ export default function CreateCalendarScreen() {
     const [events, setEvents] = useState([]);
     const [upload, setUpload] = useState(false);
     const [ChooseTemplate, setChooseTemplate] = useState(false);
-    const [selectedImage, setSelectedImage] = useState<{ id: number, eventDate: Date } | null>(null);
+    const [selectedImage, setSelectedImage] = useState<{ id: number, eventDate: Date ,url:string,event:string} | null>(null);
     const [deleteImage, setdeleteImage] = useState<{ id: number, eventDate: Date } | null>(null);
     const calendarRef = useRef<FullCalendar | null>(null);
     const calendarContainerRef = useRef<HTMLDivElement | null>(null); // Ref חדש על ה-DIV העוטף
@@ -275,7 +275,7 @@ export default function CreateCalendarScreen() {
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             e.stopPropagation();
-                                                            setSelectedImage(eventInfo.event.extendedProps as { id: number; eventDate: Date });
+                                                            setSelectedImage(eventInfo.event.extendedProps as { id: number; eventDate: Date, url: string, event: string});
                                                         }}
                                                         style={{
                                                             position: "absolute",
@@ -319,7 +319,7 @@ export default function CreateCalendarScreen() {
                                 </div>
                             )}
                         />
-                        {selectedImage && <UpdateImage id={selectedImage.id} eventDate={selectedImage.eventDate} closeModal={closeModalUpdate} onUpload={handleNewImage} />}
+                        {selectedImage && <UpdateImage id={selectedImage.id} eventDate={selectedImage.eventDate} url={selectedImage.url} event={selectedImage.event} closeModal={closeModalUpdate} onUpload={handleNewImage} />}
                         {deleteImage && <DeleteImg id={deleteImage.id} onUpload={handleNewImage} closeDelete={setDeleteImageNull} />}
                     </div>
 
