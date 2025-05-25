@@ -64,7 +64,8 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
         // הגדר מראש את הערכים המועדכנים
         let finalUrl = url;
         let finalEvent = event;
-    
+        console.log(url,event);
+        
         console.log(finalUrl, finalEvent);
         
         try {
@@ -91,7 +92,6 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                 finalEvent = newEventValue;
             }
     
-            // עכשיו שולחים את הערכים החדשים (או הישנים אם לא שונו)
             await UpdateImage(finalUrl, finalEvent);
     
             setUploadStatus("עודכן בהצלחה ✅");

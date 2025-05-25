@@ -275,6 +275,7 @@ export default function CreateCalendarScreen() {
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             e.stopPropagation();
+                                                            console.log("eventInfo.event.extendedProps:", eventInfo.event.extendedProps);
                                                             setSelectedImage(eventInfo.event.extendedProps as { id: number; eventDate: Date, url: string, event: string});
                                                         }}
                                                         style={{
@@ -295,7 +296,7 @@ export default function CreateCalendarScreen() {
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             e.stopPropagation();
-                                                            setdeleteImage(eventInfo.event.extendedProps as { id: number; eventDate: Date });
+                                                            setdeleteImage(eventInfo.event.extendedProps as { id: number; eventDate: Date});
                                                         }}
                                                         style={{
                                                             position: "absolute",
