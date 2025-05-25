@@ -10,7 +10,7 @@ import type { Calendar } from "../Models/Calendar"
 import { useEffect, useRef, useState } from "react"
 import LoginRegister from "./LoginRegister"
 import UpdateUser from "../componnents/UpdateUser"
-import DesignScreen from "../componnents/DesignScreen"
+import DesignScreen from "../componnents/DesignHomePageScreen"
 import ShowDisignCalendar from "../componnents/ShowDesignCalendar"
 
 const calendarModalStyle = {
@@ -179,7 +179,7 @@ const HomePage = () => {
             className="design-button"
             type="button"
             onClick={() => {
-              setLoginKey(prev => prev + 1) // משנה את המפתח
+              setLoginKey(prev => prev + 1) 
               setLogin(true)
             }}
           >

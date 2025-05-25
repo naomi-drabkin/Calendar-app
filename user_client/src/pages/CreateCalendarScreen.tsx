@@ -151,6 +151,7 @@ export default function CreateCalendarScreen() {
         } finally {
             setLoading(false);
             setDontShowInDownLoad(false);
+            fetchImages();
         }
     };
 

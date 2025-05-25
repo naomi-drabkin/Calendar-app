@@ -132,6 +132,7 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
   const passwordRef = useRef<HTMLInputElement>(null);
   const UserNameRef = useRef<HTMLInputElement>(null);
   const UserFamilyRef = useRef<HTMLInputElement>(null);
+  const isToken = sessionStorage.getItem("AuthToken");
   const [isOpen, setIsOpen] = useState(false);
   const [_, setLogin] = useState(false);
   const navigate = useNavigate();
@@ -177,13 +178,12 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
   return (
     <>
       <Grid>
-        {/* תפריט משתמש – סגנון עיצוב מותאם */}
         <div className="user-menu">
           <button className="menu-button" onClick={() => setIsOpen(!isOpen)}>
             <i className="fas fa-user-circle"> <FiSettings size={24} /> </i>
           </button>
 
-          {isOpen && (
+          {isToken && isOpen && (
             <div className="dropdown-menu">
               <button className="menu-item" onClick={() => { setOpenModal(true); setIsOpen(false); }}>עדכון משתמש</button>
               <button className="menu-item logout" onClick={() => { logOut(); setIsOpen(false); }}>יציאה</button>
@@ -191,8 +191,7 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
           )}
         </div>
 
-        {/* טופס במודל */}
-        <Modal onClose={() => setOpenModal(false)} open={openModal}>
+        <Modal onClose={() => [setOpenModal(false),setIsOpen(false)]} open={openModal}>
           <Box sx={styleModal}>
             <div style={{ textAlign: "center", marginBottom: "24px" }}>
               <h2
@@ -255,7 +254,7 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
                 <Button type="button"
                   onClick={(e) => {
                     console.log("נלחץ כפתור עדכון");
-                    handleSubmit(e as any); // לעקוף זמנית את סוג האירוע
+                    handleSubmit(e as any); 
                   }} 
                   variant="contained" color="primary">עדכן משתמש</Button>
               </>
