@@ -48,7 +48,7 @@ export default function CreateCalendarScreen() {
             });
 
             const formattedEvents = response.data?.map((item: Img) => ({
-                title: item.event || "📸 אירוע",
+                title: item.event ,
                 date: item.eventDate,
                 id: item.id,
                 url: item.url.split("?")[0],
@@ -77,7 +77,6 @@ export default function CreateCalendarScreen() {
     const SetChooseTemplate = (url: string) => {
         setChooseTemplate(false);
         if (url) {
-            // const http_url = url.replace("https://", "http://")
             const http_url = url;
             console.log("http_url : " + http_url);
 
@@ -110,7 +109,6 @@ export default function CreateCalendarScreen() {
             console.log(backgroundImageUrl);
 
 
-            // טען את התמונה עם fetch
             const bgImageBlob = await fetchImage(backgroundImageUrl);
             const img = new Image();
             img.src = URL.createObjectURL(bgImageBlob);
@@ -128,12 +126,12 @@ export default function CreateCalendarScreen() {
 
             for (let month = 0; month < 12; month++) {
                 calendarApi.gotoDate(new Date(2025, month, 1));
-                await new Promise(resolve => setTimeout(resolve, 500)); // ממתין לרינדור
+                await new Promise(resolve => setTimeout(resolve, 500));
 
                 const canvas = await html2canvas(calendarElement, {
                     scale: 2,
                     useCORS: true,
-                    backgroundColor: null // כדי לא למחוק את הרקע של ה־CSS
+                    backgroundColor: null
                 });
 
                 const imgData = canvas.toDataURL("image/png");
@@ -141,8 +139,8 @@ export default function CreateCalendarScreen() {
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
                 if (month !== 0) pdf.addPage();
-                pdf.addImage(img.src, "PNG", 0, 0, imgWidth, imgHeight); // הוספת הרקע
-                pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight); // צילום הלוח
+                pdf.addImage(img.src, "PNG", 0, 0, imgWidth, imgHeight);
+                pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
             }
 
             pdf.save("calendar.pdf");

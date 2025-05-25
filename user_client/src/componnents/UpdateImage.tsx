@@ -232,7 +232,7 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                                     }}
                                 >
                                     <Upload size={24} color="#8a2be2" />
-                                    <span style={{ color: "#666" }}>{file ? file.name : presignedUrl } :תמונה </span>
+                                    <span style={{ color: "#666" }}>{file ? file.name : presignedUrl }</span>
                                 </div>
                                 <input id="file-upload-update" type="file" onChange={handleFileChange} style={{ display: "none" }} />
                             </label>
