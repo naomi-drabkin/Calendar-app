@@ -84,8 +84,9 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                 finalUrl = presignedUrl.split("?")[0]; // הכתובת הסופית בלי הפרמטרים
             }
 
+            const finalEvent = isEventChanged ? newEventValue : event;
 
-            await UpdateImage(url, event);
+            await UpdateImage(finalUrl, finalEvent);
 
             setUploadStatus("עודכן בהצלחה ✅");
             onUpload();
