@@ -128,7 +128,7 @@ export default function UpdateImage({ id, eventDate, closeModal, onUpload }: { i
     return (
         <>
 
-            <Modal open={openModal} onClose={() => setOpenMOdal(false)}>
+            <Modal open={openModal} onClose={() =>[ setOpenMOdal(false) ,closeModal()]}>
                 <Box sx={updateModalStyle}>
                     <div style={{ textAlign: "center", marginBottom: "24px" }}>
                         <h2
