@@ -58,18 +58,48 @@ namespace MomentoServer.Api.Controllers
         }
 
         [HttpGet("download-url/{fileName}")]
+        //public async Task<string> GetDownloadUrlAsync(string fileName)
+        //{
+        //    var request = new GetPreSignedUrlRequest
+        //    {
+        //        BucketName = _bucketName,
+        //        Key = fileName,
+        //        Verb = HttpVerb.GET,
+        //        Expires = DateTime.UtcNow.AddMinutes(60)
+        //    };
+
+        //    return _s3Client.GetPreSignedURL(request);
+        //}
+
+
+
         public async Task<string> GetDownloadUrlAsync(string fileName)
         {
+            var fileExtension = Path.GetExtension(fileName).ToLower();
+
+            var contentType = fileExtension switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                _ => "application/octet-stream"
+            };
+
             var request = new GetPreSignedUrlRequest
             {
                 BucketName = _bucketName,
                 Key = fileName,
                 Verb = HttpVerb.GET,
-                Expires = DateTime.UtcNow.AddMinutes(60)
+                Expires = DateTime.UtcNow.AddMinutes(60),
+                ResponseHeaderOverrides = new ResponseHeaderOverrides
+                {
+                    ContentType = contentType,
+                    ContentDisposition = $"inline; filename=\"{fileName}\""
+                }
             };
 
             return _s3Client.GetPreSignedURL(request);
         }
+
 
     }
 }

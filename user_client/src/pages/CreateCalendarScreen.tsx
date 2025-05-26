@@ -31,7 +31,7 @@ export default function CreateCalendarScreen() {
     const [selectedImage, setSelectedImage] = useState<{ id: number, eventDate: Date ,url:string,event:string} | null>(null);
     const [deleteImage, setdeleteImage] = useState<{ id: number, eventDate: Date } | null>(null);
     const calendarRef = useRef<FullCalendar | null>(null);
-    const calendarContainerRef = useRef<HTMLDivElement | null>(null); // Ref חדש על ה-DIV העוטף
+    const calendarContainerRef = useRef<HTMLDivElement | null>(null);
     const [loading, setLoading] = useState(false);
     const [dontShowInDownLoad, setDontShowInDownLoad] = useState(false);
     const [color, setColor] = useState<string>(() => sessionStorage.getItem("Color") || "white");
@@ -155,7 +155,6 @@ export default function CreateCalendarScreen() {
         }
     };
 
-    // פונקציה לטעינת התמונה
     const fetchImage = async (url: string) => {
         try {
             console.log("url : " + url);
