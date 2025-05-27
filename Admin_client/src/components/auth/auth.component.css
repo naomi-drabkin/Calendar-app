@@ -96,8 +96,8 @@
  
   
   .spinner-small {
-    display: inline-block;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    display:flex;
+    border: 2px solid rgba(158, 50, 198, 0.638);
     border-radius: 50%;
     border-top: 2px solid #ffffff;
     width: 26px;
@@ -105,5 +105,11 @@
     animation: spin 1s linear infinite;
     margin-left: 8px;
     vertical-align: middle;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
   }
   
