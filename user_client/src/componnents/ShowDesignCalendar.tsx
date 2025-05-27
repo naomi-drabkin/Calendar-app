@@ -23,58 +23,58 @@ export default function ShowDisignCalendar() {
     }, [listCalendars]);
 
 
-    // return (
-    //     <>
-    //         {listCalendars.length > 0 && 
-    //             <p style={{fontSize:"15px",fontWeight:"normal",position:"absolute",top:"63%",justifyContent:"center"}}>עיצובים אחרונים</p>
-    //         }
-    //         <div className="calendarDesign-container">
-    //             {listCalendars.length > 0 ? (
-    //                 listCalendars.map((img, index) => (
-    //                     <button className="calendarDesign-box" type='button' onClick={() => { sessionStorage.setItem("numOfCalendar",JSON.stringify(index+1)); Navigate(`/createCalendar`) }}>
-    //                         <span className="calendarDesign-icon" ><AiOutlineCalendar/></span>
-    //                         <p key={index}>{img.title}</p>
-    //                     </button>
-    //                 ))
-    //             ) : (
-    //                 <p></p>
-    //             )}
-    //         </div>
-    //     </>
-    // )
-
     return (
-        <div className="calendar-page-wrapper">
-          <button className="top-button">כפתור למעלה</button>
+        <>
+            {/* {listCalendars.length > 0 && 
+                <p style={{fontSize:"15px",fontWeight:"normal",position:"absolute",top:"63%",justifyContent:"center"}}>עיצובים אחרונים</p>
+            } */}
+            <div className="calendarDesign-container">
+                {listCalendars.length > 0 ? (
+                    listCalendars.map((img, index) => (
+                        <button className="calendarDesign-box" type='button' onClick={() => { sessionStorage.setItem("numOfCalendar",JSON.stringify(index+1)); Navigate(`/createCalendar`) }}>
+                            <span className="calendarDesign-icon" ><AiOutlineCalendar/></span>
+                            <p key={index}>{img.title}</p>
+                        </button>
+                    ))
+                ) : (
+                    <p></p>
+                )}
+            </div>
+        </>
+    )
+
+    // return (
+    //     <div className="calendar-page-wrapper">
+    //       <button className="top-button">כפתור למעלה</button>
       
-          {listCalendars.length > 0 && (
-            <p className="calendar-title">עיצובים אחרונים</p>
-          )}
+    //       {/* {listCalendars.length > 0 && (
+    //         <p className="calendar-title">עיצובים אחרונים</p>
+    //       )} */}
       
-          <div className="calendarDesign-container">
-            {listCalendars.length > 0 ? (
-              listCalendars.map((img, index) => (
-                <button
-                  key={index}
-                  className="calendarDesign-box"
-                  type="button"
-                  onClick={() => {
-                    sessionStorage.setItem("numOfCalendar", JSON.stringify(index + 1));
-                    Navigate(`/createCalendar`);
-                  }}
-                >
-                  <span className="calendarDesign-icon">
-                    <AiOutlineCalendar />
-                  </span>
-                  <p>{img.title}</p>
-                </button>
-              ))
-            ) : (
-              <p></p>
-            )}
-          </div>
-        </div>
-      );
+    //       <div className="calendarDesign-container">
+    //         {listCalendars.length > 0 ? (
+    //           listCalendars.map((img, index) => (
+    //             <button
+    //               key={index}
+    //               className="calendarDesign-box"
+    //               type="button"
+    //               onClick={() => {
+    //                 sessionStorage.setItem("numOfCalendar", JSON.stringify(index + 1));
+    //                 Navigate(`/createCalendar`);
+    //               }}
+    //             >
+    //               <span className="calendarDesign-icon">
+    //                 <AiOutlineCalendar />
+    //               </span>
+    //               <p>{img.title}</p>
+    //             </button>
+    //           ))
+    //         ) : (
+    //           <p></p>
+    //         )}
+    //       </div>
+    //     </div>
+    //   );
       
 }
 

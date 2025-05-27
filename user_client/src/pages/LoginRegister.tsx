@@ -7,6 +7,8 @@ import { Box, Button, Modal, TextField } from "@mui/material"
 import HomePage from "./HomePage"
 import { useNavigate } from "react-router"
 import { _http } from "../App"
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 export const styleModal = {
   position: "absolute",
@@ -48,22 +50,60 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
   const passwordRef = useRef<HTMLInputElement>(null)
   const UserNameRef = useRef<HTMLInputElement>(null)
   const UserFamilyRef = useRef<HTMLInputElement>(null)
+
   const navigate = useNavigate()
+
+  const MySwal = withReactContent(Swal);
 
   const [isRegister, setIsRegister] = useState(status)
   const [isOpenModal, setIsOpenModal] = useState(true)
   const [openNextComponnent, setOpenNextComponnent] = useState(false)
+  const [loading, setLoading] = useState(false)
+  // const handleSubmit = async (event: FormEvent) => {
+  //   event.preventDefault()
+  //   let res = null
+  //   try {
+  //     if (!isRegister) {
+  //       res = await axios.post(`${_http}/api/User/login`, {
+  //         email: emailRef.current?.value,
+  //         password: passwordRef.current?.value,
+  //       })
+  //       console.log("login")
+  //     } else {
+  //       res = await axios.post(`${_http}/api/User/register`, {
+  //         email: emailRef.current?.value,
+  //         password: passwordRef.current?.value,
+  //         UserName: UserNameRef.current?.value,
+  //         UserFamily: UserFamilyRef.current?.value,
+  //         Role: "User",
+  //       })
+  //       console.log("register")
+  //     }
+      
+  //     await sessionStorage.setItem("AuthToken", res.data.token)
+  //     sessionStorage.setItem("countCalendar", res.data.countCalendar)
+  //     await setOpenNextComponnent(true)
+  //     setIsOpenModal(false)
+  //     setDesign()
+  //     status == true ? navigate("/homePage") : setOpenNextComponnent(false)
+  //   } catch (error) {
+  //     alert("ארע תקלה בהתחברות")
+  //   }
+  // }
+
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault()
-    let res = null
+    event.preventDefault();
+    setLoading(true);
+    let res = null;
+
     try {
       if (!isRegister) {
         res = await axios.post(`${_http}/api/User/login`, {
           email: emailRef.current?.value,
           password: passwordRef.current?.value,
-        })
-        console.log("login")
+        });
+        console.log("login");
       } else {
         res = await axios.post(`${_http}/api/User/register`, {
           email: emailRef.current?.value,
@@ -71,20 +111,38 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
           UserName: UserNameRef.current?.value,
           UserFamily: UserFamilyRef.current?.value,
           Role: "User",
-        })
-        console.log("register")
+        });
+        console.log("register");
       }
-      
-      await sessionStorage.setItem("AuthToken", res.data.token)
-      sessionStorage.setItem("countCalendar", res.data.countCalendar)
-      await setOpenNextComponnent(true)
-      setIsOpenModal(false)
-      setDesign()
-      status == true ? navigate("/homePage") : setOpenNextComponnent(false)
+
+      sessionStorage.setItem("AuthToken", res.data.token);
+      sessionStorage.setItem("countCalendar", res.data.countCalendar);
+
+      setOpenNextComponnent(true);
+      setIsOpenModal(false);
+      setDesign();
+      if (status) navigate("/homePage");
+      else setOpenNextComponnent(false);
+
+      await MySwal.fire({
+        icon: 'success',
+        title: isRegister ? 'נרשמת בהצלחה!' : 'התחברת בהצלחה!',
+        confirmButtonText: 'אישור',
+        confirmButtonColor: '#3085d6',
+      });
     } catch (error) {
-      alert("ארע תקלה בהתחברות")
+      console.error(error);
+      await MySwal.fire({
+        icon: 'error',
+        title: 'שגיאה',
+        text: 'ארעה תקלה בהתחברות או ההרשמה',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'סגור',
+      });
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
 
  
@@ -216,8 +274,8 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
                     <Button type="button" onClick={() => setIsRegister(true)} sx={secondaryButtonStyle}>
                         עוד לא רשום?
                         </Button>
-                        <Button type="submit" sx={primaryButtonStyle}>
-                        התחבר
+                        <Button type="submit" sx={primaryButtonStyle} disabled={loading}>
+                        {loading ? <span className="spinner"></span> : 'התחברות'}
                       </Button>
                       </>
                     ) : (
@@ -225,8 +283,8 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
                       <Button type="button" onClick={() => setIsRegister(false)} sx={secondaryButtonStyle}>
                         כבר רשום?
                         </Button>
-                      <Button type="submit" sx={primaryButtonStyle}>
-                        הרשם
+                      <Button type="submit" sx={primaryButtonStyle} disabled={loading}>
+                        {loading ? <span className="spinner"></span> : 'הרשמה'}
                       </Button>
                     </>
                   )}
