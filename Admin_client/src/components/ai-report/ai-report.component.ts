@@ -281,9 +281,7 @@ export class AiReportComponent {
               // Only close popup when all emails are processed
               if (this.sendingProgress.sent + this.sendingProgress.failed === this.sendingProgress.total) {
                 this.isSending = false;
-                // this.showPopup = false;
-              
-                // if (this.sendingProgress.sent > 0) {
+                
                   setTimeout(() => {
                     this.closePopup();
                   }, 1000);
