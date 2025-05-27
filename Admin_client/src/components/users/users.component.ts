@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import Swal from 'sweetalert2';
 
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 @Component({
@@ -89,7 +90,14 @@ export class UsersComponent implements OnInit {
           this.isLoading = false;
         },
         error: (err) => {
-          alert('שגיאה במחיקה: ' + err.error),
+          // alert('שגיאה במחיקה: ' + err.error),
+          Swal.fire({
+            title: 'שגיאה',
+            text: 'שגיאה במחיקה',
+            icon: 'error',
+            confirmButtonText: 'אישור',
+            confirmButtonColor: '#2575fc'
+          }),
           this.isLoading = false;
         }
       });
@@ -111,7 +119,16 @@ export class UsersComponent implements OnInit {
         this.isLoading = false;
         this.fetchUsers();
       },
-      error: (err) => {alert('שגיאה בעדכון: ' + err.error),this.isLoading = false;}
+      error: (err) => {
+        // alert('שגיאה בעדכון: ' + err.error)
+        Swal.fire({
+          title: 'שגיאה',
+          text: 'שגיאה בעדכון',
+          icon: 'error',
+          confirmButtonText: 'אישור',
+          confirmButtonColor: '#2575fc'
+        }),
+        this.isLoading = false;}
     });
 
     this.data.reset();
@@ -132,7 +149,16 @@ export class UsersComponent implements OnInit {
         this.isLoading = false;
         this.fetchUsers();
       },
-      error: (err) => {alert('שגיאה בהוספה: ' + err.error),this.isLoading = false; }
+      error: (err) => {
+        // alert('שגיאה בהוספה: ' + err.error),
+        Swal.fire({
+          title: 'שגיאה',
+          text: 'שגיאה בהוספה',
+          icon: 'error',
+          confirmButtonText: 'אישור',
+          confirmButtonColor: '#2575fc'
+        }),
+        this.isLoading = false; }
     });
     this.data.reset();
     this.dialog.closeAll();

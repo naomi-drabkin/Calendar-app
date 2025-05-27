@@ -191,6 +191,14 @@ const HomePage = () => {
         <footer>
           <hr />
           <p style={{ margin: "5px", padding: "10px" }}> © MomenTo - 2025 </p>
+          <a
+          href="https://mail.google.com/mail/?view=cm&fs=1&to=momentodesigncalendar@gmail.com&su=פנייה%20מאתר%20MomenTo&body=שלום%20רציתי%20לפנות%20בנוגע%20ל..."
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: '#0077cc', textDecoration: 'none', marginLeft: '5px' }}
+        >
+          support@Calendar.co.il
+        </a>
         </footer>
       </div>
     </>

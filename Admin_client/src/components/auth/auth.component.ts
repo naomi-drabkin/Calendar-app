@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-auth',
@@ -48,7 +49,14 @@ export class AuthComponent {
         console.log("in auth components in next after login 2");
         console.log("isAdmin = " + isAdmin);
         if (!isAdmin) {
-          alert("לא ניתן להתחבר למערכת");
+          // alert("לא ניתן להתחבר למערכת");
+          Swal.fire({
+            title: 'שגיאה',
+            text:"לא ניתן להתחבר למערכת",
+            icon: 'error',
+            confirmButtonText: 'אישור',
+            confirmButtonColor: '#2575fc'
+          });
           localStorage.removeItem('token');
           return;
         }
@@ -57,7 +65,14 @@ export class AuthComponent {
         this.isLoading = false;
       },
       error: (err) => {
-        alert('שגיאה בהתחברות: ' + err.error);
+        // alert('שגיאה בהתחברות: ' + err.error);
+        Swal.fire({
+          title: 'שגיאה',
+          text: 'שגיאה בהתחברות',
+          icon: 'error',
+          confirmButtonText: 'אישור',
+          confirmButtonColor: '#2575fc'
+        });
         this.isLoading = false;
       }
     });

@@ -102,7 +102,7 @@ export default function CreateCalendarScreen() {
             const backgroundImageUrl = encodeURI(rawUrl);
 
             console.log("backgroundImageUrl : " + backgroundImageUrl);
-            
+
             if (!calendarElement || !backgroundImageUrl) {
                 console.error("Calendar container or background image is missing.");
                 setLoading(false);
@@ -136,7 +136,7 @@ export default function CreateCalendarScreen() {
                     useCORS: true,
                     backgroundColor: null
                 });
-                
+
                 const imgData = canvas.toDataURL("image/png");
                 const imgWidth = 210;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -188,7 +188,11 @@ export default function CreateCalendarScreen() {
         <>
             {loading &&
                 <div className="banner" style={{ left: "2%" }}
-                ><h1>......מורידים בשבילך את הלוח! - לא לזוז</h1></div>
+                ><h1>......מורידים בשבילך את הלוח! - לא לזוז</h1>
+                    <div className="progress-bar">
+                        <div className="progress-fill"></div>
+                    </div>
+                </div>
             }
             <div>
                 <button className="fancy-button" onClick={() => navigate(-1)}>

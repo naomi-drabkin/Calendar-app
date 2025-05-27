@@ -40,10 +40,10 @@ namespace Api.Controllers
                                 <p style='margin:0; font-weight:bold;'>🎉 MomenTo – <span style='font-style:italic;'>כי רגעים צריך להנציח </span></p>
                                 <p style='margin:4px 0;'>🎨 עיצוב חכם ללוחות שנה, תבניות מותאמות אישית ועוד</p>
                                 <p style='margin:4px 0;'>🌐 
-                                    <a href='https://calendar-react-client.onrender.com' style='color:#0066cc; text-decoration:none;'>www.calendar-app.com</a>
+                                    <a href='https://calendar-react-client.onrender.com' style='color:#0066cc; text-decoration:none;'>www.MomenTo.com</a>
                                 </p>
                                 <p style='margin:4px 0;'>📧 
-                                    <a href='mailto:momentodesigncalendar@gmail.com?subject=פנייה%20לשירות%20לקוחות&body=שלום%20צוות%20Calendar%2C%0A%0Aברצוני%20לפנות%20אליכם%20בעניין%20...' 
+                                    <a href='mailto:momentodesigncalendar@gmail.com?subject=פנייה%20לשירות%20לקוחות&body=שלום%20צוות%20MomenTo%2C%0A%0Aברצוני%20לפנות%20אליכם%20בעניין%20...' 
                                        style='color:#0066cc; text-decoration:none;'>support@calendar.co.il</a>
                                 </p>
                                 <p style='margin:4px 0;'>📞 +1 (234) 567-8900</p>
