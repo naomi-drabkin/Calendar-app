@@ -59,6 +59,7 @@ export class UploadTemplatesComponent{
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
       this.selectedFileName = this.selectedFile.name;
+      console.log(this.selectedFileName);
       this.imgeExtension = this.selectedFile.name.split('.').pop()?  this.selectedFile.name.split('.').pop():undefined; // קבלת סיומת הקובץ
       // יצירת תצוגה מקדימה של התמונה
       console.log(this.imgeExtension);
