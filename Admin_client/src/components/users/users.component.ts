@@ -76,12 +76,20 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(id: number) {
-    this.isLoading = true;
-
-    if (confirm('האם אתה בטוח שברצונך למחוק את המשתמש?')) {
+    Swal.fire({
+      title: 'מחיקת משתמש ',
+      text: '?האם אתה בטוח שברצונך למחוק את המשתמש',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#5c6bc0',
+      cancelButtonColor: '#757575',
+      confirmButtonText: 'שמור',
+      cancelButtonText: 'ביטול'
+    }).then((result) => {
       console.log("אני בטוח!!!!!! 'האם אתה בטוח שברצונך למחוק את המשתמש?'");
       console.log(id);
       console.log("אני בטוח!!!!!! 'האם אתה בטוח שברצונך למחוק את המשתמש?'");
+      this.isLoading = true;
 
       this.userService.deleteUser(id).subscribe({
         next: () => {
@@ -98,10 +106,10 @@ export class UsersComponent implements OnInit {
             confirmButtonText: 'אישור',
             confirmButtonColor: '#2575fc'
           }),
-          this.isLoading = false;
+            this.isLoading = false;
         }
       });
-    }
+    })
   }
 
   updateUser(id: number) {
@@ -128,7 +136,8 @@ export class UsersComponent implements OnInit {
           confirmButtonText: 'אישור',
           confirmButtonColor: '#2575fc'
         }),
-        this.isLoading = false;}
+          this.isLoading = false;
+      }
     });
 
     this.data.reset();
@@ -158,7 +167,8 @@ export class UsersComponent implements OnInit {
           confirmButtonText: 'אישור',
           confirmButtonColor: '#2575fc'
         }),
-        this.isLoading = false; }
+          this.isLoading = false;
+      }
     });
     this.data.reset();
     this.dialog.closeAll();
