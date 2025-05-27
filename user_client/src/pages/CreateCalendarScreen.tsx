@@ -28,7 +28,7 @@ export default function CreateCalendarScreen() {
     const [events, setEvents] = useState([]);
     const [upload, setUpload] = useState(false);
     const [ChooseTemplate, setChooseTemplate] = useState(false);
-    const [selectedImage, setSelectedImage] = useState<{ id: number, eventDate: Date ,url:string,event:string} | null>(null);
+    const [selectedImage, setSelectedImage] = useState<{ id: number, eventDate: Date, url: string, event: string } | null>(null);
     const [deleteImage, setdeleteImage] = useState<{ id: number, eventDate: Date } | null>(null);
     const calendarRef = useRef<FullCalendar | null>(null);
     const calendarContainerRef = useRef<HTMLDivElement | null>(null);
@@ -52,12 +52,12 @@ export default function CreateCalendarScreen() {
                 date: item.eventDate,
                 id: item.id,
                 url: item.url.split("?")[0],
-                extendedProps: { id: item.id, eventDate: item.eventDate ,url: item.url, event: item.event}
+                extendedProps: { id: item.id, eventDate: item.eventDate, url: item.url, event: item.event }
             }));
             setEvents(formattedEvents);
         } catch (error) {
             console.log("No fetching images");
-            
+
         }
     };
 
@@ -98,8 +98,8 @@ export default function CreateCalendarScreen() {
 
             const pdf = new jsPDF("landscape", "mm", "a4");
             const calendarElement = calendarContainerRef.current;
-            const backgroundImageUrl = sessionStorage.getItem("Color") || " ";
-
+            const rawUrl = sessionStorage.getItem("Color") || " ";
+            const backgroundImageUrl = encodeURI(rawUrl);
             if (!calendarElement || !backgroundImageUrl) {
                 console.error("Calendar container or background image is missing.");
                 setLoading(false);
@@ -243,7 +243,7 @@ export default function CreateCalendarScreen() {
                             objectFit: "contain",
                             margin: "20px"
                         }}
-                    >                    
+                    >
 
                         <FullCalendar
                             ref={calendarRef}
@@ -274,7 +274,7 @@ export default function CreateCalendarScreen() {
                                                             e.preventDefault();
                                                             e.stopPropagation();
                                                             console.log("eventInfo.event.extendedProps:", eventInfo.event.extendedProps);
-                                                            setSelectedImage(eventInfo.event.extendedProps as { id: number; eventDate: Date, url: string, event: string});
+                                                            setSelectedImage(eventInfo.event.extendedProps as { id: number; eventDate: Date, url: string, event: string });
                                                         }}
                                                         style={{
                                                             position: "absolute",
@@ -294,7 +294,7 @@ export default function CreateCalendarScreen() {
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             e.stopPropagation();
-                                                            setdeleteImage(eventInfo.event.extendedProps as { id: number; eventDate: Date});
+                                                            setdeleteImage(eventInfo.event.extendedProps as { id: number; eventDate: Date });
                                                         }}
                                                         style={{
                                                             position: "absolute",
