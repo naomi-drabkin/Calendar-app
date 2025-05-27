@@ -73,7 +73,8 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
       }, {
         headers: { Authorization: `Bearer ${authToken}` }
       });
-
+      setIsLoading(false);
+      setUpdateOpenModal(false);
       await MySwal.fire({
         icon: 'success',
         title: 'העדכון הצליח',
@@ -93,8 +94,7 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
         confirmButtonText: 'סגור',
       });
     } finally {
-      setIsLoading(false);
-      setUpdateOpenModal(false);
+      
       sessionStorage.setItem("Design", "true");
     }
   };

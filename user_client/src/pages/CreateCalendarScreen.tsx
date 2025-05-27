@@ -91,87 +91,154 @@ export default function CreateCalendarScreen() {
 
     }
 
+    // const handleSaveCalendarAsPDF = async () => {
+    //     try {
+    //         setDontShowInDownLoad(true);
+    //         setLoading(true);
+
+    //         const pdf = new jsPDF("landscape", "mm", "a4");
+    //         const calendarElement = calendarContainerRef.current;
+    //         const rawUrl = sessionStorage.getItem("Color") || " ";
+    //         const backgroundImageUrl = encodeURI(rawUrl);
+
+    //         console.log("backgroundImageUrl : " + backgroundImageUrl);
+
+    //         if (!calendarElement || !backgroundImageUrl) {
+    //             console.error("Calendar container or background image is missing.");
+    //             setLoading(false);
+    //             return;
+    //         }
+
+    //         console.log(backgroundImageUrl);
+
+
+    //         const bgImageBlob = await fetchImage(backgroundImageUrl);
+    //         const img = new Image();
+    //         img.src = URL.createObjectURL(bgImageBlob);
+
+    //         await new Promise((resolve) => {
+    //             img.onload = () => resolve(img);
+    //         });
+
+    //         const calendarApi = calendarRef.current?.getApi?.();
+    //         if (!calendarApi) {
+    //             console.error("Calendar API is not available.");
+    //             setLoading(false);
+    //             return;
+    //         }
+
+    //         for (let month = 0; month < 12; month++) {
+    //             calendarApi.gotoDate(new Date(2025, month, 1));
+    //             await new Promise(resolve => setTimeout(resolve, 500));
+
+    //             const canvas = await html2canvas(calendarElement, {
+    //                 scale: 2,
+    //                 useCORS: true,
+    //                 backgroundColor: null
+    //             });
+
+    //             const imgData = canvas.toDataURL("image/png");
+    //             const imgWidth = 210;
+    //             const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    //             if (month !== 0) pdf.addPage();
+    //             pdf.addImage(img.src, "PNG", 0, 0, imgWidth, imgHeight);
+    //             pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+    //         }
+
+    //         pdf.save("calendar.pdf");
+    //         console.log("Calendar saved as PDF with background image.");
+    //     } catch (error) {
+    //         console.error("Error generating PDF:", error);
+    //         alert("שגיאה בהורדת הקובץ.");
+    //     } finally {
+    //         setLoading(false);
+    //         setDontShowInDownLoad(false);
+    //         fetchImages();
+    //     }
+    // };
+
+
     const handleSaveCalendarAsPDF = async () => {
         try {
             setDontShowInDownLoad(true);
             setLoading(true);
-
+    
             const pdf = new jsPDF("landscape", "mm", "a4");
             const calendarElement = calendarContainerRef.current;
-            const rawUrl = sessionStorage.getItem("Color") || " ";
-            const backgroundImageUrl = encodeURI(rawUrl);
-
-            console.log("backgroundImageUrl : " + backgroundImageUrl);
-
+            const rawUrl = sessionStorage.getItem("Color") || "";
+            const backgroundImageUrl = encodeURI(rawUrl); // חשוב לקודד
+    
             if (!calendarElement || !backgroundImageUrl) {
-                console.error("Calendar container or background image is missing.");
+                console.error("Missing calendar element or background image.");
                 setLoading(false);
                 return;
             }
-
-            console.log(backgroundImageUrl);
-
-
-            const bgImageBlob = await fetchImage(backgroundImageUrl);
-            const img = new Image();
-            img.src = URL.createObjectURL(bgImageBlob);
-
-            await new Promise((resolve) => {
-                img.onload = () => resolve(img);
+    
+            // משיכת תמונה כ-Blob והמרה ל-Base64
+            const bgImageBlob = await fetch(backgroundImageUrl).then(r => r.blob());
+            const bgImageBase64 = await new Promise<string>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result as string);
+                reader.onerror = reject;
+                reader.readAsDataURL(bgImageBlob);
             });
-
+    
             const calendarApi = calendarRef.current?.getApi?.();
             if (!calendarApi) {
                 console.error("Calendar API is not available.");
                 setLoading(false);
                 return;
             }
-
+    
             for (let month = 0; month < 12; month++) {
                 calendarApi.gotoDate(new Date(2025, month, 1));
                 await new Promise(resolve => setTimeout(resolve, 500));
-
+    
                 const canvas = await html2canvas(calendarElement, {
                     scale: 2,
                     useCORS: true,
                     backgroundColor: null
                 });
-
+    
                 const imgData = canvas.toDataURL("image/png");
                 const imgWidth = 210;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
+    
                 if (month !== 0) pdf.addPage();
-                pdf.addImage(img.src, "PNG", 0, 0, imgWidth, imgHeight);
+    
+                // הוספת רקע Base64 לפני הכל
+                pdf.addImage(bgImageBase64, "JPEG", 0, 0, imgWidth, imgHeight);
                 pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
             }
-
+    
             pdf.save("calendar.pdf");
-            console.log("Calendar saved as PDF with background image.");
+            console.log("Calendar saved with background image successfully.");
         } catch (error) {
             console.error("Error generating PDF:", error);
             alert("שגיאה בהורדת הקובץ.");
         } finally {
             setLoading(false);
             setDontShowInDownLoad(false);
-            fetchImages();
+            fetchImages(); // אופציונלי, אם את צריכה לרענן
         }
     };
+    
 
-    const fetchImage = async (url: string) => {
-        try {
-            console.log("url : " + url);
+    // const fetchImage = async (url: string) => {
+    //     try {
+    //         console.log("url : " + url);
 
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return await response.blob();
-        } catch (error) {
-            console.error("Error fetching image:", error);
-            throw error;
-        }
-    };
+    //         const response = await fetch(url);
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+    //         return await response.blob();
+    //     } catch (error) {
+    //         console.error("Error fetching image:", error);
+    //         throw error;
+    //     }
+    // };
 
 
     useEffect(() => {
