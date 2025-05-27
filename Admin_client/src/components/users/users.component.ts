@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 @Component({
   selector: 'app-users',
@@ -25,7 +25,6 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
     MatFormFieldModule, MatInputModule, MatButtonModule,
     CommonModule,
     MatIconModule,
-    MatProgressSpinnerModule
 
   ],
   templateUrl: './users.component.html',

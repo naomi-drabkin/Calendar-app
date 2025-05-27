@@ -284,6 +284,7 @@ export class AiReportComponent {
                 // this.showPopup = false; 
                 // this.editorContent = '';
                 // this.emailDraft = '';
+                this.closePopup();
 
                 // Only close if at least one email was sent successfully
                 if (this.sendingProgress.sent > 0) {
