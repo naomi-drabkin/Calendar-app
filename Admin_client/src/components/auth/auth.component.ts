@@ -9,6 +9,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 @Component({
   selector: 'app-auth',
   imports: [
@@ -18,8 +20,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatCardModule,
     MatButtonModule,
     CommonModule,
-    MatIconModule // הוסף את זה
-
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css']
@@ -27,10 +29,14 @@ import { MatIconModule } from '@angular/material/icon';
 export class AuthComponent {
   email = '';
   password = '';
+  isLoading = false;
+
 
   constructor(private authService: AuthService, private router: Router) { }
 
   login() {
+    this.isLoading = true; 
+
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
         console.log("in auth components in next after login");
@@ -48,10 +54,11 @@ export class AuthComponent {
         }
         localStorage.setItem('isLoggedIn', 'true');
         this.router.navigate(['/users']);
-
+        this.isLoading = false;
       },
       error: (err) => {
         alert('שגיאה בהתחברות: ' + err.error);
+        this.isLoading = false;
       }
     });
   }

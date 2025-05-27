@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 @Component({
   selector: 'app-users',
@@ -23,7 +24,9 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
     ReactiveFormsModule,
     MatFormFieldModule, MatInputModule, MatButtonModule,
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule
+
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
@@ -36,6 +39,8 @@ export class UsersComponent implements OnInit {
   idUser: number = 0;
   add_User: boolean = false;
   @ViewChild('dialogTemplate') dialogTemplate!: TemplateRef<any>;
+  isLoading = false;
+
 
   constructor(private userService: UsersService,
     private authService: AuthService,
@@ -62,7 +67,7 @@ export class UsersComponent implements OnInit {
     this.userService.getAllUsers()?.subscribe({
       next: (data) => {
         this.users = data.filter(d => d.email !== this.authService.getAdminEmail()),
-        console.log("data = " + data)
+          console.log("data = " + data)
         console.log(data);
       },
 
@@ -71,6 +76,8 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(id: number) {
+    this.isLoading = true;
+
     if (confirm('האם אתה בטוח שברצונך למחוק את המשתמש?')) {
       console.log("אני בטוח!!!!!! 'האם אתה בטוח שברצונך למחוק את המשתמש?'");
       console.log(id);
@@ -80,45 +87,53 @@ export class UsersComponent implements OnInit {
         next: () => {
           console.log("user delete successfully");
           this.users = this.users.filter(u => u.id !== id);
+          this.isLoading = false;
         },
-        error: (err) => alert('שגיאה במחיקה: ' + err.error)
+        error: (err) => {
+          alert('שגיאה במחיקה: ' + err.error),
+          this.isLoading = false;
+        }
       });
     }
   }
 
   updateUser(id: number) {
+    this.isLoading = true;
     const model = this.data.value;
 
     const user: User = {
-      id:id,
+      id: id,
       ...model
     };
 
     this.userService.updateUser(id, user).subscribe({
       next: () => {
         console.log("user update successfully");
+        this.isLoading = false;
         this.fetchUsers();
       },
-      error: (err) => alert('שגיאה בעדכון: ' + err.error)
+      error: (err) => {alert('שגיאה בעדכון: ' + err.error),this.isLoading = false;}
     });
 
     this.data.reset();
   }
 
   addUser() {
+    this.isLoading = true;
     const model = this.data.value;
 
     const user: User = {
       ...model,
-      'role' : "User"
+      'role': "User"
     };
 
     this.userService.addUser(user).subscribe({
       next: () => {
         console.log("user add successfully");
+        this.isLoading = false;
         this.fetchUsers();
       },
-      error: (err) => alert('שגיאה בהוספה: ' + err.error)
+      error: (err) => {alert('שגיאה בהוספה: ' + err.error),this.isLoading = false; }
     });
     this.data.reset();
     this.dialog.closeAll();

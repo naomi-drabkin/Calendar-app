@@ -215,3 +215,12 @@
     opacity: 0.6;
     cursor: not-allowed;
   }
+
+
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    color: rgba(71, 118, 230, 0.3);
+  }

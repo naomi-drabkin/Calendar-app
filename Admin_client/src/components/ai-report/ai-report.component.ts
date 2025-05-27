@@ -207,7 +207,7 @@ export class AiReportComponent {
   isGenerating: boolean = false;
   isSending: boolean = false;
   prompt = `צור טיוטה של מייל שיווקי בעברית עבור משתמשים שמכינים לוח שנה אישי עם תמונות לפי תאריך ,באתר MOMENTO. סגנון קליל, מזמין, עם קריאה לפעולה ברורה.`;
- 
+
   sendingProgress: { total: number, sent: number, failed: number } = {
     total: 0,
     sent: 0,
@@ -227,32 +227,22 @@ export class AiReportComponent {
     this.isGenerating = true;
 
     this.aiService.sendMessage(this.prompt)
-    .subscribe({
-      next: res => {
-        this.isGenerating = false;
-        this.emailDraft = res.choices[0].message.content;
-        const formattedContent = `<div dir="rtl" style="text-align: right;">${this.emailDraft}</div>`;
-        this.editorContent = formattedContent;
-      },
-      error: err => {
-        this.isGenerating = false;
-        console.error(err);
-        this.errorMessage = 'אירעה שגיאה בקבלת הטיוטה';
-      }
-    });
+      .subscribe({
+        next: res => {
+          this.isGenerating = false;
+          this.emailDraft = res.choices[0].message.content;
+          const formattedContent = `<div dir="rtl" style="text-align: right;">${this.emailDraft}</div>`;
+          this.editorContent = formattedContent;
+        },
+        error: err => {
+          this.isGenerating = false;
+          console.error(err);
+          this.errorMessage = 'אירעה שגיאה בקבלת הטיוטה';
+        }
+      });
   }
 
-  // generateMarketingEmail() {
-  //     this.showPopup = true;
-  //   this.emailDraft = '';
-  //   this.editorContent = '';
-  //   this.errorMessage = '';
-  //   this.isGenerating = true;
-  //   this.aiService.sendMessage(this.prompt)
-  //     .subscribe(response => {
-  //       console.log(response.choices[0].message.content);
-  //     });
-  // }
+
 
   sendToAll() {
     this.sendingProgress = {
@@ -292,6 +282,9 @@ export class AiReportComponent {
               if (this.sendingProgress.sent + this.sendingProgress.failed === this.sendingProgress.total) {
                 this.isSending = false;
 
+                this.editorContent = '';
+                this.emailDraft = '';
+
                 // Only close if at least one email was sent successfully
                 if (this.sendingProgress.sent > 0) {
                   setTimeout(() => {
@@ -307,6 +300,7 @@ export class AiReportComponent {
               // Check if all emails are processed
               if (this.sendingProgress.sent + this.sendingProgress.failed === this.sendingProgress.total) {
                 this.isSending = false;
+
               }
             }
           });

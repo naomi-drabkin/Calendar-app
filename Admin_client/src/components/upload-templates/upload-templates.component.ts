@@ -23,6 +23,7 @@ export class UploadTemplatesComponent{
   imgeExtension: string | undefined = undefined; // סיומת התמונה
   isUploading: boolean = false;
   deletingTemplateId: string | null = null;
+  selectedFileName: string = '';
 
 
   constructor(private uploadService: UploadService) {
@@ -57,10 +58,10 @@ export class UploadTemplatesComponent{
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
+      this.selectedFileName = this.selectedFile.name;
       this.imgeExtension = this.selectedFile.name.split('.').pop()?  this.selectedFile.name.split('.').pop():undefined; // קבלת סיומת הקובץ
       // יצירת תצוגה מקדימה של התמונה
       console.log(this.imgeExtension);
-      
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
@@ -77,6 +78,7 @@ export class UploadTemplatesComponent{
       this.uploadService.uploadFile(this.selectedFile).subscribe({
         next: () => {
           this.selectedFile = null;
+          this.selectedFileName = '';
           this.imagePreview = null;
           this.loadTemplates();
           this.isUploading = false;

@@ -5,7 +5,7 @@
     <div class="file-input-container">
       <label class="file-input-label">
         <mat-icon>cloud_upload</mat-icon>
-        בחר קובץ
+        {{ selectedFileName || 'בחר קובץ' }}
         <input type="file" class="file-input" (change)="onFileSelected($event)" />
       </label>
     </div>

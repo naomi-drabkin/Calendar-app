@@ -91,3 +91,12 @@
   .auth-button:active {
     transform: translateY(0);
   }
+
+
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    color: rgba(71, 118, 230, 0.4);
+  }

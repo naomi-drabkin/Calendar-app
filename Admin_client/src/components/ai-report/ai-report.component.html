@@ -76,26 +76,26 @@
         </h2>
         <button class="close-btn" [disabled]="isSending" (click)="closePopup()">×</button>
       </div>
-      
+
       <div class="popup-body">
         <div *ngIf="errorMessage" class="error-message">
           <span class="error-icon">⚠️</span>
           {{ errorMessage }}
         </div>
-        
+
         <div *ngIf="isGenerating" class="loading">
           <div class="spinner"></div>
           <p>מייצר טיוטה...</p>
         </div>
-        
+
         <div *ngIf="emailDraft && !isGenerating" class="editor-container">
           <div class="editor-header">
             <h3>ערוך את הטקסט לפני השליחה</h3>
             <p class="editor-tip">ניתן להדגיש, לצבוע, למחוק ולערוך את הטקסט</p>
           </div>
-          
+
           <app-simple-editor [(content)]="editorContent"></app-simple-editor>
-          
+
           <div class="action-buttons">
             <button class="send-btn primary-btn" [disabled]="isSending" (click)="sendToAll()">
               <span *ngIf="!isSending">
@@ -115,17 +115,21 @@
               <span class="btn-text">ביטול</span>
             </button>
           </div>
-          
-          <!-- Sending progress bar -->
-          <div *ngIf="isSending" class="sending-progress">
-            <div class="progress-bar">
-              <div class="progress-fill" [style.width.%]="getSendingPercentage()"></div>
+
+          @if(isSending){
+            <div class="sending-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="getSendingPercentage()"></div>
+              </div>
+              <div class="progress-stats">
+                <span class="sent">נשלחו: {{ sendingProgress.sent }}</span>
+                <span class="failed" *ngIf="sendingProgress.failed > 0">נכשלו: {{ sendingProgress.failed }}</span>
+              </div>
             </div>
-            <div class="progress-stats">
-              <span class="sent">נשלחו: {{ sendingProgress.sent }}</span>
-              <span class="failed" *ngIf="sendingProgress.failed > 0">נכשלו: {{ sendingProgress.failed }}</span>
-            </div>
-          </div>
+          }
+         
+
+
         </div>
       </div>
     </div>

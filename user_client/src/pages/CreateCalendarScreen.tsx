@@ -100,6 +100,9 @@ export default function CreateCalendarScreen() {
             const calendarElement = calendarContainerRef.current;
             const rawUrl = sessionStorage.getItem("Color") || " ";
             const backgroundImageUrl = encodeURI(rawUrl);
+
+            console.log("backgroundImageUrl : " + backgroundImageUrl);
+            
             if (!calendarElement || !backgroundImageUrl) {
                 console.error("Calendar container or background image is missing.");
                 setLoading(false);
@@ -133,7 +136,7 @@ export default function CreateCalendarScreen() {
                     useCORS: true,
                     backgroundColor: null
                 });
-
+                
                 const imgData = canvas.toDataURL("image/png");
                 const imgWidth = 210;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;

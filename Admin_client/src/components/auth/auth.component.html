@@ -23,6 +23,12 @@
         <button mat-raised-button class="auth-button" (click)="login()">
           Login
         </button>
+        @if(isLoading){
+          <div class="spinner-container">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+        }
+        
       </form>
     </div>
   </div>
