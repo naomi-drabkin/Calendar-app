@@ -23,6 +23,11 @@ import { jsPDF } from "jspdf";
 import ShowTemplates from "../componnents/ShowTemplates";
 import { useNavigate } from "react-router";
 import { _http } from "../App";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
+
 
 export default function CreateCalendarScreen() {
     const [events, setEvents] = useState([]);
@@ -161,70 +166,95 @@ export default function CreateCalendarScreen() {
 
     const handleSaveCalendarAsPDF = async () => {
         try {
-            setDontShowInDownLoad(true);
-            setLoading(true);
-    
-            const pdf = new jsPDF("landscape", "mm", "a4");
-            const calendarElement = calendarContainerRef.current;
-            const rawUrl = sessionStorage.getItem("Color") || "";
-            const backgroundImageUrl = encodeURI(rawUrl); // חשוב לקודד
-    
-            if (!calendarElement || !backgroundImageUrl) {
-                console.error("Missing calendar element or background image.");
-                setLoading(false);
-                return;
-            }
-    
-            // משיכת תמונה כ-Blob והמרה ל-Base64
-            const bgImageBlob = await fetch(backgroundImageUrl).then(r => r.blob());
-            const bgImageBase64 = await new Promise<string>((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result as string);
-                reader.onerror = reject;
-                reader.readAsDataURL(bgImageBlob);
-            });
-    
-            const calendarApi = calendarRef.current?.getApi?.();
-            if (!calendarApi) {
-                console.error("Calendar API is not available.");
-                setLoading(false);
-                return;
-            }
-    
-            for (let month = 0; month < 12; month++) {
-                calendarApi.gotoDate(new Date(2025, month, 1));
-                await new Promise(resolve => setTimeout(resolve, 500));
-    
-                const canvas = await html2canvas(calendarElement, {
-                    scale: 2,
-                    useCORS: true,
-                    backgroundColor: null
-                });
-    
-                const imgData = canvas.toDataURL("image/png");
-                const imgWidth = 210;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    
-                if (month !== 0) pdf.addPage();
-    
-                // הוספת רקע Base64 לפני הכל
-                pdf.addImage(bgImageBase64, "JPEG", 0, 0, imgWidth, imgHeight);
-                pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-            }
-    
-            pdf.save("calendar.pdf");
-            console.log("Calendar saved with background image successfully.");
-        } catch (error) {
-            console.error("Error generating PDF:", error);
-            alert("שגיאה בהורדת הקובץ.");
-        } finally {
+          setDontShowInDownLoad(true);
+          setLoading(true);
+      
+          const pdf = new jsPDF("landscape", "mm", "a4");
+          const calendarElement = calendarContainerRef.current;
+          const rawUrl = sessionStorage.getItem("Color") || "";
+      
+          if (!calendarElement || !rawUrl) {
+            console.error("Calendar container or background image is missing.");
             setLoading(false);
-            setDontShowInDownLoad(false);
-            fetchImages(); // אופציונלי, אם את צריכה לרענן
+            return;
+          }
+      
+          // חילוץ שם הקובץ מה-URL המקורי
+          const fileName = rawUrl.substring(rawUrl.lastIndexOf("/") + 1);
+      
+          // שליפת PreSigned URL מהשרת
+          const backgroundImageUrl = await getSafeImageUrl(fileName);
+          console.log("PreSigned background image URL:", backgroundImageUrl);
+      
+          // הבאת ה-Blob של התמונה
+          const bgImageBlob = await fetchImage(backgroundImageUrl);
+          const img = new Image();
+          img.src = URL.createObjectURL(bgImageBlob);
+      
+          await new Promise((resolve) => {
+            img.onload = () => resolve(img);
+          });
+      
+          const calendarApi = calendarRef.current?.getApi?.();
+          if (!calendarApi) {
+            console.error("Calendar API is not available.");
+            setLoading(false);
+            return;
+          }
+      
+          for (let month = 0; month < 12; month++) {
+            calendarApi.gotoDate(new Date(2025, month, 1));
+            await new Promise(resolve => setTimeout(resolve, 500));
+      
+            const canvas = await html2canvas(calendarElement, {
+              scale: 2,
+              useCORS: true,
+              backgroundColor: null
+            });
+      
+            const imgData = canvas.toDataURL("image/png");
+            const imgWidth = 210;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+            if (month !== 0) pdf.addPage();
+      
+            // ציור רקע
+            pdf.addImage(img.src, "PNG", 0, 0, imgWidth, imgHeight);
+            // ציור תוכן
+            pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+          }
+      
+          pdf.save("calendar.pdf");
+          console.log("Calendar saved as PDF with background image.");
+        } catch (error) {
+          console.error("Error generating PDF:", error);
+          await MySwal.fire({
+            icon: 'error',
+            title: 'שגיאה',
+            text: 'אירעה תקלה בעת הורדת הקובץ',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'סגור',
+          });
+          
+        } finally {
+          setLoading(false);
+          setDontShowInDownLoad(false);
+          fetchImages();
         }
-    };
-    
+      };
+      
+    const fetchImage = async (url: string): Promise<Blob> => {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Failed to fetch image");
+        return await response.blob();
+      };
 
+
+      const getSafeImageUrl = async (fileName: string): Promise<string> => {
+        const res = await fetch(`${_http}/api/upload/download-url/${fileName}`);
+        if (!res.ok) throw new Error("לא ניתן לקבל כתובת מאובטחת לתמונה");
+        return await res.text();
+      };
     // const fetchImage = async (url: string) => {
     //     try {
     //         console.log("url : " + url);
