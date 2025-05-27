@@ -27,7 +27,32 @@ namespace Api.Controllers
                 {
                     From = new MailAddress("MomenTo@gmail.com"),
                     Subject = request.Subject,
-                    Body = request.Body,
+                    //Body = request.Body,
+                    Body = $@"
+                    <div dir='rtl'>
+                        <p>{request.Body}</p>
+                        <img src='cid:invitationImage' style='max-width:100%;' />
+                         <hr style='margin:20px 0;' />
+           
+                        <br/>
+                        <br/>
+                         <div style='color: #555;'>
+                                <p style='margin:0; font-weight:bold;'>🎉 InvitationLine – <span style='font-style:italic;'>כי כל פרט חשוב</span></p>
+                                <p style='margin:4px 0;'>🎨 עיצוב חכם ללוחות שנה, תבניות מותאמות אישית ועוד</p>
+                                <p style='margin:4px 0;'>🌐 
+                                    <a href='https://calendar-react-client.onrender.com' style='color:#0066cc; text-decoration:none;'>www.calendar-app.com</a>
+                                </p>
+                                <p style='margin:4px 0;'>📧 
+                                    <a href='mailto:momentodesigncalendar@gmail.com?subject=פנייה%20לשירות%20לקוחות&body=שלום%20צוות%20Calendar%2C%0A%0Aברצוני%20לפנות%20אליכם%20בעניין%20...' 
+                                       style='color:#0066cc; text-decoration:none;'>support@calendar.co.il</a>
+                                </p>
+                                <p style='margin:4px 0;'>📞 +1 (234) 567-8900</p>
+                                <p style='margin-top:10px; font-size:12px; color:#888;'>
+                                    הודעה זו נשלחה מ calendar. נשמח לסייע בכל שאלה או פנייה.
+                                </p>
+                            </div>
+                    </div>",
+
                     IsBodyHtml = true,
                 };
                 mailMessage.To.Add(request.To);

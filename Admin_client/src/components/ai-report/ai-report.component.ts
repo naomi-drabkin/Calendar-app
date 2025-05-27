@@ -281,16 +281,17 @@ export class AiReportComponent {
               // Only close popup when all emails are processed
               if (this.sendingProgress.sent + this.sendingProgress.failed === this.sendingProgress.total) {
                 this.isSending = false;
+                this.showPopup = false; 
 
-                this.editorContent = '';
-                this.emailDraft = '';
+                // this.editorContent = '';
+                // this.emailDraft = '';
 
-                // Only close if at least one email was sent successfully
-                if (this.sendingProgress.sent > 0) {
-                  setTimeout(() => {
-                    this.showPopup = false;
-                  }, 1000); // Show success state briefly before closing
-                }
+                // // Only close if at least one email was sent successfully
+                // if (this.sendingProgress.sent > 0) {
+                //   setTimeout(() => {
+                //     this.showPopup = false;
+                //   }, 1000); // Show success state briefly before closing
+                // }
               }
             },
             error: error => {
