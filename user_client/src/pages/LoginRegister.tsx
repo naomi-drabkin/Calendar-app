@@ -132,10 +132,12 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
       });
     } catch (error) {
       console.error(error);
+      setIsOpenModal(false);
+      setOpenNextComponnent(false);
       await MySwal.fire({
         icon: 'error',
         title: 'שגיאה',
-        text: 'ארעה תקלה בהתחברות או ההרשמה',
+        text: 'ארעה תקלה - נסה שנית',
         confirmButtonColor: '#d33',
         confirmButtonText: 'סגור',
       });
@@ -148,11 +150,7 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
  
   useEffect(() => {}, [sessionStorage.getItem("AuthToken")])
 
-  // useEffect(() => 
-  //   { 
-      
-  // }, [isOpenModal])
-  
+
   const buttonStyle = {
     marginTop: "8px",
     marginBottom: "8px",
