@@ -37,7 +37,7 @@ namespace Api.Controllers
                         <br/>
                         <br/>
                          <div style='color: #555;'>
-                                <p style='margin:0; font-weight:bold;'>🎉 InvitationLine – <span style='font-style:italic;'>כי כל פרט חשוב</span></p>
+                                <p style='margin:0; font-weight:bold;'>🎉 MomenTo – <span style='font-style:italic;'>כי רגעים צריך להנציח </span></p>
                                 <p style='margin:4px 0;'>🎨 עיצוב חכם ללוחות שנה, תבניות מותאמות אישית ועוד</p>
                                 <p style='margin:4px 0;'>🌐 
                                     <a href='https://calendar-react-client.onrender.com' style='color:#0066cc; text-decoration:none;'>www.calendar-app.com</a>
