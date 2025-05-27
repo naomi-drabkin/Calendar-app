@@ -75,9 +75,45 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  // deleteUser(id: number) {
+  //   Swal.fire({
+  //     title: 'מחיקת משתמש ',
+  //     text: '?האם אתה בטוח שברצונך למחוק את המשתמש',
+  //     icon: 'question',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#5c6bc0',
+  //     cancelButtonColor: '#757575',
+  //     confirmButtonText: 'כן',
+  //     cancelButtonText: 'ביטול'
+  //   }).then((result) => {
+  //     console.log(id);
+  //     this.isLoading = true;
+
+  //     this.userService.deleteUser(id).subscribe({
+  //       next: () => {
+  //         console.log("user delete successfully");
+  //         this.users = this.users.filter(u => u.id !== id);
+  //         this.isLoading = false;
+  //       },
+  //       error: (err) => {
+  //         // alert('שגיאה במחיקה: ' + err.error),
+  //         Swal.fire({
+  //           title: 'שגיאה',
+  //           text: 'שגיאה במחיקה',
+  //           icon: 'error',
+  //           confirmButtonText: 'אישור',
+  //           confirmButtonColor: '#2575fc'
+  //         }),
+  //           this.isLoading = false;
+  //       }
+  //     });
+  //   })
+  // }
+
+
   deleteUser(id: number) {
     Swal.fire({
-      title: 'מחיקת משתמש ',
+      title: 'מחיקת משתמש',
       text: '?האם אתה בטוח שברצונך למחוק את המשתמש',
       icon: 'question',
       showCancelButton: true,
@@ -86,29 +122,32 @@ export class UsersComponent implements OnInit {
       confirmButtonText: 'כן',
       cancelButtonText: 'ביטול'
     }).then((result) => {
-      console.log(id);
-      this.isLoading = true;
-
-      this.userService.deleteUser(id).subscribe({
-        next: () => {
-          console.log("user delete successfully");
-          this.users = this.users.filter(u => u.id !== id);
-          this.isLoading = false;
-        },
-        error: (err) => {
-          // alert('שגיאה במחיקה: ' + err.error),
-          Swal.fire({
-            title: 'שגיאה',
-            text: 'שגיאה במחיקה',
-            icon: 'error',
-            confirmButtonText: 'אישור',
-            confirmButtonColor: '#2575fc'
-          }),
+      if (result.isConfirmed) {  // ⬅️ רק אם המשתמש אישר
+        this.isLoading = true;
+  
+        this.userService.deleteUser(id).subscribe({
+          next: () => {
+            console.log("user deleted successfully");
+            this.users = this.users.filter(u => u.id !== id);
             this.isLoading = false;
-        }
-      });
-    })
+          },
+          error: (err) => {
+            Swal.fire({
+              title: 'שגיאה',
+              text: 'שגיאה במחיקה',
+              icon: 'error',
+              confirmButtonText: 'אישור',
+              confirmButtonColor: '#2575fc'
+            });
+            this.isLoading = false;
+          }
+        });
+      } else {
+        console.log("מחיקה בוטלה ע״י המשתמש");
+      }
+    });
   }
+  
 
   updateUser(id: number) {
     this.isLoading = true;
