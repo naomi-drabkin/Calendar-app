@@ -550,3 +550,21 @@ p {
   min-height: 60px; /* גובה קבוע למניעת קפיצה */
   padding: 8px 0;
 }
+
+
+
+.calendar-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.calendar-title {
+  margin: 40px 0;
+  font-size: 18px;
+  font-weight: normal;
+  text-align: center;
+}
