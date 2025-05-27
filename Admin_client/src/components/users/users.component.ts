@@ -114,7 +114,7 @@ export class UsersComponent implements OnInit {
   deleteUser(id: number) {
     Swal.fire({
       title: 'מחיקת משתמש',
-      text: '?האם אתה בטוח שברצונך למחוק את המשתמש',
+      text: 'האם אתה בטוח שברצונך למחוק את המשתמש?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#5c6bc0',
