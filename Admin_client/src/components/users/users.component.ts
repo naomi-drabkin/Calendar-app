@@ -83,12 +83,10 @@ export class UsersComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#5c6bc0',
       cancelButtonColor: '#757575',
-      confirmButtonText: 'שמור',
+      confirmButtonText: 'כן',
       cancelButtonText: 'ביטול'
     }).then((result) => {
-      console.log("אני בטוח!!!!!! 'האם אתה בטוח שברצונך למחוק את המשתמש?'");
       console.log(id);
-      console.log("אני בטוח!!!!!! 'האם אתה בטוח שברצונך למחוק את המשתמש?'");
       this.isLoading = true;
 
       this.userService.deleteUser(id).subscribe({
