@@ -70,10 +70,9 @@ export class UploadService {
     const nameWithoutExtension = originalName.split('.').slice(0, -1).join('.');
     return nameWithoutExtension
       .toLowerCase()
-      .replace(/[^a-z0-9-]/g, '')     // שומר רק תווים מותרים
-      .replace(/-+/g, '-')            // מקפים רצופים → מקף אחד
-      .replace(/^-+|-+$/g, '');       // מסיר מקפים מהתחלה/סוף
+      .replace(/[^a-z0-9]/g, ''); // מסיר כל תו שהוא לא אות או מספר
   }
+  
   
 
   // מחיקת תבנית
