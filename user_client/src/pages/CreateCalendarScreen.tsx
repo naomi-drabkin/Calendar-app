@@ -46,7 +46,6 @@ export default function CreateCalendarScreen() {
     const fetchImages = async () => {
         try {
             const numOfCalendar = sessionStorage.getItem('numOfCalendar');
-            // console.log(numOfCalendar);
 
             const response = await axios.get(`${_http}/api/Image/all/${numOfCalendar}`, {
                 headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` },
@@ -95,79 +94,7 @@ export default function CreateCalendarScreen() {
         }
 
     }
-
-    // const handleSaveCalendarAsPDF = async () => {
-    //     try {
-    //         setDontShowInDownLoad(true);
-    //         setLoading(true);
-
-    //         const pdf = new jsPDF("landscape", "mm", "a4");
-    //         const calendarElement = calendarContainerRef.current;
-    //         const backgroundImageUrl = sessionStorage.getItem("Color") || "";
-
-    //         console.log("backgroundImageUrl : " + backgroundImageUrl);
-
-    //         if (!calendarElement || !backgroundImageUrl) {
-    //             console.error("Calendar container or background image is missing.");
-    //             setLoading(false);
-    //             return;
-    //         }
-
-    //         console.log(backgroundImageUrl);
-
-
-    //         const bgImageBlob = await fetchImage(backgroundImageUrl);
-    //         const img = new Image();
-    //         img.src = URL.createObjectURL(bgImageBlob);
-
-    //         await new Promise((resolve) => {
-    //             img.onload = () => resolve(img);
-    //         });
-
-    //         const calendarApi = calendarRef.current?.getApi?.();
-    //         if (!calendarApi) {
-    //             console.error("Calendar API is not available.");
-    //             setLoading(false);
-    //             return;
-    //         }
-
-    //         for (let month = 0; month < 12; month++) {
-    //             calendarApi.gotoDate(new Date(2025, month, 1));
-    //             await new Promise(resolve => setTimeout(resolve, 500));
-
-    //             const canvas = await html2canvas(calendarElement, {
-    //                 scale: 2,
-    //                 useCORS: true,
-    //                 backgroundColor: null
-    //             });
-
-    //             const imgData = canvas.toDataURL("image/png");
-    //             const imgWidth = 210;
-    //             const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    //             if (month !== 0) pdf.addPage();
-    //             pdf.addImage(img.src, "PNG", 0, 0, imgWidth, imgHeight);
-    //             pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-    //         }
-
-    //         pdf.save("calendar.pdf");
-    //         console.log("Calendar saved as PDF with background image.");
-    //     } catch (error) {
-    //         console.error("Error generating PDF:", error);
-    //         await MySwal.fire({
-    //             icon: 'error',
-    //             title: 'שגיאה',
-    //             text: 'אירעה תקלה בעת הורדת הקובץ',
-    //             confirmButtonColor: '#d33',
-    //             confirmButtonText: 'סגור',
-    //         });
-    //     } finally {
-    //         setLoading(false);
-    //         setDontShowInDownLoad(false);
-    //         fetchImages();
-    //     }
-    // };
-
+   
 
     const handleSaveCalendarAsPDF = async () => {
         try {
@@ -240,111 +167,16 @@ export default function CreateCalendarScreen() {
                 confirmButtonText: 'סגור',
             });
         } finally {
-            setLoading(false);
-            // setDontShowInDownLoad(false);
-            // fetchImages();
-            
+            setLoading(false);            
             const calendarApi = calendarRef.current?.getApi?.();
             if (calendarApi) {
-                calendarApi.gotoDate(new Date()); // מחזיר את הלוח לזמן נוכחי
+                calendarApi.gotoDate(new Date()); 
             }
             setDontShowInDownLoad(false);
-            setTimeout(() => fetchImages(), 50); // טוען מחדש את התמונות הרגי
+            setTimeout(() => fetchImages(), 50); 
         }
     };
 
-
-    // const handleSaveCalendarAsPDF = async () => {
-    //     try {
-    //       setDontShowInDownLoad(true);
-    //       setLoading(true);
-
-    //       const pdf = new jsPDF("landscape", "mm", "a4");
-    //       const calendarElement = calendarContainerRef.current;
-    //       const rawUrl = sessionStorage.getItem("Color") || "";
-
-    //       if (!calendarElement || !rawUrl) {
-    //         console.error("Calendar container or background image is missing.");
-    //         setLoading(false);
-    //         return;
-    //       }
-
-    //       // חילוץ שם הקובץ מה-URL המקורי
-    //       const fileName = rawUrl.substring(rawUrl.lastIndexOf("/") + 1);
-
-    //       // שליפת PreSigned URL מהשרת
-    //       const backgroundImageUrl = await getSafeImageUrl(fileName);
-    //       console.log("PreSigned background image URL:", backgroundImageUrl);
-
-    //       // הבאת ה-Blob של התמונה
-    //       const bgImageBlob = await fetchImage(backgroundImageUrl);
-    //       const img = new Image();
-    //       img.src = URL.createObjectURL(bgImageBlob);
-
-    //       await new Promise((resolve) => {
-    //         img.onload = () => resolve(img);
-    //       });
-
-    //       const calendarApi = calendarRef.current?.getApi?.();
-    //       if (!calendarApi) {
-    //         console.error("Calendar API is not available.");
-    //         setLoading(false);
-    //         return;
-    //       }
-
-    //       for (let month = 0; month < 12; month++) {
-    //         calendarApi.gotoDate(new Date(2025, month, 1));
-    //         await new Promise(resolve => setTimeout(resolve, 500));
-
-    //         const canvas = await html2canvas(calendarElement, {
-    //           scale: 2,
-    //           useCORS: true,
-    //           backgroundColor: null
-    //         });
-
-    //         const imgData = canvas.toDataURL("image/png");
-    //         const imgWidth = 210;
-    //         const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    //         if (month !== 0) pdf.addPage();
-
-    //         // ציור רקע
-    //         pdf.addImage(img.src, "PNG", 0, 0, imgWidth, imgHeight);
-    //         // ציור תוכן
-    //         pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-    //       }
-
-    //       pdf.save("calendar.pdf");
-    //       console.log("Calendar saved as PDF with background image.");
-    //     } catch (error) {
-    //       console.error("Error generating PDF:", error);
-    //       await MySwal.fire({
-    //         icon: 'error',
-    //         title: 'שגיאה',
-    //         text: 'אירעה תקלה בעת הורדת הקובץ',
-    //         confirmButtonColor: '#d33',
-    //         confirmButtonText: 'סגור',
-    //       });
-
-    //     } finally {
-    //       setLoading(false);
-    //       setDontShowInDownLoad(false);
-    //       fetchImages();
-    //     }
-    //   };
-
-    // const fetchImage = async (url: string): Promise<Blob> => {
-    //     const response = await fetch(url);
-    //     if (!response.ok) throw new Error("Failed to fetch image");
-    //     return await response.blob();
-    //   };
-
-
-    //   const getSafeImageUrl = async (fileName: string): Promise<string> => {
-    //     const res = await fetch(`${_http}/api/upload/download-url/${fileName}`);
-    //     if (!res.ok) throw new Error("לא ניתן לקבל כתובת מאובטחת לתמונה");
-    //     return await res.text();
-    //   };
     const fetchImage = async (url: string) => {
         try {
             console.log("url : " + url);
@@ -382,12 +214,12 @@ export default function CreateCalendarScreen() {
                 </div>
             }
             <div>
-                <button className="fancy-button" onClick={() => navigate(-1)}>
+                <button className="fancy-button" onClick={() => navigate(-1)} disabled={loading}>
                     <span>חזרה לעמוד הבית</span>
                 </button>
 
 
-                <Button type="button" onClick={() => setChooseTemplate(true)} style={{
+                <Button type="button" onClick={() => setChooseTemplate(true)} disabled={loading} style={{
                     position: "absolute",
                     top: '15px',
                     left: '45%',
@@ -406,6 +238,7 @@ export default function CreateCalendarScreen() {
                 <>
                     <Button className="upload-button"
                         onClick={() => setUpload(true)}
+                        disabled={loading}
                         style={{
                             position: "absolute",
                             top: '15px',
