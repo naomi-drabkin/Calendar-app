@@ -49,7 +49,7 @@ export class UploadService {
     const cleanFileName = this.cleanFileName(file.name);
     const extension = file.name.split('.').pop()?.toLowerCase() || 'png';
     const randomId = Math.random().toString(36).substring(2, 8);
-    const finalFileName = `${cleanFileName}-${randomId}.${extension}`;
+    const finalFileName = `${cleanFileName}${randomId}.${extension}`;
   
     const formData = new FormData();
     const sanitizedFile = new File([file], finalFileName, { type: file.type });
