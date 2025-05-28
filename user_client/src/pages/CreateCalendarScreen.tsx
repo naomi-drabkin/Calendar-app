@@ -173,19 +173,19 @@ export default function CreateCalendarScreen() {
         try {
             setDontShowInDownLoad(true);
             setLoading(true);
-    
+
             const pdf = new jsPDF("landscape", "mm", "a4");
             const calendarElement = calendarContainerRef.current;
             const backgroundImageUrl = sessionStorage.getItem("Color") || "";
-    
+
             if (!calendarElement) {
                 console.error("Calendar container is missing.");
                 setLoading(false);
                 return;
             }
-    
+
             let backgroundImage: HTMLImageElement | null = null;
-    
+
             if (backgroundImageUrl.trim() !== "") {
                 try {
                     const bgImageBlob = await fetchImage(backgroundImageUrl);
@@ -199,35 +199,35 @@ export default function CreateCalendarScreen() {
                     console.warn("Could not load background image, continuing without it.");
                 }
             }
-    
+
             const calendarApi = calendarRef.current?.getApi?.();
             if (!calendarApi) {
                 console.error("Calendar API is not available.");
                 setLoading(false);
                 return;
             }
-    
+
             for (let month = 0; month < 12; month++) {
                 calendarApi.gotoDate(new Date(2025, month, 1));
                 await new Promise(resolve => setTimeout(resolve, 500));
-    
+
                 const canvas = await html2canvas(calendarElement, {
                     scale: 2,
                     useCORS: true,
                     backgroundColor: null
                 });
-    
+
                 const imgData = canvas.toDataURL("image/png");
                 const imgWidth = 210;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    
+
                 if (month !== 0) pdf.addPage();
                 if (backgroundImage) {
                     pdf.addImage(backgroundImage, "PNG", 0, 0, imgWidth, imgHeight);
                 }
                 pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
             }
-    
+
             pdf.save("calendar.pdf");
             console.log("Calendar saved as PDF.");
         } catch (error) {
@@ -241,11 +241,18 @@ export default function CreateCalendarScreen() {
             });
         } finally {
             setLoading(false);
+            // setDontShowInDownLoad(false);
+            // fetchImages();
+            
+            const calendarApi = calendarRef.current?.getApi?.();
+            if (calendarApi) {
+                calendarApi.gotoDate(new Date()); // מחזיר את הלוח לזמן נוכחי
+            }
             setDontShowInDownLoad(false);
-            fetchImages();
+            setTimeout(() => fetchImages(), 50); // טוען מחדש את התמונות הרגי
         }
     };
-    
+
 
     // const handleSaveCalendarAsPDF = async () => {
     //     try {
