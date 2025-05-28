@@ -96,63 +96,140 @@ export default function CreateCalendarScreen() {
 
     }
 
+    // const handleSaveCalendarAsPDF = async () => {
+    //     try {
+    //         setDontShowInDownLoad(true);
+    //         setLoading(true);
+
+    //         const pdf = new jsPDF("landscape", "mm", "a4");
+    //         const calendarElement = calendarContainerRef.current;
+    //         const backgroundImageUrl = sessionStorage.getItem("Color") || "";
+
+    //         console.log("backgroundImageUrl : " + backgroundImageUrl);
+
+    //         if (!calendarElement || !backgroundImageUrl) {
+    //             console.error("Calendar container or background image is missing.");
+    //             setLoading(false);
+    //             return;
+    //         }
+
+    //         console.log(backgroundImageUrl);
+
+
+    //         const bgImageBlob = await fetchImage(backgroundImageUrl);
+    //         const img = new Image();
+    //         img.src = URL.createObjectURL(bgImageBlob);
+
+    //         await new Promise((resolve) => {
+    //             img.onload = () => resolve(img);
+    //         });
+
+    //         const calendarApi = calendarRef.current?.getApi?.();
+    //         if (!calendarApi) {
+    //             console.error("Calendar API is not available.");
+    //             setLoading(false);
+    //             return;
+    //         }
+
+    //         for (let month = 0; month < 12; month++) {
+    //             calendarApi.gotoDate(new Date(2025, month, 1));
+    //             await new Promise(resolve => setTimeout(resolve, 500));
+
+    //             const canvas = await html2canvas(calendarElement, {
+    //                 scale: 2,
+    //                 useCORS: true,
+    //                 backgroundColor: null
+    //             });
+
+    //             const imgData = canvas.toDataURL("image/png");
+    //             const imgWidth = 210;
+    //             const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    //             if (month !== 0) pdf.addPage();
+    //             pdf.addImage(img.src, "PNG", 0, 0, imgWidth, imgHeight);
+    //             pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+    //         }
+
+    //         pdf.save("calendar.pdf");
+    //         console.log("Calendar saved as PDF with background image.");
+    //     } catch (error) {
+    //         console.error("Error generating PDF:", error);
+    //         await MySwal.fire({
+    //             icon: 'error',
+    //             title: 'שגיאה',
+    //             text: 'אירעה תקלה בעת הורדת הקובץ',
+    //             confirmButtonColor: '#d33',
+    //             confirmButtonText: 'סגור',
+    //         });
+    //     } finally {
+    //         setLoading(false);
+    //         setDontShowInDownLoad(false);
+    //         fetchImages();
+    //     }
+    // };
+
+
     const handleSaveCalendarAsPDF = async () => {
         try {
             setDontShowInDownLoad(true);
             setLoading(true);
-
+    
             const pdf = new jsPDF("landscape", "mm", "a4");
             const calendarElement = calendarContainerRef.current;
-            const rawUrl = sessionStorage.getItem("Color") || " ";
-            const backgroundImageUrl = encodeURI(rawUrl);
-
-            console.log("backgroundImageUrl : " + backgroundImageUrl);
-
-            if (!calendarElement || !backgroundImageUrl) {
-                console.error("Calendar container or background image is missing.");
+            const backgroundImageUrl = sessionStorage.getItem("Color") || "";
+    
+            if (!calendarElement) {
+                console.error("Calendar container is missing.");
                 setLoading(false);
                 return;
             }
-
-            console.log(backgroundImageUrl);
-
-
-            const bgImageBlob = await fetchImage(backgroundImageUrl);
-            const img = new Image();
-            img.src = URL.createObjectURL(bgImageBlob);
-
-            await new Promise((resolve) => {
-                img.onload = () => resolve(img);
-            });
-
+    
+            let backgroundImage: HTMLImageElement | null = null;
+    
+            if (backgroundImageUrl.trim() !== "") {
+                try {
+                    const bgImageBlob = await fetchImage(backgroundImageUrl);
+                    const img = new Image();
+                    img.src = URL.createObjectURL(bgImageBlob);
+                    await new Promise((resolve) => {
+                        img.onload = () => resolve(img);
+                    });
+                    backgroundImage = img;
+                } catch (err) {
+                    console.warn("Could not load background image, continuing without it.");
+                }
+            }
+    
             const calendarApi = calendarRef.current?.getApi?.();
             if (!calendarApi) {
                 console.error("Calendar API is not available.");
                 setLoading(false);
                 return;
             }
-
+    
             for (let month = 0; month < 12; month++) {
                 calendarApi.gotoDate(new Date(2025, month, 1));
                 await new Promise(resolve => setTimeout(resolve, 500));
-
+    
                 const canvas = await html2canvas(calendarElement, {
                     scale: 2,
                     useCORS: true,
                     backgroundColor: null
                 });
-
+    
                 const imgData = canvas.toDataURL("image/png");
                 const imgWidth = 210;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
+    
                 if (month !== 0) pdf.addPage();
-                pdf.addImage(img.src, "PNG", 0, 0, imgWidth, imgHeight);
+                if (backgroundImage) {
+                    pdf.addImage(backgroundImage, "PNG", 0, 0, imgWidth, imgHeight);
+                }
                 pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
             }
-
+    
             pdf.save("calendar.pdf");
-            console.log("Calendar saved as PDF with background image.");
+            console.log("Calendar saved as PDF.");
         } catch (error) {
             console.error("Error generating PDF:", error);
             await MySwal.fire({
@@ -168,7 +245,7 @@ export default function CreateCalendarScreen() {
             fetchImages();
         }
     };
-
+    
 
     // const handleSaveCalendarAsPDF = async () => {
     //     try {

@@ -31,19 +31,50 @@ export class UploadService {
   }
 
   // העלאת קובץ
+  // uploadFile(file: File): Observable<any> {
+  //   const formData = new FormData();
+  //   formData.append('file', file); // זה הקובץ עצמו
+  //   formData.append('fileName', file.name); // זה השם שהשרת דורש
+  //   formData.append('extention', file.name.split('.').pop() || ''); // זה הסיומת של הקובץ
+
+
+  //   return this.http.post(
+  //     `${this.serverUrl}/upload-image`,
+  //     formData,
+  //     this.userService.getAuthHeaders() // אם את משתמשת באותנטיקציה
+  //   );
+  // }
+
   uploadFile(file: File): Observable<any> {
+    const cleanFileName = this.cleanFileName(file.name);
+    const extension = file.name.split('.').pop()?.toLowerCase() || 'png';
+    const randomId = Math.random().toString(36).substring(2, 8);
+    const finalFileName = `${cleanFileName}-${randomId}.${extension}`;
+  
     const formData = new FormData();
-    formData.append('file', file); // זה הקובץ עצמו
-    formData.append('fileName', file.name); // זה השם שהשרת דורש
-    formData.append('extention', file.name.split('.').pop() || ''); // זה הסיומת של הקובץ
-
-
+    const sanitizedFile = new File([file], finalFileName, { type: file.type });
+  
+    formData.append('file', sanitizedFile); // הקובץ עצמו עם שם מנוקה
+    formData.append('fileName', finalFileName); // השם המעודכן
+    formData.append('extention', extension); // הסיומת (למקרה שהשרת דורש)
+  
     return this.http.post(
       `${this.serverUrl}/upload-image`,
       formData,
-      this.userService.getAuthHeaders() // אם את משתמשת באותנטיקציה
+      this.userService.getAuthHeaders()
     );
   }
+
+  
+  private cleanFileName(originalName: string): string {
+    const nameWithoutExtension = originalName.split('.').slice(0, -1).join('.');
+    return nameWithoutExtension
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, '')     // שומר רק תווים מותרים
+      .replace(/-+/g, '-')            // מקפים רצופים → מקף אחד
+      .replace(/^-+|-+$/g, '');       // מסיר מקפים מהתחלה/סוף
+  }
+  
 
   // מחיקת תבנית
   deleteTemplate(template: TemplateDto): Observable<void> {
