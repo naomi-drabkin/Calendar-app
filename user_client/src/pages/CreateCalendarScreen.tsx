@@ -94,7 +94,7 @@ export default function CreateCalendarScreen() {
         }
 
     }
-   
+
 
     const handleSaveCalendarAsPDF = async () => {
         try {
@@ -167,13 +167,13 @@ export default function CreateCalendarScreen() {
                 confirmButtonText: 'סגור',
             });
         } finally {
-            setLoading(false);            
+            setLoading(false);
             const calendarApi = calendarRef.current?.getApi?.();
             if (calendarApi) {
-                calendarApi.gotoDate(new Date()); 
+                calendarApi.gotoDate(new Date());
             }
             setDontShowInDownLoad(false);
-            setTimeout(() => fetchImages(), 50); 
+            setTimeout(() => fetchImages(), 50);
         }
     };
 
@@ -214,7 +214,10 @@ export default function CreateCalendarScreen() {
                 </div>
             }
             <div>
-                <button className="fancy-button" onClick={() => navigate(-1)} disabled={loading}>
+                <button className="fancy-button" disabled={loading} onClick={() => navigate(-1)} style={{
+                    opacity: loading ? 0.5 : 1,
+                    pointerEvents: loading ? "none" : "auto"
+                }}>
                     <span>חזרה לעמוד הבית</span>
                 </button>
 
@@ -229,6 +232,8 @@ export default function CreateCalendarScreen() {
                     minWidth: "30px",
                     width: "60px",
                     height: "60px",
+                    opacity: loading ? 0.5 : 1, // ויזואלית
+                    pointerEvents: loading ? "none" : "auto" // למנוע קליקים
                 }}>
                     <Palette size={32} />
                 </Button>
@@ -248,7 +253,9 @@ export default function CreateCalendarScreen() {
                             borderRadius: "50%",
                             minWidth: "30px",
                             width: "60px",
-                            height: "60px"
+                            height: "60px",
+                            opacity: loading ? 0.5 : 1, // ויזואלית
+                            pointerEvents: loading ? "none" : "auto" // למנוע קליקים
                         }}>
                         <Upload size={32} />
                     </Button>
