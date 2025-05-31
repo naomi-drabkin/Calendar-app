@@ -85,7 +85,7 @@ export class AiReportComponent {
         emailList.forEach(email => {
           const emailData = {
             to: email,
-            subject: 'Test Subject',
+            subject: 'עדיין לא יצרתם MomenTo?! - זה הזמן!',
             body: this.editorContent,
           };
 

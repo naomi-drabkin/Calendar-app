@@ -59,39 +59,7 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
   const [isOpenModal, setIsOpenModal] = useState(true)
   const [openNextComponnent, setOpenNextComponnent] = useState(false)
   const [loading, setLoading] = useState(false)
-  // const handleSubmit = async (event: FormEvent) => {
-  //   event.preventDefault()
-  //   let res = null
-  //   try {
-  //     if (!isRegister) {
-  //       res = await axios.post(`${_http}/api/User/login`, {
-  //         email: emailRef.current?.value,
-  //         password: passwordRef.current?.value,
-  //       })
-  //       console.log("login")
-  //     } else {
-  //       res = await axios.post(`${_http}/api/User/register`, {
-  //         email: emailRef.current?.value,
-  //         password: passwordRef.current?.value,
-  //         UserName: UserNameRef.current?.value,
-  //         UserFamily: UserFamilyRef.current?.value,
-  //         Role: "User",
-  //       })
-  //       console.log("register")
-  //     }
-      
-  //     await sessionStorage.setItem("AuthToken", res.data.token)
-  //     sessionStorage.setItem("countCalendar", res.data.countCalendar)
-  //     await setOpenNextComponnent(true)
-  //     setIsOpenModal(false)
-  //     setDesign()
-  //     status == true ? navigate("/homePage") : setOpenNextComponnent(false)
-  //   } catch (error) {
-  //     alert("ארע תקלה בהתחברות")
-  //   }
-  // }
-
-
+ 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
@@ -103,7 +71,6 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
           email: emailRef.current?.value,
           password: passwordRef.current?.value,
         });
-        console.log("login");
       } else {
         res = await axios.post(`${_http}/api/User/register`, {
           email: emailRef.current?.value,
@@ -112,7 +79,6 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
           UserFamily: UserFamilyRef.current?.value,
           Role: "User",
         });
-        console.log("register");
       }
 
       sessionStorage.setItem("AuthToken", res.data.token);
@@ -131,7 +97,6 @@ const LoginRegister = ({ status, setDesign }: { status: boolean; setDesign: Func
         confirmButtonColor: '#3085d6',
       });
     } catch (error) {
-      console.error(error);
       setIsOpenModal(false);
       setOpenNextComponnent(false);
       await MySwal.fire({
