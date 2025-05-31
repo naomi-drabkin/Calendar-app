@@ -14,8 +14,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<any> {
-    console.log("in authService before login");
-    console.log("*********");
+
     
     return this.http.post(`${this.apiUrl}/login`, { email, password });
   }
@@ -29,20 +28,11 @@ export class AuthService {
     const token = localStorage.getItem('token');
     if (!token) return [];
 
-    const decoded:any = jwtDecode(token);
-    console.log(decoded);
-    console.log("decoded = " + decoded);
-    console.log(decoded);
-    
-    
-
+    const decoded:any = jwtDecode(token); 
     const roles = decoded['roles'] || [];
 
-    console.log("role = " + roles);
     return Array.isArray(roles) ? roles : [roles];    
-    // if (role) return decoded.role;
-    // if (role && decoded.roles.length > 0) return decoded.roles[0];
-    // return [];
+
   }
 
   isAdmin(): boolean {

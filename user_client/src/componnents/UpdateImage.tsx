@@ -20,35 +20,6 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
         setFile(event.target.files?.[0] || null);
     };
 
-    // const handleUpdate = async () => {
-    //     if (!file) {
-    //         setUploadStatus("Please select a file to upload.");
-    //         return;
-    //     }
-    //     try {
-    //         setLoading(true);
-    //         const response = await axios.get(
-    //             `${_http}/api/upload/presigned-url?fileName=${file.name}`
-    //         );
-    //         presignedUrl = response.data.url;
-
-    //         const uploadResponse = await axios.put(presignedUrl, file, {
-    //             headers: {
-    //                 "Content-Type": file.type,
-    //             },
-    //         });
-
-    //         if (uploadResponse.status === 200) {
-    //             UpdateImage(url,event);
-    //         } else {
-    //             setUploadStatus("Upload failed: " + uploadResponse.statusText);
-    //         }
-    //     } catch (error) {
-    //         setUploadStatus("Error: " + error);
-    //     }
-    //     setLoading(false);
-    // };
-
     const handleUpdate = async () => {
         const newEventValue = newEvent.current?.value?.trim() || "";
         const isImageChanged = !!file;
@@ -61,13 +32,8 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
     
         setLoading(true);
     
-        // הגדר מראש את הערכים המועדכנים
         let finalUrl = url;
-        let finalEvent = event;
-        console.log(url,event);
-        
-        console.log(finalUrl, finalEvent);
-        
+        let finalEvent = event;               
         try {
             if (isImageChanged && file) {
                 const response = await axios.get(
@@ -125,7 +91,7 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                     EventDate: eventDate,
                     Event: updatedEvent,
                     UserId: jwtDecode<Jwt>(token).ID,
-                    FileName: file?.name ?? "", // אם לא השתנה – ריק או תוכל לשלוח קובץ ישן אם יש לך
+                    FileName: file?.name ?? "",
                     NumOfCalendar: numOfCalendar
                 },
                 {
@@ -318,9 +284,7 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                             style={{
                                 position: "absolute",
                                 top: "12px",
-                                right: "12px",
-                                // background: "rgba(255, 255, 255, 0.8)",
-                                // border: "1px solid rgba(0, 0, 0, 0.1)",
+                                right: "12px",                           
                                 cursor: "pointer",
                                 color: "rgba(17, 16, 16, 0.8)",
                                 fontSize: "16px",
@@ -330,7 +294,6 @@ export default function UpdateImage({ id, eventDate, url, event, closeModal, onU
                                 width: "30px",
                                 height: "30px",
                                 borderRadius: "30%",
-                                // boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                                 transition: "all 0.2s ease",
                                 zIndex: 10,
                             }}

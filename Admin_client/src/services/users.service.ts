@@ -17,19 +17,16 @@ export class UsersService {
   }
 
   deleteUser(id: number): Observable<any> {
-    console.log("in userService before deleteUser");
     return this.http.delete(`${this.apiUrl}/${id}`, this.getAuthHeaders());
   }
 
   updateUser(id:number,user:User): Observable<any> {
-    console.log(user);
     
     return this.http.put(`${this.apiUrl}/${id}`, user, this.getAuthHeaders());
   }
 
   
   addUser(user: User): Observable<any> {
-    console.log(user);
     return this.http.post(`${this.apiUrl}/register`, user, this.getAuthHeaders());
   }
 

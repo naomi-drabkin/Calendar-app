@@ -1,71 +1,3 @@
-// import axios from "axios";
-// import { useEffect, useState } from "react";
-// import { Template } from "../Models/Template";
-// // import { useLocation } from "react-router";
-// import { Box, Button, Modal } from "@mui/material";
-// import { styleModal } from "../pages/LoginRegister";
-// import "../App.css";
-
-// export default function ShowTemplates({ chooseTemplate }: { chooseTemplate: Function }) {
-//     const [listTemplates, setListTemplate] = useState<Template[]>([]);
-//     const [openModal,setopanModal] = useState(true);
-//     // const location = useLocation();
-//     // const setColor = location.state?.color;
-
-//     useEffect(() => {
-//         const fetchAllTemplates = async () => {
-//             try {
-//                 const res = await axios.get('http://localhost:5204/api/templates/get-all-templates', {
-//                     // headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` }
-//                 })
-//                 setListTemplate(res.data);
-//                 console.log(res.data);
-
-//                 console.log(res.data);
-//                 // console.log(res.data);
-
-
-//             } catch (error) {
-//                 alert("ארע תקלה בהצגת התבניות")
-
-//             }
-//         }
-
-//         fetchAllTemplates();
-
-//     }, []);
-
-//     useEffect(() => {
-//     }, [listTemplates]);
-
-//     return (
-//         <>
-//             <Modal open={openModal} onClose={()=>{setopanModal(false),chooseTemplate(null)}} 
-//             >
-//                 <Box sx={styleModal} >
-//                     {listTemplates.length > 0 ? (
-//                         listTemplates.map((img) => (
-//                             // <ShowImg key={index} fileName={img.name} setColor={setColor} chooseTemplate={chooseTemplate} />
-//                             <Button onClick={()=>chooseTemplate(img.imageUrl)}>
-//                                 <div className="template-item">
-//                                 <img style={{width:50,height:50,objectFit:"cover"}} src={img.imageUrl} alt={img.name}></img>
-//                                 </div>
-//                             </Button>
-
-//                         ))
-//                     ) : (
-//                         <p></p>
-//                     )}
-//                      <span className="close-btn" onClick={()=>{setopanModal(false),chooseTemplate(null)}}>
-//                         ✖
-//                     </span>
-//                 </Box>
-//             </Modal>
-//         </>
-//     )
-// }
-
-
 "use client"
 import { useEffect, useState } from "react"
 import axios from "axios"
@@ -74,7 +6,6 @@ import type { Template } from "../Models/Template"
 import "../App.css"
 import { _http } from "../App"
 
-// סגנון מעודכן לפופאפ הצגת תבניות
 const templatesModalStyle = {
     position: "absolute",
     top: "50%",
@@ -101,14 +32,10 @@ export default function ShowTemplates({ chooseTemplate }: { chooseTemplate: Func
         const fetchAllTemplates = async () => {
             try {
                 const res = await axios.get(`${_http}/api/templates/get-all-templates`, {
-                    // headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` },
-                    // mode: "cors",
+
                 })
                 setListTemplate(res.data)
-                console.log(res.data)
 
-                console.log(res.data)
-                // console.log(res.data);
             } catch (error) {
                 alert("ארע תקלה בהצגת התבניות")
             }
@@ -242,9 +169,7 @@ export default function ShowTemplates({ chooseTemplate }: { chooseTemplate: Func
                         style={{
                             position: "absolute",
                             top: "12px",
-                            right: "12px",
-                            // background: "rgba(255, 255, 255, 0.8)",
-                            // border: "1px solid rgba(0, 0, 0, 0.1)",
+                            right: "12px",                           
                             cursor: "pointer",
                             color: "rgba(17, 16, 16, 0.8)",
                             fontSize: "16px",
@@ -254,7 +179,6 @@ export default function ShowTemplates({ chooseTemplate }: { chooseTemplate: Func
                             width: "30px",
                             height: "30px",
                             borderRadius: "30%",
-                            // boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                             transition: "all 0.2s ease",
                             zIndex: 10,
                         }}

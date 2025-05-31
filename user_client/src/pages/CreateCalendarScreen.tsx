@@ -82,12 +82,9 @@ export default function CreateCalendarScreen() {
         setChooseTemplate(false);
         if (url) {
             const http_url = url;
-            console.log("http_url : " + http_url);
 
             setColor(http_url);
             sessionStorage.setItem("Color", http_url)
-            console.log("--------------------");
-            console.log(sessionStorage.getItem("Color"));
         }
         else {
             setColor(color);
@@ -156,7 +153,6 @@ export default function CreateCalendarScreen() {
             }
 
             pdf.save("calendar.pdf");
-            console.log("Calendar saved as PDF.");
         } catch (error) {
             console.error("Error generating PDF:", error);
             await MySwal.fire({
@@ -179,7 +175,6 @@ export default function CreateCalendarScreen() {
 
     const fetchImage = async (url: string) => {
         try {
-            console.log("url : " + url);
 
             const response = await fetch(url);
             if (!response.ok) {
@@ -232,8 +227,8 @@ export default function CreateCalendarScreen() {
                     minWidth: "30px",
                     width: "60px",
                     height: "60px",
-                    opacity: loading ? 0.5 : 1, // ויזואלית
-                    pointerEvents: loading ? "none" : "auto" // למנוע קליקים
+                    opacity: loading ? 0.5 : 1,
+                    pointerEvents: loading ? "none" : "auto" 
                 }}>
                     <Palette size={32} />
                 </Button>
@@ -254,8 +249,8 @@ export default function CreateCalendarScreen() {
                             minWidth: "30px",
                             width: "60px",
                             height: "60px",
-                            opacity: loading ? 0.5 : 1, // ויזואלית
-                            pointerEvents: loading ? "none" : "auto" // למנוע קליקים
+                            opacity: loading ? 0.5 : 1,
+                            pointerEvents: loading ? "none" : "auto"
                         }}>
                         <Upload size={32} />
                     </Button>

@@ -3,12 +3,9 @@ import axios from "axios";
 import { Calendar } from "../Models/Calendar";
 import { RootState } from "./Store";
 
-// פעולה אסינכרונית לשליפת התבניות
 export const fetchDisignCalendar = createAsyncThunk("DesignCalendar/fetch",
   async (_, thunkApi) => {
-    try {
-      console.log("fetchDisignCalendar");
-      
+    try {      
       const res = await axios.get("https://calendar-app-server-fn9y.onrender.com/api/calendars/user",
         {
           headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}`}
@@ -21,7 +18,6 @@ export const fetchDisignCalendar = createAsyncThunk("DesignCalendar/fetch",
   }
 );
 
-// // פעולה אסינכרונית להוספת התבניות
 export const addDesignCalendar = createAsyncThunk('DesignCalendar/add', async (DisignCalendar: Partial<Calendar>, thunkApi) => {
   try {
     const res = await axios.post("https://calendar-app-server-fn9y.onrender.com/api/calendars",
@@ -74,7 +70,6 @@ const DesignCalendarSlice = createSlice({
 });
 
 export const selectDesignCalendar = (state: RootState) => state.DesignCalendar;
-//   export const { actions } = DesignCalendarSlice;
 
 export default DesignCalendarSlice;
 

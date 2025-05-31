@@ -1,172 +1,4 @@
-// import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-// import { FormsModule } from '@angular/forms';
 
-// @Component({
-//   selector: 'app-simple-editor',
-//   standalone: true,
-//   imports: [CommonModule, FormsModule],
-//   template: `
-//     <div class="simple-editor-container">
-//       <div class="toolbar">
-//         <button type="button" class="toolbar-button" (click)="formatText('underline')" title="קו תחתון">
-//           <span style="text-decoration: underline;">U</span>
-//         </button>
-//         <button type="button" class="toolbar-button" (click)="formatText('italic')" title="נטוי">
-//           <span style="font-style: italic;">I</span>
-//         </button>
-//         <button type="button" class="toolbar-button" (click)="formatText('bold')" title="מודגש">
-//           <span style="font-weight: bold;">B</span>
-//         </button>
-//         <div class="dropdown">
-//           <button type="button" class="toolbar-button dropdown-toggle">
-//             <span>T</span>
-//             <span class="dropdown-arrow">▼</span>
-//           </button>
-//           <div class="dropdown-menu">
-//             <button type="button" class="dropdown-item" (click)="formatText('h1')">כותרת 1</button>
-//             <button type="button" class="dropdown-item" (click)="formatText('h2')">כותרת 2</button>
-//             <button type="button" class="dropdown-item" (click)="formatText('normal')">טקסט רגיל</button>
-//           </div>
-//         </div>
-//       </div>
-      
-//       <div 
-//         class="editor-content" 
-//         contenteditable="true"
-//         [innerHTML]="content"
-//         (input)="onContentChange($event)"
-//         dir="rtl"
-//       ></div>
-//     </div>
-//   `,
-//   styles: [`
-//     .simple-editor-container {
-//       border: 1px solid #ccc;
-//       border-radius: 4px;
-//       overflow: hidden;
-//       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-//     }
-    
-//     .toolbar {
-//       display: flex;
-//       padding: 8px;
-//       background-color: #f8f9fa;
-//       border-bottom: 1px solid #e0e0e0;
-//       direction: rtl;
-//     }
-    
-//     .toolbar-button {
-//       background: none;
-//       border: none;
-//       width: 32px;
-//       height: 32px;
-//       border-radius: 4px;
-//       margin-left: 4px;
-//       cursor: pointer;
-//       display: flex;
-//       align-items: center;
-//       justify-content: center;
-//       font-size: 16px;
-//     }
-    
-//     .toolbar-button:hover {
-//       background-color: #e8eaed;
-//     }
-    
-//     .editor-content {
-//       min-height: 200px;
-//       padding: 16px;
-//       direction: rtl;
-//       text-align: right;
-//       line-height: 1.6;
-//       font-size: 16px;
-//     }
-    
-//     .dropdown {
-//       position: relative;
-//       display: inline-block;
-//     }
-    
-//     .dropdown-toggle {
-//       display: flex;
-//       align-items: center;
-//       justify-content: center;
-//       width: auto;
-//       padding: 0 8px;
-//     }
-    
-//     .dropdown-arrow {
-//       font-size: 10px;
-//       margin-right: 4px;
-//     }
-    
-//     .dropdown-menu {
-//       position: absolute;
-//       top: 100%;
-//       right: 0;
-//       background-color: white;
-//       border: 1px solid #e0e0e0;
-//       border-radius: 4px;
-//       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-//       display: none;
-//       z-index: 10;
-//       min-width: 120px;
-//     }
-    
-//     .dropdown:hover .dropdown-menu {
-//       display: block;
-//     }
-    
-//     .dropdown-item {
-//       display: block;
-//       width: 100%;
-//       padding: 8px 16px;
-//       text-align: right;
-//       background: none;
-//       border: none;
-//       cursor: pointer;
-//     }
-    
-//     .dropdown-item:hover {
-//       background-color: #f1f3f4;
-//     }
-//   `],
-//   encapsulation: ViewEncapsulation.None
-// })
-// export class SimpleEditorComponent {
-//   @Input() content: string = '';
-//   @Output() contentChange = new EventEmitter<string>();
-
-//   onContentChange(event: Event) {
-//     const element = event.target as HTMLElement;
-//     this.content = element.innerHTML;
-//     this.contentChange.emit(this.content);
-//   }
-
-//   formatText(format: string) {
-//     switch (format) {
-//       case 'bold':
-//         document.execCommand('bold', false);
-//         break;
-//       case 'italic':
-//         document.execCommand('italic', false);
-//         break;
-//       case 'underline':
-//         document.execCommand('underline', false);
-//         break;
-//       case 'h1':
-//         document.execCommand('formatBlock', false, '<h1>');
-//         break;
-//       case 'h2':
-//         document.execCommand('formatBlock', false, '<h2>');
-//         break;
-//       case 'normal':
-//         document.execCommand('formatBlock', false, '<p>');
-//         break;
-//     }
-//   }
-// }
 import { Component, Input, Output, EventEmitter, ViewEncapsulation, AfterViewInit, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -272,7 +104,6 @@ export class SimpleEditorComponent implements AfterViewInit {
   set content(value: string) {
     if (this._content !== value) {
       this._content = value;
-      // Only update the editor content if it's different from what we have
       if (this.editorContentRef && this.editorContentRef.nativeElement.innerHTML !== value) {
         this.editorContentRef.nativeElement.innerHTML = value;
       }
@@ -287,13 +118,11 @@ export class SimpleEditorComponent implements AfterViewInit {
   
   @Output() contentChange = new EventEmitter<string>();
   
-  // Color picker state
   showTextColorPicker: boolean = false;
   showBgColorPicker: boolean = false;
   currentTextColor: string = '#000000';
   currentBgColor: string = 'transparent';
   
-  // Rich color palette
   colorPalette: string[] = [
     '#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#efefef', '#f3f3f3', '#ffffff',
     '#980000', '#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#4a86e8', '#0000ff', '#9900ff', '#ff00ff',
@@ -305,7 +134,6 @@ export class SimpleEditorComponent implements AfterViewInit {
     '#5b0f00', '#660000', '#783f04', '#7f6000', '#274e13', '#0c343d', '#1c4587', '#073763', '#20124d', '#4c1130'
   ];
   
-  // Selection tracking
   private lastSelection: {
     startOffset: number;
     endOffset: number;
@@ -316,29 +144,24 @@ export class SimpleEditorComponent implements AfterViewInit {
   constructor(private ngZone: NgZone) {}
   
   ngAfterViewInit() {
-    // Initialize editor content
     if (this.content) {
       this.editorContentRef.nativeElement.innerHTML = this.content;
     }
     
-    // Focus the editor when it's initialized
     setTimeout(() => {
       this.editorContentRef.nativeElement.focus();
     }, 0);
   }
 
   onContentChange() {
-    // Save selection before updating content
     this.saveSelection();
     
-    // Get the content and emit changes
     const newContent = this.editorContentRef.nativeElement.innerHTML;
     if (this._content !== newContent) {
       this._content = newContent;
       this.contentChange.emit(this._content);
     }
     
-    // Run outside Angular to avoid triggering change detection
     this.ngZone.runOutsideAngular(() => {
       setTimeout(() => {
         this.restoreSelection();
@@ -346,7 +169,6 @@ export class SimpleEditorComponent implements AfterViewInit {
     });
   }
   
-  // Save the current selection/cursor position
   saveSelection() {
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
@@ -360,14 +182,12 @@ export class SimpleEditorComponent implements AfterViewInit {
     }
   }
   
-  // Restore the saved selection/cursor position
   restoreSelection() {
     if (!this.lastSelection) return;
     
     const selection = window.getSelection();
     if (!selection) return;
     
-    // Make sure the containers are still in the DOM
     if (!this.isNodeInEditor(this.lastSelection.startContainer) || 
         !this.isNodeInEditor(this.lastSelection.endContainer)) {
       return;
@@ -384,14 +204,12 @@ export class SimpleEditorComponent implements AfterViewInit {
     }
   }
   
-  // Check if a node is still in the editor
   isNodeInEditor(node: Node | null): boolean {
     if (!node) return false;
     return this.editorContentRef.nativeElement.contains(node);
   }
 
   formatText(format: string) {
-    // Focus the editor and restore selection before applying formatting
     this.editorContentRef.nativeElement.focus();
     this.restoreSelection();
     
@@ -416,15 +234,12 @@ export class SimpleEditorComponent implements AfterViewInit {
         break;
     }
     
-    // Save the selection again after formatting
     this.saveSelection();
     
-    // Update content after formatting
     this._content = this.editorContentRef.nativeElement.innerHTML;
     this.contentChange.emit(this._content);
   }
   
-  // Toggle color picker visibility
   toggleColorPicker(type: 'text' | 'background') {
     if (type === 'text') {
       this.showTextColorPicker = !this.showTextColorPicker;
@@ -435,7 +250,6 @@ export class SimpleEditorComponent implements AfterViewInit {
     }
   }
   
-  // Apply text color
   applyTextColor(color: string) {
     this.currentTextColor = color;
     this.editorContentRef.nativeElement.focus();
@@ -444,40 +258,32 @@ export class SimpleEditorComponent implements AfterViewInit {
     this.saveSelection();
     this.showTextColorPicker = false;
     
-    // Update content after formatting
     this._content = this.editorContentRef.nativeElement.innerHTML;
     this.contentChange.emit(this._content);
   }
   
-  // Apply background color - fixed method
   applyBgColor(color: string) {
     this.currentBgColor = color;
     this.editorContentRef.nativeElement.focus();
     this.restoreSelection();
     
-    // Fix for background color in different browsers
     try {
-      // Try standard approach first
       document.execCommand('hiliteColor', false, color);
       
-      // If that doesn't work, try a different approach
       if (!this.isBackgroundColorApplied()) {
         this.applyBackgroundColorManually(color);
       }
     } catch (e) {
-      // Fallback to manual approach
       this.applyBackgroundColorManually(color);
     }
     
     this.saveSelection();
     this.showBgColorPicker = false;
     
-    // Update content after formatting
     this._content = this.editorContentRef.nativeElement.innerHTML;
     this.contentChange.emit(this._content);
   }
   
-  // Check if background color was applied
   isBackgroundColorApplied(): boolean {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return false;
@@ -488,7 +294,6 @@ export class SimpleEditorComponent implements AfterViewInit {
     
     const result = span.style.backgroundColor !== '';
     
-    // Clean up the test span if it didn't work
     if (!result) {
       const parent = span.parentNode;
       while (span.firstChild) {
@@ -500,7 +305,6 @@ export class SimpleEditorComponent implements AfterViewInit {
     return result;
   }
   
-  // Manual approach to apply background color
   applyBackgroundColorManually(color: string) {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
@@ -513,9 +317,7 @@ export class SimpleEditorComponent implements AfterViewInit {
       range.surroundContents(span);
     } catch (e) {
       console.error('Error applying background color:', e);
-      
-      // Alternative approach for complex selections
-      const fragment = range.extractContents();
+            const fragment = range.extractContents();
       span.appendChild(fragment);
       range.insertNode(span);
     }

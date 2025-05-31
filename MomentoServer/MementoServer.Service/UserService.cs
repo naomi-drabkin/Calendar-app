@@ -73,7 +73,6 @@ namespace MementoServer.Service
                 return null;
             }
 
-            //var userLogin = _userRepository.GetByEmailAsync(email);
             var token = _tokenService.GenerateToken(user);
 
             return new AuthResponse

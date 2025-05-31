@@ -66,50 +66,12 @@ export class UsersComponent implements OnInit {
   fetchUsers() {
     this.userService.getAllUsers()?.subscribe({
       next: (data) => {
-        this.users = data.filter(d => d.email !== this.authService.getAdminEmail()),
-          console.log("data = " + data)
-        console.log(data);
+        this.users = data.filter(d => d.email !== this.authService.getAdminEmail())
       },
 
       error: (err) => console.error('שגיאה בטעינת משתמשים:', err)
     });
   }
-
-  // deleteUser(id: number) {
-  //   Swal.fire({
-  //     title: 'מחיקת משתמש ',
-  //     text: '?האם אתה בטוח שברצונך למחוק את המשתמש',
-  //     icon: 'question',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#5c6bc0',
-  //     cancelButtonColor: '#757575',
-  //     confirmButtonText: 'כן',
-  //     cancelButtonText: 'ביטול'
-  //   }).then((result) => {
-  //     console.log(id);
-  //     this.isLoading = true;
-
-  //     this.userService.deleteUser(id).subscribe({
-  //       next: () => {
-  //         console.log("user delete successfully");
-  //         this.users = this.users.filter(u => u.id !== id);
-  //         this.isLoading = false;
-  //       },
-  //       error: (err) => {
-  //         // alert('שגיאה במחיקה: ' + err.error),
-  //         Swal.fire({
-  //           title: 'שגיאה',
-  //           text: 'שגיאה במחיקה',
-  //           icon: 'error',
-  //           confirmButtonText: 'אישור',
-  //           confirmButtonColor: '#2575fc'
-  //         }),
-  //           this.isLoading = false;
-  //       }
-  //     });
-  //   })
-  // }
-
 
   deleteUser(id: number) {
     Swal.fire({
@@ -122,12 +84,11 @@ export class UsersComponent implements OnInit {
       confirmButtonText: 'כן',
       cancelButtonText: 'ביטול'
     }).then((result) => {
-      if (result.isConfirmed) {  // ⬅️ רק אם המשתמש אישר
+      if (result.isConfirmed) {
         this.isLoading = true;
   
         this.userService.deleteUser(id).subscribe({
           next: () => {
-            console.log("user deleted successfully");
             this.users = this.users.filter(u => u.id !== id);
             this.isLoading = false;
           },
@@ -160,12 +121,10 @@ export class UsersComponent implements OnInit {
 
     this.userService.updateUser(id, user).subscribe({
       next: () => {
-        console.log("user update successfully");
         this.isLoading = false;
         this.fetchUsers();
       },
       error: (err) => {
-        // alert('שגיאה בעדכון: ' + err.error)
         Swal.fire({
           title: 'שגיאה',
           text: 'שגיאה בעדכון',
@@ -191,12 +150,10 @@ export class UsersComponent implements OnInit {
 
     this.userService.addUser(user).subscribe({
       next: () => {
-        console.log("user add successfully");
         this.isLoading = false;
         this.fetchUsers();
       },
       error: (err) => {
-        // alert('שגיאה בהוספה: ' + err.error),
         Swal.fire({
           title: 'שגיאה',
           text: 'שגיאה בהוספה',
@@ -219,7 +176,6 @@ export class UsersComponent implements OnInit {
 
   onSubmit(id: number): void {
     if (this.data.valid) {
-      console.log('נשלח:', this.data.value);
       this.updateUser(id);
       this.dialog.closeAll();
     }

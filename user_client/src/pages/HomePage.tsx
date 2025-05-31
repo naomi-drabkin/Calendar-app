@@ -35,13 +35,11 @@ const HomePage = () => {
   const [Login, setLogin] = useState(false)
   const [loginKey, setLoginKey] = useState(0)
   const [_, setDesign] = useState(false)
-  // sessionStorage.setItem("Design",`${true}`);
 
   const dispatch = useDispatch<AppDispatch>()
 
   const res = useSelector((state: RootState) => state.DesignCalendar.listDesignCalendar)
   const handleSubmit = () => {
-    console.log(res.length + 1)
 
     var DisignCalendar: Partial<Calendar> = {   
       title: TitleRef.current?.value || `calendar ${res.length + 1}`,
@@ -49,26 +47,21 @@ const HomePage = () => {
       pdfUrl: " ",
       numOfCalendar: res.length + 1,
     }
-    // if (url) {
     dispatch(addDesignCalendar(DisignCalendar))
     Navigate(`/createCalendar`)
     sessionStorage.setItem("numOfCalendar", `${res.length + 1}`)
 
-    // }
   }
   useEffect(() => {
-    //  dispatch(fetchDisignCalendar());
     if (sessionStorage.getItem("Design") == "true") dispatch(fetchDisignCalendar())
   }, [sessionStorage.getItem("Design"), res])
 
   const SetDesign = () => {
-    // setDesign(true);
     sessionStorage.setItem("Design", `${true}`)
 
     setLogin(false)
   }
 
-  // סגנונות לרכיבים
   const textFieldStyle = {
     marginBottom: "16px",
     "& .MuiOutlinedInput-root": {

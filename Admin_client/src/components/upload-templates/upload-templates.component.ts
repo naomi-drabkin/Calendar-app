@@ -16,30 +16,27 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./upload-templates.component.css'],
 })
 export class UploadTemplatesComponent{
-  templates: TemplateDto[] = []; // נתונים לשימוש מקומי
+  templates: TemplateDto[] = [];
   templates$: BehaviorSubject<TemplateDto[]> = new BehaviorSubject<TemplateDto[]>([]);
-  selectedFile: File | null = null; // קובץ נבחר
-  imagePreview: string | null = null; // תצוגה מקדימה
-  imgeExtension: string | undefined = undefined; // סיומת התמונה
+  selectedFile: File | null = null;
+  imagePreview: string | null = null; 
+  imgeExtension: string | undefined = undefined; 
   isUploading: boolean = false;
   deletingTemplateId: string | null = null;
   selectedFileName: string = '';
 
 
   constructor(private uploadService: UploadService) {
-    // this.loadTemplates(); // טוען את רשימת התבניות בעת יצירת הקומפוננטה
   }
 
   ngOnInit(): void {
-    this.loadTemplates(); // תתבצע פעם אחת כשנטען הקומפוננט
+    this.loadTemplates(); 
   }
 
   loadTemplates(): void {
     this.uploadService.getAllTemplates().subscribe({
       next: (templates) => {
-        console.log('רשימת תבניות מהשרת:', templates);
   
-        // מיון לפי uploadedAt (מהחדש לישן)
         const sortedTemplates = templates.sort((a, b) =>
           new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
         );
@@ -53,16 +50,13 @@ export class UploadTemplatesComponent{
     });
   }
   
-  // בחירת קובץ
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
       this.selectedFileName = this.selectedFile.name;
-      console.log(this.selectedFileName);
       this.imgeExtension = this.selectedFile.name.split('.').pop()?  this.selectedFile.name.split('.').pop():undefined; // קבלת סיומת הקובץ
-      // יצירת תצוגה מקדימה של התמונה
-      console.log(this.imgeExtension);
+
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
@@ -71,7 +65,6 @@ export class UploadTemplatesComponent{
     }
   }
 
-  // העלאת קובץ
   upload(): void {
     if (this.selectedFile) {
       this.isUploading = true;
@@ -92,10 +85,8 @@ export class UploadTemplatesComponent{
     }
   }
   
-
-  // מחיקת תבנית
   deleteTemplate(template: TemplateDto): void {
-    this.deletingTemplateId = template.name; // בהנחה שלכל TemplateDto יש id
+    this.deletingTemplateId = template.name; 
   
     this.uploadService.deleteTemplate(template).subscribe({
       next: () => {
@@ -110,9 +101,4 @@ export class UploadTemplatesComponent{
   }
   
 
-  // // טיפול בשגיאות טעינת תמונה
-  // handleImageError(event: Event): void {
-  //   const imgElement = event.target as HTMLImageElement;
-  //   imgElement.src = 'assets/default-image.png'; // תמונה חלופית במקרה של שגיאה
-  // }
 }

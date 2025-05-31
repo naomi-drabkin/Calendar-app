@@ -40,16 +40,12 @@ export class AuthComponent {
 
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
-        console.log("in auth components in next after login");
-        console.log(res.token);
+
 
         localStorage.setItem('token', res.token);
-        console.log(this.authService.getUserRole());
         const isAdmin = this.authService.isAdmin();
-        console.log("in auth components in next after login 2");
-        console.log("isAdmin = " + isAdmin);
+     
         if (!isAdmin) {
-          // alert("לא ניתן להתחבר למערכת");
           Swal.fire({
             title: 'שגיאה',
             text:"לא ניתן להתחבר למערכת",
@@ -65,7 +61,6 @@ export class AuthComponent {
         this.isLoading = false;
       },
       error: (err) => {
-        // alert('שגיאה בהתחברות: ' + err.error);
         Swal.fire({
           title: 'שגיאה',
           text: 'שגיאה בהתחברות',

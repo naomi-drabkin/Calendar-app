@@ -15,7 +15,6 @@ interface ImageUploadProps {
     closeModal: () => void
 }
 
-// סגנון מעודכן לפופאפ העלאת תמונה
 const uploadModalStyle = {
     position: "absolute",
     top: "50%",
@@ -58,18 +57,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
             );
             presignedUrl = response.data.url;
 
-            console.log("File Name:", file.name);
 
             const uploadResponse = await axios.put(presignedUrl, file, {
                 headers: {
                     "Content-Type": file.type,
                 },
             });
-            console.log(uploadResponse.status);
 
             
             if (uploadResponse.status == 200 || uploadResponse.status === 204 || uploadResponse.status === 201) {
-                console.log("Uploading Success!");
                 postImage();
             }
             else {
@@ -94,7 +90,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onUpload, closeModal }) => {
                 if (isNaN(parsedDate.getTime())) {
                     alert(`Invalid Date: ${eventDateValue}`);
                 } else {
-                    console.log("התמונה בהלאעה");
 
                     await axios.post(
                         `${_http}/api/Image/upload`,

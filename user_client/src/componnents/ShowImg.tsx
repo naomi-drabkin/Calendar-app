@@ -4,16 +4,12 @@ import { useEffect, useState } from 'react'
 import { _http } from '../App';
 
 const ShowImg = ({ fileName, 
-    // setColor,
      chooseTemplate }: { fileName: string,
-        //  setColor: null | string
-        //  ,
           chooseTemplate: Function }) => {
     const [imgUrl, setImgUrl] = useState(null);
 
     useEffect(() => {
         const getImageUrl = async () => {
-            console.log(fileName);
             
             try {
                 const response = await axios.get(`${_http}/api/upload/download-url/${fileName}`);
@@ -29,8 +25,6 @@ const ShowImg = ({ fileName,
     return (<>
         {imgUrl != null ? (
             <Button className="image-box" onClick={() => { 
-                // setColor = fileName
-            // ,
              chooseTemplate(fileName) }}>
                 <div style={{
                     backgroundColor: `${fileName}`,

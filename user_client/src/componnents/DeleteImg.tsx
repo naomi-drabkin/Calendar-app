@@ -25,7 +25,6 @@ export default function DeleteImg({id,onUpload,closeDelete}:{id:number,onUpload:
                 alert("---תקלה במחיקת הקובץ")
             }
         };
-        // console.log("🔄 DeleteImg useEffect ran with id:", id);
 
         deleteImg();
 

@@ -26,35 +26,6 @@ export default function UpdateUser({ setDesign }: { setDesign: Function }) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-
-  // const handleSubmit = async (event: FormEvent) => {
-  //   event.preventDefault();
-  //   try {
-  //     const authToken = sessionStorage.getItem("AuthToken");
-  //     if (!authToken) {
-  //       throw new Error("AuthToken is missing");
-  //     }
-  //     const userId = jwtDecode<Jwt>(authToken).ID;
-  //     await axios.put(`${_http}/api/User/${userId}`, {
-  //       email: emailRef.current?.value,
-  //       password: passwordRef.current?.value,
-  //       UserName: UserNameRef.current?.value,
-  //       UserFamily: UserFamilyRef.current?.value,
-  //     },
-  //       {
-  //         headers: { Authorization: `Bearer ${sessionStorage.getItem("AuthToken")}` }
-  //       });
-
-  //     console.log("פרטיך מתעדכנים...");
-
-  //   } catch (error) {
-  //     console.log("ארע תקלה בעת עדכון פרטיך");
-
-  //   }
-  //   setUpdateOpenModal(false);
-  //   sessionStorage.setItem("Design", `${true}`);
-  // }
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
