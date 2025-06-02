@@ -16,13 +16,6 @@ using Amazon.Runtime;
 using DotNetEnv;
 using MomentoServer.Api.Controllers;
 
-//var builder = WebApplication.CreateBuilder(args);
-//Console.WriteLine(builder.Configuration["AWS:AccessKey"]);
-//Console.WriteLine(builder.Configuration["AWS:SecretKey"]);
-//Console.WriteLine(builder.Configuration["AWS:Region"]);
-
-
-
 
 DotNetEnv.Env.Load();
 
@@ -46,12 +39,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-//builder.Services.AddControllers()
-//    .AddJsonOptions(x =>
-//    {
-//        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-//        x.JsonSerializerOptions.WriteIndented = true;
-//    });
 
 builder.Services.AddControllers()
     .AddJsonOptions(x =>
@@ -62,30 +49,15 @@ builder.Services.AddControllers()
 
 
 
-//Env.Load();
-
-////var AccessKey = Environment.GetEnvironmentVariable("ACCESS");
-////var SecretAccess = Environment.GetEnvironmentVariable("SECRET");
-//var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
-
-//var credentials = new BasicAWSCredentials(
-//builder.Configuration["AWS:AccessKey"],
-//builder.Configuration["AWS:SecretKey"]
-////AccessKey,
-////SecretAccess
-//);
-
 
 var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]); // בדקי שהאזור נכון
 
-//var region = Amazon.RegionEndpoint.GetBySystemName(awsRegion);
 
 var s3Client = new AmazonS3Client(credentials, region);
 
 builder.Services.AddSingleton<IAmazonS3>(s3Client);
 Console.WriteLine(s3Client);
 
-//builder.Services.AddScoped<TemplateController, UploadFiles>();
 builder.Services.AddScoped<UploadFiles>();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -106,7 +78,6 @@ builder.Services.AddScoped<ICalendarRepository, CalendarRepository>();
 builder.Services.AddScoped<ICalendarService, CalendarService>();
 
 
-//var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -133,22 +104,12 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddHttpClient();
 
-// הוספת שירותי ה-MailService (שירות לשליחת מיילים דרך Mailchimp או שירותים אחרים)
-//builder.Services.AddTransient<IMailService, MailService>();
+
 
 builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowAll", policy =>
-
-//    policy.SetIsOriginAllowed(_ => true)
-//        .AllowAnyMethod().AllowAnyHeader().AllowCredentials()
-//        );
-
-//});
 
 builder.Services.AddCors(options =>
 {
@@ -166,7 +127,6 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Memento API", Version = "v1" });
 
-    // ?? הוספת תמיכה ב- JWT Authorization
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -195,25 +155,13 @@ builder.Services.AddSwaggerGen(c =>
 
 
 
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    c.OperationFilter<SwaggerFileUploadOperationFilter>();
-//});
-
-//builder.Services.Configure<FormOptions>(options =>
-//{
-//    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // מגבלת העלאה של 10MB
-//});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
 app.UseSwagger();
 
 app.UseSwaggerUI();
-//}
+
 
 app.MapGet("/", () => "server is running");
 
@@ -221,7 +169,6 @@ app.MapGet("/", () => "server is running");
 app.UseHttpsRedirection();
 app.UseCors("AllowClients");
 
-//app.UseAuthorization();
 app.UseAuthentication();
 app.UseAuthorization();
 

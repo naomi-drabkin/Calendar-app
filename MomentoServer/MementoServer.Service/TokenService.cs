@@ -25,12 +25,10 @@ public class TokenService : ITokenService
         Console.WriteLine("Jwt:Audience = " + _configuration["Jwt:Audience"]);
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-        //Console.WriteLine($"User Role: {user.Role}");
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim("Email", user.Email),
-            //new Claim(ClaimTypes.Role,user.Role),
             new Claim("Password", user.Password),
             new Claim("ID", user.Id.ToString()),
 
@@ -50,7 +48,6 @@ public class TokenService : ITokenService
         );
 
 
-        //var token = tokenHandler.CreateToken(tokenDescriptor);
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

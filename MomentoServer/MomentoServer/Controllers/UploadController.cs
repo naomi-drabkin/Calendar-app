@@ -24,31 +24,27 @@ namespace MomentoServer.Api.Controllers
         public async Task<IActionResult> GetPresignedUrlAsync([FromQuery] string fileName)
         {
            
-            // רשימת הסיומות המותרות
             var allowedExtensions = new HashSet<string> { ".jpg", ".jpeg", ".png" };
 
-            // קבלת הסיומת של הקובץ (אותיות קטנות)
             var fileExtension = Path.GetExtension(fileName).ToLower();
 
-            // בדיקה אם הסיומת חוקית
             if (!allowedExtensions.Contains(fileExtension))
             {
                 return BadRequest(new { message = "❌ ניתן להעלות רק קבצים מסוג JPG, JPEG או PNG." });
             }
 
-            // קביעת סוג התוכן המתאים
             var contentType = fileExtension switch
             {
                 ".jpg" or ".jpeg" => "image/jpeg",
                 ".png" => "image/png",
-                _ => "application/octet-stream" // לא אמור לקרות, אבל ביטוח מפני שגיאות
+                _ => "application/octet-stream" 
             };
 
             var request = new GetPreSignedUrlRequest
             {
                 BucketName = _bucketName,
                 Key = fileName,
-                Verb = HttpVerb.PUT, // מאפשר העלאה
+                Verb = HttpVerb.PUT,
                 Expires = DateTime.UtcNow.AddMinutes(5),
                 ContentType = contentType
             };

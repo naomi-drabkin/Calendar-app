@@ -6,7 +6,6 @@ using MomentoServer.Core.IServices;
 
 namespace MomentoServer.Api.Controllers
 {
-    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -67,12 +66,10 @@ namespace MomentoServer.Api.Controllers
             return NoContent();
         }
 
-        //[Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] DTOuser user)
         {
-            //var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            //if (userId != id) return Forbid();
+           
 
             var result = await _userService.UpdateUserAsync(id, user);
             return result ? Ok(new { message = "User updated successfully" }) : NotFound("User not found");

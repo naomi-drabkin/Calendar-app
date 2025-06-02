@@ -25,7 +25,7 @@ namespace MomentoServer.Api.Controllers
             return Ok(calendars);
         }
 
-        [HttpGet("user")] // מקבל את ה-ID של המשתמש המחובר
+        [HttpGet("user")] 
         [Authorize]
         public async Task<IActionResult> GetUserCalendars()
         {

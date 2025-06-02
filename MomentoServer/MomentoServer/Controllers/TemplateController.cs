@@ -46,14 +46,6 @@ namespace MomentoServer.Api.Controllers
             return Ok(template);
         }
 
-        //[Authorize(Policy = "Admin")]
-        //[HttpPost]
-        //public async Task<IActionResult> CreateTemplate(TemplateDto templateDto)
-        //{
-        //    await _service.AddTemplateAsync(templateDto);
-        //    return Ok();
-        //}
-
         [Authorize(Policy = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTemplate(int id, TemplateDto templateDto)
@@ -78,7 +70,6 @@ namespace MomentoServer.Api.Controllers
                     Key = $"{decodedFileName}"
                 };
 
-                //await _s3Client.DeleteObjectAsync(deleteRequest);
                 var response = await _s3Client.DeleteObjectAsync(deleteRequest);
 
                 Console.WriteLine($"[מחיקה] סטטוס תשובה מ-S3: {response.HttpStatusCode}");
@@ -112,24 +103,20 @@ namespace MomentoServer.Api.Controllers
                 return BadRequest(new { message = "לא נשלח קובץ." });
             }
 
-            // רשימת הסיומות המותרות
             var allowedExtensions = new HashSet<string> { ".jpg", ".jpeg", ".png" };
 
-            // קבלת הסיומת של הקובץ (אותיות קטנות)
             var fileExtension = Path.GetExtension(fileName).ToLower();
 
-            // בדיקה אם הסיומת חוקית
             if (!allowedExtensions.Contains(fileExtension))
             {
                 return BadRequest(new { message = "❌ ניתן להעלות רק קבצים מסוג JPG, JPEG או PNG." });
             }
 
-            // קביעת סוג התוכן המתאים
             var contentType = fileExtension switch
             {
                 ".jpg" or ".jpeg" => "image/jpeg",
                 ".png" => "image/png",
-                _ => "application/octet-stream" // לא אמור לקרות, אבל ביטוח מפני שגיאות
+                _ => "application/octet-stream" 
             };
 
             var folderName = "Templates";
@@ -146,7 +133,6 @@ namespace MomentoServer.Api.Controllers
             // העלאת הקובץ ל-S3
             await _s3Client.PutObjectAsync(putRequest);
 
-            // אם ההעלאה הצליחה, מחזירים את ה-URL הציבורי של הקובץ
             var publicUrl = $"https://{_bucketName}.s3.us-east-1.amazonaws.com/{key}";
 
             return Ok(new { publicUrl });
