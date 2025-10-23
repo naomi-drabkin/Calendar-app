@@ -1,3 +1,6 @@
  https://calendar-react-client.onrender.com
 
  https://calendar-admin-client.onrender.com
+
+קישור לפרזנטצייה
+https://drive.google.com/file/d/1F76RPRc1PJSXVugQ0F61Bji76A3hH-MC/view?usp=sharing
